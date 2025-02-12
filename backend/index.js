@@ -2,8 +2,10 @@
 const express = require("express");
 const connectDB = require("./config/db");
 const dotenv = require("dotenv");
-
+const cookieParser = require("cookie-parser");
 const app = express();
+const cors = require("cors");
+const bodyParse = require("body-parser");
 
 dotenv.config();
 const port = process.env.PORT;
@@ -11,6 +13,14 @@ const port = process.env.PORT;
 // Connect to MongoDB
 connectDB();
 
+app.use(bodyParse.json())
+app.use(
+    cors({
+        credentials: true,
+        origin: ["http://localhost:3000"],
+    })
+);
+app.use(cookieParser())
 
 // Middleware
 app.use(express.json());

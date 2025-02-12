@@ -8,9 +8,14 @@
 npm init
 ```
 
+## NextJS
+```bash
+npm install axios
+```
+
 ## Install Express
 ```bash
-npm install express morgan body-parser cors nodemon
+npm install bcryptjs body-parser cookie-parser cors dotenv express jsonwebtoken mongoose morgan nodemon
 ```
 
 

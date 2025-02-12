@@ -1,7 +1,6 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-
 require("dotenv").config();
 
 
@@ -50,53 +49,49 @@ const register = async (req, res) => {
 // Login
 const login = async (req, res) => {
     try {
-        const { email, username, password } = req.body;
+        const { email, password } = req.body;
 
-        // ตรวจสอบว่า user กรอก email หรือ username
-        let query = {};
-
-        if (email) {
-
-            query.email = email;
-
-        } else if (username) {
-
-            query.username = username;
-
-        } else {
-            return res
-                .status(400)
-                .json({ message: "Email or username is required" });
-        }
-
-        // ค้นหา user
-        const user = await User.findOne(query);
+        // หาว่ามี email ในฐานข้อมูลรึป่าว
+        const user = await User.findOne({ email });
         if (!user) {
-            return res
-                .status(401)
-                .json({ message: "Invalid username/email or password" });
+            return res.status(400).json({ message: "Invalid email or password" });
         }
 
         // ตรวจสอบรหัสผ่าน
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res
-                .status(401)
-                .json({ message: "Invalid username/email or password" });
+            return res.status(400).json({ message: "Invalid email or password" });
         }
 
         // สร้าง JWT Token
-        const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET, {
-            expiresIn: "2h",
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+        });
+
+        // set token ไปที่ cookie
+        res.cookie("token", token, {
+            maxAge: 300000,
+            secure: true,
+            httpOnly: true,
+            sameSite: "none",
         });
 
         res.status(200).json({ token, user });
-        
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: "Server error", error });
     }
 };
+
+
+// Logout
+const logout = async (req, res) => {
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "Strict",
+    });
+    res.status(200).json({ message: "Logged out successfully" });
+}
 
 
 
@@ -104,7 +99,6 @@ const login = async (req, res) => {
 
 module.exports = {
     register,    
-    login
-
+    login,
+    logout
 };
-  
