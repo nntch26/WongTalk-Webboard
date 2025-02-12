@@ -49,6 +49,85 @@ const getAllPost = async (req, res) => {
 };
 
 
+// ดึงโพสอันล่าสุด
+const getLatestPost = async (req, res) => {
+
+    try {
+        const allPosts = await Post.find()
+        .select('title content likes commentCount createdAt')
+        .populate({ path: 'topicId', select: 'name' })
+        .populate({ path: 'userId', select: 'fullname' })
+        .sort({ createdAt: -1 }) // เรียงจากใหม่ไปเก่า
+        .lean();
+    
+    
+    
+         // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+        const modifiedPosts = allPosts.map(post => ({
+            ...post,
+            likes: post.likes?.length || 0,  // ถ้าไม่มี likes ให้เป็น 0
+            commentCount: post.commentCount?.length || 0, // ถ้าไม่มี comments ให้เป็น 0
+            time:moment(post.createdAt).tz('Asia/Bangkok').fromNow(),
+            createdPost: moment(post.createdAt).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss')
+        }));
+    
+        console.log(modifiedPosts);
+    
+    
+      
+        res.status(200).json({
+            success: true,
+            data: modifiedPosts,
+        });
+    
+    
+    } catch (error) {
+        res.status(500).json({
+          success: false,
+          message: "Internal Server Error...",
+        });
+    }
+}
+
+
+// ดึงโพสมาแรงที่สุด
+const getPostsTop = async (req, res) => {
+  try {
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7); // ย้อนกลับไป 7 วัน
+
+
+    const allPosts = await Post.find({ createdAt: { $gte: oneWeekAgo } })
+    .select('title content likes commentCount createdAt')
+    .populate({ path: 'topicId', select: 'name' })
+    .populate({ path: 'userId', select: 'fullname' })
+    .sort({ likes: -1 }) // เรียงจากมากไปน้อย
+    .lean(); // แปลงเป็น JSON object
+
+
+    // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+    const modifiedPosts = allPosts.map(post => ({
+        ...post,
+        likes: post.likes?.length || 0,  // ถ้าไม่มี likes ให้เป็น 0
+        commentCount: post.commentCount?.length || 0, // ถ้าไม่มี comments ให้เป็น 0
+        time:moment(post.createdAt).tz('Asia/Bangkok').fromNow(),
+        createdPost: moment(post.createdAt).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss')
+    }));
+
+    console.log(modifiedPosts);
+
+
+    res.status(200).json({
+        success: true,
+        data: modifiedPosts,
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
+  }
+};
+
+
 
 // ค้นหาโพส
 const Search = async (req, res) => {  
@@ -464,5 +543,7 @@ module.exports = {
     deletePost,
     getPostDetail,
     likePost,
+    getLatestPost,
+    getPostsTop
 
 };
