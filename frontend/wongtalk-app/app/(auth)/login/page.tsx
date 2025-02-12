@@ -11,7 +11,7 @@ export default function Login() {
     const [error, setError] = useState(null);
     const router = useRouter();
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
 
@@ -43,7 +43,7 @@ export default function Login() {
                         <h3 className="text-2xl sm:text-3xl font-bold text-[#E8E9EA] mb-6 text-center">
                             Login
                         </h3>
-                        <form className="space-y-4" onSubmit={handleLogin}>
+                        <form className="space-y-4" onSubmit={handleSubmit}>
                             {/* Email Input */}
                             <div className="relative">
                                 <svg
