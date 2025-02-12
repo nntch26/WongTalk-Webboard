@@ -3,24 +3,40 @@ const User = require("../models/userModel");
 const Post = require("../models/PostModel");
 const Comment = require("../models/commentModel");
 const Topic = require("../models/topicModel");
-const mongoose = require('mongoose');
+
+const moment = require('moment-timezone');
+
+
 
 // ดึงข้อมูลทั้งหมด
 const getAllPost = async (req, res) => {
   try {
     const allPosts = await Post.find()
-        .populate({ path: 'topicId', select: 'name' }) // ดึง topic
-        .populate({ path: 'userId', select: 'name' }); // ดึง user
+    .select('title content likes commentCount createdAt')
+    .populate({ path: 'topicId', select: 'name' })
+    .populate({ path: 'userId', select: 'fullname' })
+    .lean();
 
-    // เพิ่มจำนวน likesCount ในแต่ละโพสต์
-    const posts = allPosts.map(post => ({
-        ...post.toObject(), // แปลง Document เป็น Object
-        likesCount: post.likes ? post.likes.length : 0 // นับจำนวน likes
+    // สุ่มโพสต์ 
+    const randomPosts = allPosts.sort(() => 0.5 - Math.random()) //.slice(0, 10);
+
+
+     // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+    const modifiedPosts = randomPosts.map(post => ({
+        ...post,
+        likes: post.likes?.length || 0,  // ถ้าไม่มี likes ให้เป็น 0
+        commentCount: post.commentCount?.length || 0, // ถ้าไม่มี comments ให้เป็น 0
+        time:moment(post.createdAt).tz('Asia/Bangkok').fromNow(),
+        createdPost: moment(post.createdAt).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss')
     }));
 
+    console.log(modifiedPosts);
+
+
+  
     res.status(200).json({
         success: true,
-        data: posts,
+        data: modifiedPosts,
     });
 
 
@@ -33,6 +49,7 @@ const getAllPost = async (req, res) => {
 };
 
 
+
 // ค้นหาโพส
 const Search = async (req, res) => {  
   try {
@@ -43,32 +60,54 @@ const Search = async (req, res) => {
       return res.status(400).json({ message: "Please enter a search term." });
     }
 
-    const posts = await Post.aggregate([
-      {
-        $match: {
-          $or: [
-            { title: { $regex: query, $options: "i" } }, // ค้นหาจาก title
-            // { content: { $regex: query, $options: "i" } } // ค้นหาจาก content
-          ]
-        }
-      },
-      { $sample: { size: 10 } } // สุ่มโพสมา 10 โพส
-    ]);
+    const allPosts = await Post.find()
+    .select('title content likes commentCount createdAt')
+    .populate({ path: 'topicId', select: 'name' })
+    .populate({ path: 'userId', select: 'fullname' })
+    .lean(); // แปลงเป็น JSON object 
+
+
+    // กรองโพสต์ที่ตรงกับคำค้นหา
+    const filteredPosts = allPosts.filter(post => 
+    post.title.match(new RegExp(query, 'i')) // ค้นหาจาก title
+    // post.content.match(new RegExp(query, 'i')) // ค้นหาจาก content
+    );
+
+    // สุ่มโพสต์ 10 โพส
+    const randomPosts = filteredPosts.sort(() => 0.5 - Math.random()).slice(0, 10);
+
+   
+
+     // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+    const modifiedPosts = randomPosts.map(post => ({
+        ...post,
+        likes: post.likes?.length || 0,  // ถ้าไม่มี likes ให้เป็น 0
+        commentCount: post.commentCount?.length || 0, // ถ้าไม่มี comments ให้เป็น 0
+        time:moment(post.createdAt).tz('Asia/Bangkok').fromNow(),
+        createdPost: moment(post.createdAt).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss')
+    }));
+
+    console.log(modifiedPosts);
 
 
     // ไม่มีคำที่ค้นหา หาไม่เจอ
-    if (posts.length === 0) {
+    if (modifiedPosts.length === 0) {
       return res.status(404).json({ 
         message: "No posts found matching your search." 
       });
     }
 
-    res.json(posts);
+    res.status(200).json({
+        success: true,
+        data: modifiedPosts,
+    });
 
   } catch (error) {
     res.status(500).json({ message: "Server Error", error });
   }
 }
+
+
 
 // ดึงข้อมูลโพสตาม topic
 const getPostTopic = async (req, res) => {
@@ -83,10 +122,25 @@ const getPostTopic = async (req, res) => {
     }
 
     const posts = await Post.find({ topicId: topicId })
-      .populate({ path: 'topicId', select: 'name' })
-      .populate({ path: 'userId', select: 'name' })
-      .sort({ createdAt: -1 });  // เรียงโพสต์จากใหม่ไปเก่า
-    console.log(posts)
+    .select('title content likes commentCount createdAt')
+    .populate({ path: 'topicId', select: 'name description' })
+    .populate({ path: 'userId', select: 'fullname' })
+    .sort({ createdAt: -1 }) // เรียงจากใหม่ไปเก่า
+    .lean(); // แปลงเป็น JSON object
+
+
+    // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+    const modifiedPosts = posts.map(post => ({
+        ...post,
+        likes: post.likes?.length || 0,  // ถ้าไม่มี likes ให้เป็น 0
+        commentCount: post.commentCount?.length || 0, // ถ้าไม่มี comments ให้เป็น 0
+        time:moment(post.createdAt).tz('Asia/Bangkok').fromNow(),
+        createdPost: moment(post.createdAt).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss')
+    }));
+
+
+    console.log(modifiedPosts);
+
 
     if (posts.length === 0) {
       return res.status(404).json({
@@ -94,7 +148,10 @@ const getPostTopic = async (req, res) => {
       });
     }
 
-    res.json(posts);
+    res.status(200).json({
+        success: true,
+        data:modifiedPosts
+    });
 
   } catch (error) {
     res.status(500).json({ message: "Server Error", error });
@@ -105,48 +162,49 @@ const getPostTopic = async (req, res) => {
 // โพสแต่ละ topic ที่มี like มากที่สุด
 const getPostsTopInTopic = async (req, res) => {
   try {
-    const { topicName } = req.params;  // รับชื่อหัวจาก URL parameter
-    console.log(topicName , "<= query");
+    // const { topicName } = req.params;  // รับชื่อหัว URL parameter
+    const { topicId } = req.body; 
 
-    // ตรวจสอบว่ามี topicName หรือไม่
-    if (!topicName) {
-      return res.status(400).json({ message: "Please provide a topic name." });
-    }
-
-    // ค้นหา topicId จากชื่อ topicName
-    const topic = await Topic.findOne({ name: topicName });
-    console.log(topic , "<= topic");
-    
-    // ตรวจสอบว่า topicId มีหรือไม่
-    if (!topic) {
-      return res.status(404).json({ message: "Topic not found." });
-    }
-
-    const topicId = new mongoose.Types.ObjectId(topic._id);  // ดึง topicId
     console.log(topicId , "<= topicId");
 
-
-    // ค้นหาโพส และจัดเรียงตามจำนวน likes มากที่สุด
-    const posts = await Post.find({ topicId: topicId })
-      .populate({ path: 'userId', select: 'name' })  // ดึงข้อมูล username จาก userId
-      .sort({ likes: -1 })  // จัดเรียงโพสต์ตามจำนวน likes มากที่สุด
-      .limit(5);  // จำกัดผลลัพธ์ 5 โพสต์
-
-    console.log(posts , "<= posts");
-
-    // ตรวจสอบว่าไม่พบโพสต์
-    if (posts.length === 0) {
-      return res.status(404).json({ message: "No posts found for this topic." });
+    if (!topicId) {
+      return res.status(400).json({ message: "Please enter a topicId." });
     }
 
-    res.status(200).json(posts.map(post => ({
-      postId: post._id,  
-      title: post.title,
-      likes: post.likes.length, 
-      commentCount: post.commentCount,
-      username: post.userId.name, 
-      createdAt: post.createdAt
-    })));
+
+    const posts = await Post.find({ topicId: topicId })
+    .select('title content likes commentCount createdAt')
+    .populate({ path: 'topicId', select: 'name description' })
+    .populate({ path: 'userId', select: 'fullname' })
+    .sort({ likes: -1 }) // เรียงตามจำนวน likes มากที่สุด
+    .limit(5) // จำกัดผลลัพธ์ 5 โพสต์
+    .lean(); // แปลงเป็น JSON object
+    
+
+    // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+    const modifiedPosts = posts.map(post => ({
+        ...post,
+        likes: post.likes?.length || 0,  // ถ้าไม่มี likes ให้เป็น 0
+        commentCount: post.commentCount?.length || 0,// ถ้าไม่มี comments ให้เป็น 0
+        time:moment(post.createdAt).tz('Asia/Bangkok').fromNow(),
+        createdPost: moment(post.createdAt).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss')
+    }));
+
+
+    console.log(modifiedPosts);
+
+
+    if (posts.length === 0) {
+      return res.status(404).json({
+        message: "No posts found for this topic."
+      });
+    }
+    
+
+    res.status(200).json({
+        success: true,
+        data:modifiedPosts
+    });
 
   } catch (error) {
     console.log(error.message);
@@ -170,22 +228,35 @@ const getPostDetail = async (req, res) =>{
         }
 
          // ค้นหาตาม id
-        const getpost = await Post.findById(id)
-        .populate({ path: 'topicId', select: 'name' })
-        .populate({ path: 'userId', select: 'name' }); // ดึง user
 
-         if (!getpost) {
-             return res.status(404).json({ message: "User not found" })
+        const posts = await Post.findById(id)
+        .select('title content likes commentCount createdAt')
+        .populate({ path: 'topicId', select: 'name' })
+        .populate({ path: 'userId', select: 'fullname' })
+        .lean(); // แปลงเป็น JSON object
+        
+
+        // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+        const modifiedPosts = Array.of(posts).map(post => ({
+            ...post,
+            likes: post.likes?.length || 0,  // ถ้าไม่มี likes ให้เป็น 0
+            commentCount: post.commentCount?.length || 0, // ถ้าไม่มี comments ให้เป็น 0
+            time: moment(post.createdAt).tz('Asia/Bangkok').fromNow(),
+            createdPost: moment(post.createdAt).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss')
+        }));
+
+         if (!modifiedPosts) {
+             return res.status(404).json({ message: "Post not found" })
         }
 
         // ดึงข้อมูลคอมเม้นโพสต์นี้
-        const comments = await Comment.find({ postId: id }).populate('userId', 'name'); // ใช้ populate เพื่อดึงข้อมูลผู้ใช้ด้วย
+        const comments = await Comment.find({ postId: id }).populate('userId', 'fullname'); // ใช้ populate เพื่อดึงข้อมูลผู้ใช้ด้วย
         console.log(comments)
 
 
         res.status(200).json({
         success: true,
-        Post: getpost, 
+        Post: modifiedPosts, 
         allComments :comments
         });
     
