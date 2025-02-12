@@ -15,7 +15,7 @@ npm install axios
 
 ## Install Express
 ```bash
-npm install bcryptjs body-parser cookie-parser cors dotenv express jsonwebtoken mongoose morgan nodemon
+npm install bcryptjs body-parser cookie-parser cors dotenv express jsonwebtoken mongoose morgan nodemon moment-timezone
 ```
 
 npm install moment-timezone
