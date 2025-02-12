@@ -18,5 +18,3 @@ npm install axios
 npm install bcryptjs body-parser cookie-parser cors dotenv express jsonwebtoken mongoose morgan nodemon moment-timezone
 ```
 
-npm install moment-timezone
-
