@@ -4,13 +4,15 @@ const router = express.Router();
 const {
   getAllUser,
   getUser,
-  followTopic
+  followTopic,
+  showFollow
   
 } = require("../controllers/userController");
 
 
 router.get("/users", getAllUser);
 router.get("/users/:id", getUser);
+router.get("/showfollow", showFollow);
 
 
 router.post("/follow", followTopic);

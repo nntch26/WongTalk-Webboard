@@ -151,9 +151,45 @@ const followTopic = async (req, res) => {
 };
 
 
+// แสดง topic ที่ติดตาม
+const showFollow = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    // เช็คมี userId หรือไม่
+    if (!userId) {
+      return res.status(400).json({ message: 'userId is required' });
+    }
+
+    // ค้นหาผู้ใช้ และดึงข้อมูล topic ที่ติดตาม
+    const user = await User.findById(userId).populate('followTopic');
+
+
+    // ตรวจสอบว่าผู้ใช้ติดตามหัวข้อใด ๆ ป่าว
+    if (!user.followTopic.length) {
+      return res.status(404).json({ message: 'No followed topics found' });
+    }
+
+    // ส่ง topic ติดตามกลับไป
+    res.status(200).json({
+      message: 'Followed topics retrieved successfully',
+      topics: user.followTopic,
+    });
+
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+
 module.exports = {
   getAllUser,
   getUser,
-  followTopic
+  followTopic,
+  showFollow
   
 };
