@@ -1,35 +1,83 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { register } from "../api/auth";
+import { register } from "../api/authServices";
 import { useRouter } from "next/navigation";
 
+interface RegisterForm {
+    fullname: string;
+    username: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
+
 export default function Register() {
-    const [fullname, setFullname] = useState("");
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [formData, setFormData] = useState<RegisterForm>({
+        fullname: "",
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+    });
+
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+        // เคลียร์ error ถ้ามีค่า error อยู่
+        if (error) setError(null);
+    };
+
+
+    const validateForm = () => {
+        if (
+            !formData.fullname ||
+            !formData.username ||
+            !formData.email ||
+            !formData.password ||
+            !formData.confirmPassword
+        ) {
+            setError("All fields are required");
+            return false;
+        }
+
+        if (formData.password.length < 6) {
+            setError("Password must be at least 6 characters");
+            return false;
+        }
+
+        if (formData.password !== formData.confirmPassword) {
+            setError("Passwords do not match");
+            return false;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            setError("Invalid email format");
+            return false;
+        }
+
+        return true;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError(null);
 
-        // Validate password match
-        if (password !== confirmPassword) {
-            setError("Passwords do not match");
-            return;
-        }
+        if (!validateForm()) return;
 
         try {
             await register(
-                fullname,
-                username,
-                email,
-                password,
-                confirmPassword
+                formData.fullname,
+                formData.username,
+                formData.email,
+                formData.password,
+                formData.confirmPassword
             );
             router.push("/login");
         } catch (err: any) {
@@ -40,7 +88,7 @@ export default function Register() {
     return (
         <div className="min-h-screen flex items-center justify-center p-4 bg-[#080E13]">
             {/* container หลัก */}
-            <div className="w-full sm:w-[80%] md:w-[500px] max-w-6xl bg-[#0F151A] rounded-3xl shadow-xl flex justify-center overflow-hidden min-h-[680px] md:h-[55vh]">
+            <div className="w-full sm:w-[80%] md:w-[500px] max-w-6xl bg-[#0F151A] rounded-3xl shadow-xl flex justify-center overflow-hidden min-h-[750px] md:h-[55vh]">
                 <div className="w-full min-h-[680px] p-4 sm:p-6 md:p-8 bg-[#0F151A] flex justify-center relative">
                     <div className="w-full max-w-sm mx-auto relative pt-16 ">
                         <div className="absolute top-0 left-1/2 transform -translate-x-1/2">
@@ -61,11 +109,14 @@ export default function Register() {
                             </div>
                         )}
 
-                        <form onSubmit={handleSubmit} className="space-y-4">
+                        <form onSubmit={handleSubmit} className="space-y-3">
                             {/* Fullname Input */}
                             <div className="relative">
+                                <label className="block text-[#E8E9EA] text-[16px] mb-1">
+                                    Fullname
+                                </label>
                                 <svg
-                                    className="w-5 h-5 absolute left-3 top-3.5 text-[#E8E9EA]"
+                                    className="w-5 h-5 absolute left-3 top-10 text-[#E8E9EA]"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -80,11 +131,9 @@ export default function Register() {
                                 <input
                                     type="text"
                                     name="fullname"
-                                    value={fullname}
-                                    onChange={(e) =>
-                                        setFullname(e.target.value)
-                                    }
-                                    className="w-full px-4 py-3 rounded-lg border border-[rgba(255,255,255,0.1)] focus:border-[#30E48E] focus:ring-2 focus:ring-[#30E48E] outline-none transition pl-10 text-[#E8E9EA] bg-[#191C24]"
+                                    value={formData.fullname}
+                                    onChange={handleChange}
+                                    className="w-full px-2 py-2 rounded-lg border border-[rgba(255,255,255,0.1)] focus:border-[#30E48E] focus:ring-2 focus:ring-[#30E48E] outline-none transition pl-10 text-[#E8E9EA] bg-[#191C24]"
                                     placeholder="Fullname"
                                     required
                                 />
@@ -92,8 +141,11 @@ export default function Register() {
 
                             {/* Username Input */}
                             <div className="relative">
+                                <label className="block text-[#E8E9EA] text-[16px] mb-1">
+                                    Username
+                                </label>
                                 <svg
-                                    className="w-5 h-5 absolute left-3 top-3.5 text-[#E8E9EA]"
+                                    className="w-5 h-5 absolute left-3 top-10 text-[#E8E9EA]"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -108,11 +160,9 @@ export default function Register() {
                                 <input
                                     type="text"
                                     name="username"
-                                    value={username}
-                                    onChange={(e) =>
-                                        setUsername(e.target.value)
-                                    }
-                                    className="w-full px-4 py-3 rounded-lg border border-[rgba(255,255,255,0.1)] focus:border-[#30E48E] focus:ring-2 focus:ring-[#30E48E] outline-none transition pl-10 text-[#E8E9EA] bg-[#191C24]"
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                    className="w-full px-2 py-2 rounded-lg border border-[rgba(255,255,255,0.1)] focus:border-[#30E48E] focus:ring-2 focus:ring-[#30E48E] outline-none transition pl-10 text-[#E8E9EA] bg-[#191C24]"
                                     placeholder="Username"
                                     required
                                 />
@@ -120,8 +170,11 @@ export default function Register() {
 
                             {/* Email Input */}
                             <div className="relative">
+                                <label className="block text-[#E8E9EA] text-[16px] mb-1">
+                                    Email
+                                </label>
                                 <svg
-                                    className="w-5 h-5 absolute left-3 top-3.5 text-[#E8E9EA]"
+                                    className="w-5 h-5 absolute left-3 top-10 text-[#E8E9EA]"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -136,9 +189,9 @@ export default function Register() {
                                 <input
                                     type="email"
                                     name="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full px-4 py-3 rounded-lg border border-[rgba(255,255,255,0.1)] focus:border-[#30E48E] focus:ring-2 focus:ring-[#30E48E] outline-none transition pl-10 text-[#E8E9EA] bg-[#191C24]"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className="w-full px-2 py-2 rounded-lg border border-[rgba(255,255,255,0.1)] focus:border-[#30E48E] focus:ring-2 focus:ring-[#30E48E] outline-none transition pl-10 text-[#E8E9EA] bg-[#191C24]"
                                     placeholder="Email"
                                     required
                                 />
@@ -146,8 +199,11 @@ export default function Register() {
 
                             {/* Password Input */}
                             <div className="relative">
+                                <label className="block text-[#E8E9EA] text-[16px] mb-1">
+                                    Password
+                                </label>
                                 <svg
-                                    className="w-5 h-5 absolute left-3 top-3.5 text-[#E8E9EA]"
+                                    className="w-5 h-5 absolute left-3 top-10 text-[#E8E9EA]"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -162,11 +218,9 @@ export default function Register() {
                                 <input
                                     type="password"
                                     name="password"
-                                    value={password}
-                                    onChange={(e) =>
-                                        setPassword(e.target.value)
-                                    }
-                                    className="w-full px-4 py-3 rounded-lg border border-[rgba(255,255,255,0.1)] focus:border-[#30E48E] focus:ring-2 focus:ring-[#30E48E] outline-none transition pl-10 text-[#E8E9EA] bg-[#191C24]"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    className="w-full px-2 py-2 rounded-lg border border-[rgba(255,255,255,0.1)] focus:border-[#30E48E] focus:ring-2 focus:ring-[#30E48E] outline-none transition pl-10 text-[#E8E9EA] bg-[#191C24]"
                                     placeholder="Password"
                                     required
                                 />
@@ -174,8 +228,11 @@ export default function Register() {
 
                             {/* Confirm Password Input */}
                             <div className="relative">
+                                <label className="block text-[#E8E9EA] text-[16px] mb-1">
+                                    Confirm Password
+                                </label>
                                 <svg
-                                    className="w-5 h-5 absolute left-3 top-3.5 text-[#E8E9EA]"
+                                    className="w-5 h-5 absolute left-3 top-10 text-[#E8E9EA]"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -190,11 +247,9 @@ export default function Register() {
                                 <input
                                     type="password"
                                     name="confirmPassword"
-                                    value={confirmPassword}
-                                    onChange={(e) =>
-                                        setConfirmPassword(e.target.value)
-                                    }
-                                    className="w-full px-4 py-3 rounded-lg border border-[rgba(255,255,255,0.1)] focus:border-[#30E48E] focus:ring-2 focus:ring-[#30E48E] outline-none transition pl-10 text-[#E8E9EA] bg-[#191C24]"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    className="w-full px-2 py-2 rounded-lg border border-[rgba(255,255,255,0.1)] focus:border-[#30E48E] focus:ring-2 focus:ring-[#30E48E] outline-none transition pl-10 text-[#E8E9EA] bg-[#191C24]"
                                     placeholder="Confirm Password"
                                     required
                                 />
@@ -221,7 +276,7 @@ export default function Register() {
                             >
                                 Create Account
                             </button>
-                            
+
                             {/* Login Link */}
                             <p className="text-center text-xs sm:text-sm text-[#E8E9EA] mt-2">
                                 Have an account already?{" "}

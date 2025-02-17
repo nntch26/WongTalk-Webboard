@@ -148,7 +148,7 @@ const Search = async (req, res) => {
 
     // กรองโพสต์ที่ตรงกับคำค้นหา
     const filteredPosts = allPosts.filter(post => 
-    post.title.match(new RegExp(query, 'i')) // ค้นหาจาก title
+    post.title.match(new RegExp(query, 'i')) // ค้นหาจาก titlesea
     // post.content.match(new RegExp(query, 'i')) // ค้นหาจาก content
     );
 

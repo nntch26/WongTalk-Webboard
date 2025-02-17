@@ -36,6 +36,7 @@ app.use('/api', require('./routes/usersRoute'));
 app.use('/api', require('./routes/postRoute'));
 app.use('/api', require('./routes/commentRoute'));
 app.use('/api', require('./routes/authRoute'));
+app.use('/api', require('./routes/profileRoute'));
 
 
 

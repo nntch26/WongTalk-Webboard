@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { logout } from "../(auth)/api/auth";
+import { logout } from "../(auth)/api/authServices";
 import { useRouter } from "next/navigation";
 
 export default function Navbar() {
@@ -51,12 +51,6 @@ export default function Navbar() {
                         >
                             Login
                         </Link>
-                        <a
-                            onClick={handleLogout}
-                            className="text-white cursor-pointer hover:text-[#30E48E]"
-                        >
-                            Logout
-                        </a>
                     </div>
 
                     {/* Profile Icon */}

@@ -1,10 +1,57 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { getProfile, editProfile } from "../api/profileServices";
+
+interface Profile {
+    fullname: string;
+    username: string;
+    email: string;
+}
+
 export default function EditProfile() {
+    const [user, setUser] = useState<Profile>({
+        fullname: "",
+        username: "",
+        email: "",
+    });
+    const [error, setError] = useState<string | null>(null);
+    const router = useRouter();
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const data = await getProfile(); // ดึงข้อมูลจาก API
+                setUser({
+                    fullname: data.fullname,
+                    username: data.username,
+                    email: data.email,
+                });
+            } catch (error) {
+                setError("Failed to fetch profile.");
+            }
+        };
+
+        fetchProfile();
+    }, []);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            const updatedUser = await editProfile(user); // ส่งข้อมูลที่แก้ไขไปที่ API
+            router.push("/profile"); // เมื่อแก้ไขสำเร็จให้ไปที่หน้าโปรไฟล์
+        } catch (err: any) {
+            setError(err.message || "Profile update failed.");
+        }
+    };
+
     return (
         <div className="w-full min-h-screen bg-[#080E13] text-[#E8E9EA]">
-
             {/* Main Container */}
             <div className="w-full sm:max-w-6xl sm:mx-auto">
                 {/* Banner Image */}
@@ -27,8 +74,12 @@ export default function EditProfile() {
                                 className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-[#080E13]"
                             />
                             <div className="mt-6 text-center">
-                                <h1 className="text-lg sm:text-xl font-bold">Benjamin Hoppe</h1>
-                                <p className="text-[#30E48E] text-sm sm:text-base">@Username_Benjamin</p>
+                                <h1 className="text-lg sm:text-xl font-bold">
+                                    {user.fullname}
+                                </h1>
+                                <p className="text-[#30E48E] text-sm sm:text-base">
+                                    {user.username}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -36,15 +87,18 @@ export default function EditProfile() {
                     {/* Edit Form */}
                     <div className="flex justify-center items-center pt-20 sm:pt-24">
                         <div className="mt-10 w-full max-w-3xl">
-                            <h2 className="text-xl sm:text-2xl font-bold mb-3 mt-8">Edit Profile</h2>
+                            <h2 className="text-xl sm:text-2xl font-bold mb-3 mt-8">
+                                Edit Profile
+                            </h2>
                             <hr className="border-t-2 border-[rgba(255,255,255,0.1)] mb-8" />
 
-                            <form className="space-y-4">
+                            <form className="space-y-4" onSubmit={handleSubmit}>
                                 {/* Name Fields */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {/* First Name */}
+                                {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm text-[#E8E9EA]/60 mb-2">First Name</label>
+                                        <label className="block text-sm text-[#E8E9EA]/60 mb-2">
+                                            First Name
+                                        </label>
                                         <input
                                             type="text"
                                             defaultValue="Benjamin"
@@ -52,33 +106,68 @@ export default function EditProfile() {
                                         />
                                     </div>
 
-                                    {/* Last Name */}
                                     <div>
-                                        <label className="block text-sm text-[#E8E9EA]/60 mb-2">Last Name</label>
+                                        <label className="block text-sm text-[#E8E9EA]/60 mb-2">
+                                            Last Name
+                                        </label>
                                         <input
                                             type="text"
                                             defaultValue="Hoppe"
                                             className="w-full px-4 py-2 rounded-lg bg-[#191C24] border border-[rgba(255,255,255,0.1)] text-[#E8E9EA] focus:outline-none focus:border-[#30E48E]"
                                         />
                                     </div>
-                                </div>
+                                </div> */}
 
-                                {/* Username */}
+                                {/* Fullname */}
                                 <div>
-                                    <label className="block text-sm text-[#E8E9EA]/60 mb-2">Username</label>
+                                    <label className="block text-sm text-[#E8E9EA]/60 mb-2">
+                                        Fullname
+                                    </label>
                                     <input
                                         type="text"
-                                        defaultValue="Username_Benjamin"
+                                        value={user.fullname}
                                         className="w-full px-4 py-2 rounded-lg bg-[#191C24] border border-[rgba(255,255,255,0.1)] text-[#E8E9EA] focus:outline-none focus:border-[#30E48E]"
+                                        onChange={(e) =>
+                                            setUser({
+                                                ...user,
+                                                fullname: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </div>
+                                {/* Username */}
+                                <div>
+                                    <label className="block text-sm text-[#E8E9EA]/60 mb-2">
+                                        Username
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={user.username}
+                                        className="w-full px-4 py-2 rounded-lg bg-[#191C24] border border-[rgba(255,255,255,0.1)] text-[#E8E9EA] focus:outline-none focus:border-[#30E48E]"
+                                        onChange={(e) =>
+                                            setUser({
+                                                ...user,
+                                                username: e.target.value,
+                                            })
+                                        }
                                     />
                                 </div>
 
                                 {/* Email */}
                                 <div>
-                                    <label className="block text-sm text-[#E8E9EA]/60 mb-2">Email</label>
+                                    <label className="block text-sm text-[#E8E9EA]/60 mb-2">
+                                        Email
+                                    </label>
                                     <input
                                         type="email"
+                                        value={user.email}
                                         className="w-full px-4 py-2 rounded-lg bg-[#191C24] border border-[rgba(255,255,255,0.1)] text-[#E8E9EA] focus:outline-none focus:border-[#30E48E]"
+                                        onChange={(e) =>
+                                            setUser({
+                                                ...user,
+                                                email: e.target.value,
+                                            })
+                                        }
                                     />
                                 </div>
 
@@ -89,7 +178,10 @@ export default function EditProfile() {
                                             Cancel
                                         </button>
                                     </Link>
-                                    <button className="w-full sm:w-auto px-6 py-2 bg-[#30E48E] text-[#080E13] rounded-full font-bold text-sm sm:text-base hover:bg-opacity-90 transition-colors">
+                                    <button
+                                        type="submit"
+                                        className="w-full sm:w-auto px-6 py-2 bg-[#30E48E] text-[#080E13] rounded-full font-bold text-sm sm:text-base hover:bg-opacity-90 transition-colors"
+                                    >
                                         Save changes
                                     </button>
                                 </div>

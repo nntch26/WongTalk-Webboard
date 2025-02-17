@@ -1,34 +1,39 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { login } from "../api/auth";
+import { login } from "../api/authServices";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError(null);
+
+        if (!email || !password) {
+            setError("Please enter email and password.");
+            return;
+        }
 
         try {
             const userData = await login(email, password);
             router.push("/profile");
             console.log(userData);
         } catch (err: any) {
-            alert("Invalid email or password");
-            setError(err.message);
+            // alert("Invalid email or password");
+            setError(err.response.data.message);
         }
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center p-4 bg-[#080E13]">
             {/* container หลัก */}
-            <div className="w-full sm:w-[80%] md:w-[500px] max-w-5xl bg-[#0F151A] rounded-3xl shadow-xl flex justify-center overflow-hidden min-h-[500px] md:h-[50vh]">
+            <div className="w-full sm:w-[80%] md:w-[500px] max-w-5xl bg-[#0F151A] rounded-3xl shadow-xl flex justify-center overflow-hidden min-h-[550px] md:h-[50vh]">
                 {/* div login */}
                 <div className="w-full min-h-[300px] p-4 sm:p-6 md:p-8 bg-[#0F151A] flex justify-center relative">
                     <div className="w-full max-w-sm relative pt-16">
@@ -43,11 +48,21 @@ export default function Login() {
                         <h3 className="text-2xl sm:text-3xl font-bold text-[#E8E9EA] mb-6 text-center">
                             Login
                         </h3>
-                        <form className="space-y-4" onSubmit={handleSubmit}>
+
+                        {/* แสดง error */}
+                        {error && (
+                            <div className="mb-4 p-3 bg-red-500 bg-opacity-10 border border-red-500 text-red-500 rounded-lg text-sm">
+                                {error}
+                            </div>
+                        )}
+                        <form className="space-y-3" onSubmit={handleSubmit}>
                             {/* Email Input */}
                             <div className="relative">
+                                <label className="block text-[#E8E9EA] text-[16px] mb-1">
+                                    Email
+                                </label>
                                 <svg
-                                    className="w-5 h-5 absolute left-3 top-3.5 text-[#E8E9EA]"
+                                    className="w-5 h-5 absolute left-3 top-10 text-[#E8E9EA]"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -60,9 +75,9 @@ export default function Login() {
                                     ></path>
                                 </svg>
                                 <input
-                                    type="text"
+                                    type="email"
                                     className="w-full px-4 py-3 rounded-lg border border-[rgba(255,255,255,0.1)] focus:border-[#30E48E] focus:ring-2 focus:ring-[#30E48E] outline-none transition pl-10 text-[#E8E9EA] bg-[#191C24]"
-                                    placeholder="Email"
+                                    placeholder="Enter your email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
@@ -70,8 +85,11 @@ export default function Login() {
 
                             {/* Password Input */}
                             <div className="relative">
+                                <label className="block text-[#E8E9EA] text-[16px] mb-1">
+                                    Password
+                                </label>
                                 <svg
-                                    className="w-5 h-5 absolute left-3 top-3.5 text-[#E8E9EA]"
+                                    className="w-5 h-5 absolute left-3 top-10 text-[#E8E9EA]"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -86,7 +104,7 @@ export default function Login() {
                                 <input
                                     type="password"
                                     className="w-full px-4 py-3 rounded-lg border border-[rgba(255,255,255,0.1)] focus:border-[#30E48E] focus:ring-2 focus:ring-[#30E48E] outline-none transition pl-10 text-[#E8E9EA] bg-[#191C24]"
-                                    placeholder="Password"
+                                    placeholder="Enter your password"
                                     value={password}
                                     onChange={(e) =>
                                         setPassword(e.target.value)
@@ -115,7 +133,7 @@ export default function Login() {
                             {/* Submit Button */}
                             <button
                                 type="submit"
-                                className="w-full py-3 rounded-lg bg-[#30E48E] text-[#080E13] font-medium hover:bg-opacity-90 transition duration-300 mt-2"
+                                className="w-full py-3 rounded-lg bg-[#30E48E] text-[#080E13] font-medium hover:bg-opacity-90 transition duration-300 mt-12"
                             >
                                 Login
                             </button>

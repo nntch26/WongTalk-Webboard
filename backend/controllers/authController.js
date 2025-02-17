@@ -70,13 +70,13 @@ const login = async (req, res) => {
 
         // set token ไปที่ cookie
         res.cookie("token", token, {
-            maxAge: 300000,
-            secure: true,
-            httpOnly: true,
-            sameSite: "none",
+            maxAge: 3600000, // 1 ชั่วโมง
+            secure: true, // cookie จะถูกส่งผ่านเฉพาะเมื่อใช้ HTTPS เท่านั้น
+            httpOnly: true, // cookie ไม่สามารถเข้าถึงได้จาก JavaScript ฝั่งไคลเอนต์
+            sameSite: "none", // อนุญาตให้ส่ง cookie ระหว่างโดเมน (cross-site)
         });
 
-        res.status(200).json({ token, user });
+        res.status(200).json({ message: "Login successful", user });
     } catch (error) {
         res.status(500).json({ message: "Server error", error });
     }
