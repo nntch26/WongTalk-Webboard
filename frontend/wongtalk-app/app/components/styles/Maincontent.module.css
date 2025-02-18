@@ -1,0 +1,80 @@
+/* //////////////////////////////// main content  ////////////////////////////////*/
+
+.bannercus{
+    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+    color: var(--background-Dark);
+
+}
+
+/* /////////////////////////////////// topic ///////////////////////////////////////////////// */
+.topicitem{
+    border: 1px solid #374151;
+    border-radius: 0.5rem; 
+    font-size: 0.875rem; 
+    transition: background-color 0.3s;
+}
+
+.topicitem:hover {
+    background-color: #2a3342; 
+} 
+
+/* //////////////////////////////// post card  ////////////////////////////////*/
+.post-card{
+    background-color: var(--second-DarkMidnight);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #2a3342;
+    transition: background-color 0.3s ease;
+}
+
+
+.post-card:hover {
+    background-color: var(--hover-DarkCharcoal);
+    border: 2px solid #374151;
+}
+
+.post-header{
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 6px;
+}
+
+.post-title{
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+.post-content{
+    color: #9CA3AF;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.tags-topic{
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.tag{
+    border: 1px solid var(--tag-color);
+    color: var(--tag-color);
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 16px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+
+}
+
+.tag:hover{
+    background-color: var(--tag-background);
+}
+
+.post-stats{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #9CA3AF;
+    margin-bottom: 20px;
+}

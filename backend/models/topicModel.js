@@ -12,6 +12,9 @@ const TopicSchema = new Schema({
   description: {
     type: String
   },
+  icon: {
+    type: String
+  },
   createdAt: {
     type: Date,
     default: Date.now

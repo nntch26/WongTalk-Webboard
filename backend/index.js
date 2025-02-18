@@ -37,7 +37,7 @@ app.use('/api', require('./routes/postRoute'));
 app.use('/api', require('./routes/commentRoute'));
 app.use('/api', require('./routes/authRoute'));
 app.use('/api', require('./routes/profileRoute'));
-
+app.use('/api', require('./routes/topicRoute'));
 
 
 // Start server

@@ -18,3 +18,5 @@ npm install axios
 npm install bcryptjs body-parser cookie-parser cors dotenv express jsonwebtoken mongoose morgan nodemon moment-timezone
 ```
 
+## ใช้ไอคอน Font Awesome
+- npm install --save @fortawesome/fontawesome-free

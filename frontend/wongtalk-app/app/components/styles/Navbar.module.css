@@ -1,0 +1,52 @@
+/* ////////////////////////////////  navbar ////////////////////////////////*/
+
+.navbartop{
+    background-color: var(--background-Dark);
+    color: white;
+    z-index: 50;
+    border-bottom: 1px solid #374151; 
+
+}
+
+
+.logo{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+}
+
+.logo img {
+    height: 36px;
+}
+
+.btncus{
+    transition: background-color 0.3s ease-in-out;
+    background-color: var(--primary-color);
+    color: var(--background-Dark);
+    border: 1.5px solid var(--primary-color);
+}
+
+.btncus:hover {
+    border: 1.5px solid var(--primary-color);
+    background-color: var(--background-Dark);
+    color: var(--primary-color);
+}
+
+.searchbar{
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background-color:  var(--second-DarkMidnight);
+    border: 1px solid #4B5563;
+    border-radius: 9999px 0 0 9999px;
+    color: white; 
+    outline: none;
+
+}
+.searchbar::placeholder {
+    color: #6B7280;
+}
+.searchbar:focus {
+    border: 1px solid #374151;
+    outline: none;
+}
