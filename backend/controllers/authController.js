@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
-
 // register
 const register = async (req, res) => {
     try {
@@ -16,11 +15,11 @@ const register = async (req, res) => {
         }
 
         // ตรวจสอบว่า email หรือ username มีอยู่ในระบบแล้วหรือไม่
-       
+
         const existingUser = await User.findOne({
-            $or: [{ email }, { username }] // ค้นหาจาก email หรือ username
-          });
-      
+            $or: [{ email }, { username }], // ค้นหาจาก email หรือ username
+        });
+
         if (existingUser) {
             return res.status(400).json({ message: "Email already exists" });
         }
@@ -34,17 +33,16 @@ const register = async (req, res) => {
             fullname,
             username,
             email,
+            image: "default.png",
             password: hashedPassword,
         });
 
         await newUser.save();
         res.status(201).json({ message: "User registered successfully" });
-
     } catch (error) {
         res.status(500).json({ message: "Server error", error });
     }
 };
-
 
 // Login
 const login = async (req, res) => {
@@ -54,13 +52,17 @@ const login = async (req, res) => {
         // หาว่ามี email ในฐานข้อมูลรึป่าว
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: "Invalid email or password" });
+            return res
+                .status(400)
+                .json({ message: "Invalid email or password" });
         }
 
         // ตรวจสอบรหัสผ่าน
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: "Invalid email or password" });
+            return res
+                .status(400)
+                .json({ message: "Invalid email or password" });
         }
 
         // สร้าง JWT Token
@@ -82,7 +84,6 @@ const login = async (req, res) => {
     }
 };
 
-
 // Logout
 const logout = async (req, res) => {
     res.clearCookie("token", {
@@ -91,14 +92,10 @@ const logout = async (req, res) => {
         sameSite: "Strict",
     });
     res.status(200).json({ message: "Logged out successfully" });
-}
-
-
-
-
+};
 
 module.exports = {
-    register,    
+    register,
     login,
-    logout
+    logout,
 };

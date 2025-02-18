@@ -7,7 +7,6 @@ import { getProfile } from "../api/profileServices";
 import { logout } from "@/app/(auth)/api/authServices";
 import { useRouter } from "next/navigation";
 
-
 interface Post {
     _id: string;
     title: string;
@@ -23,6 +22,7 @@ interface UserProfile {
     username: string;
     email: string;
     posts: Post[];
+    image: string;
     createdAt: string;
 }
 
@@ -73,7 +73,7 @@ export default function Profile() {
                         {/* Profile Picture */}
                         <div className="absolute -top-16">
                             <img
-                                src="https://th.bing.com/th?id=OIP.IrUBHhdMo6wWLFueKNreRwHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2"
+                                src={`/uploads/${profile.image}`}
                                 alt="Profile picture"
                                 className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-[#080E13]"
                             />
@@ -83,7 +83,7 @@ export default function Profile() {
                         <div className="flex justify-end py-3">
                             <button
                                 onClick={handleLogout}
-                                className="px-4 py-2 bg-red-500 text-white rounded-full text-sm sm:text-base font-bold hover:bg-opacity-90 transition-colors"
+                                className="px-4 py-2 bg-[#4B5563] text-[#E8E9EA] rounded-full text-sm sm:text-base font-bold hover:bg-opacity-90 transition-colors"
                             >
                                 Logout
                             </button>
@@ -144,11 +144,10 @@ export default function Profile() {
 
                     {/* MyPost */}
                     <div className="py-4 divide-y divide-[rgba(255,255,255,0.1)]">
-
                         {profile.posts.map((post, index) => (
                             <div key={index} className="flex gap-3 py-3">
                                 <img
-                                    src="https://th.bing.com/th?id=OIP.IrUBHhdMo6wWLFueKNreRwHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2"
+                                    src={`/uploads/${profile.image}`}
                                     alt="Profile picture"
                                     className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex-shrink-0"
                                 />
@@ -183,7 +182,6 @@ export default function Profile() {
                                 </div>
                             </div>
                         ))}
-
                     </div>
                 </div>
             </div>

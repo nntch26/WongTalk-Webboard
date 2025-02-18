@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+// import Link from "next/link";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -11,6 +11,7 @@ interface Profile {
     fullname: string;
     username: string;
     email: string;
+    image: string;
 }
 
 export default function EditProfile() {
@@ -18,6 +19,7 @@ export default function EditProfile() {
         fullname: "",
         username: "",
         email: "",
+        image: "",
     });
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
@@ -30,6 +32,7 @@ export default function EditProfile() {
                     fullname: data.fullname,
                     username: data.username,
                     email: data.email,
+                    image: data.image,
                 });
             } catch (error) {
                 setError("Failed to fetch profile.");
@@ -39,12 +42,21 @@ export default function EditProfile() {
         fetchProfile();
     }, []);
 
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setSelectedImage(file);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
             const updatedUser = await editProfile(user); // ส่งข้อมูลที่แก้ไขไปที่ API
-            router.push("/profile"); // เมื่อแก้ไขสำเร็จให้ไปที่หน้าโปรไฟล์
+            router.push("/profile"); // แก้ไขสำเร็จให้ไปที่หน้าโปรไฟล์
         } catch (err: any) {
             setError(err.message || "Profile update failed.");
         }
@@ -69,10 +81,25 @@ export default function EditProfile() {
                         {/* Profile Picture */}
                         <div className="absolute -top-14 sm:-top-16 flex flex-col items-center">
                             <img
-                                src="https://th.bing.com/th?id=OIP.IrUBHhdMo6wWLFueKNreRwHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2"
+                                src={`/uploads/${user.image}`}
                                 alt="Profile picture"
                                 className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-[#080E13]"
                             />
+
+                            {/*  */}
+                            <label className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                <span className="text-white text-sm">
+                                    Change Photo
+                                </span>
+                                <input
+                                    type="file"
+                                    className="hidden"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                />
+                            </label>
+                            {/*  */}
+
                             <div className="mt-6 text-center">
                                 <h1 className="text-lg sm:text-xl font-bold">
                                     {user.fullname}
@@ -173,14 +200,14 @@ export default function EditProfile() {
 
                                 {/* Buttons */}
                                 <div className="flex flex-row justify-between gap-6 py-6">
-                                    <Link href={"/profile"}>
+                                    {/* <Link href={"/profile"}>
                                         <button className="w-full sm:w-auto px-6 py-2 bg-[#4B5563] text-[#E8E9EA] rounded-full font-bold text-sm sm:text-base hover:bg-opacity-90 transition-colors">
                                             Cancel
                                         </button>
-                                    </Link>
+                                    </Link> */}
                                     <button
                                         type="submit"
-                                        className="w-full sm:w-auto px-6 py-2 bg-[#30E48E] text-[#080E13] rounded-full font-bold text-sm sm:text-base hover:bg-opacity-90 transition-colors"
+                                        className="sm:w-auto px-6 py-2 bg-[#30E48E] text-[#080E13] rounded-full font-bold text-sm sm:text-base hover:bg-opacity-90 transition-colors"
                                     >
                                         Save changes
                                     </button>
