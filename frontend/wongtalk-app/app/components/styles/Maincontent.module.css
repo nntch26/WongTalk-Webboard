@@ -19,7 +19,7 @@
 } 
 
 /* //////////////////////////////// post card  ////////////////////////////////*/
-.post-card{
+.postcard{
     background-color: var(--second-DarkMidnight);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border: 2px solid #2a3342;
@@ -27,30 +27,30 @@
 }
 
 
-.post-card:hover {
+.postcard:hover {
     background-color: var(--hover-DarkCharcoal);
     border: 2px solid #374151;
 }
 
-.post-header{
+.postheader{
     display: flex;
     align-items: center;
     margin-bottom: 16px;
     gap: 6px;
 }
 
-.post-title{
+.posttitle{
     font-weight: 800;
     margin-bottom: 16px;
 }
 
-.post-content{
+.postcontent{
     color: #9CA3AF;
     line-height: 1.6;
     margin-bottom: 20px;
 }
 
-.tags-topic{
+.tagstopic{
     display: flex;
     gap: 12px;
     margin-bottom: 20px;
@@ -71,7 +71,7 @@
     background-color: var(--tag-background);
 }
 
-.post-stats{
+.poststats{
     display: flex;
     align-items: center;
     gap: 12px;

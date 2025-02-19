@@ -13,7 +13,7 @@ const getAllPost = async (req, res) => {
   try {
     const allPosts = await Post.find()
     .select('title content likes commentCount createdAt')
-    .populate({ path: 'topicId', select: 'name' })
+    .populate({ path: 'topicId', select: 'name icon' })
     .populate({ path: 'userId', select: 'fullname' })
     .lean();
 
@@ -55,7 +55,7 @@ const getLatestPost = async (req, res) => {
     try {
         const allPosts = await Post.find()
         .select('title content likes commentCount createdAt')
-        .populate({ path: 'topicId', select: 'name' })
+        .populate({ path: 'topicId', select: 'name icon' })
         .populate({ path: 'userId', select: 'fullname' })
         .sort({ createdAt: -1 }) // เรียงจากใหม่ไปเก่า
         .lean();
@@ -99,7 +99,7 @@ const getPostsTop = async (req, res) => {
 
     const allPosts = await Post.find({ createdAt: { $gte: oneWeekAgo } })
     .select('title content likes commentCount createdAt')
-    .populate({ path: 'topicId', select: 'name' })
+    .populate({ path: 'topicId', select: 'name icon' })
     .populate({ path: 'userId', select: 'fullname' })
     .sort({ likes: -1 }) // เรียงจากมากไปน้อย
     .lean(); // แปลงเป็น JSON object
@@ -141,7 +141,7 @@ const Search = async (req, res) => {
 
     const allPosts = await Post.find()
     .select('title content likes commentCount createdAt')
-    .populate({ path: 'topicId', select: 'name' })
+    .populate({ path: 'topicId', select: 'name icon' })
     .populate({ path: 'userId', select: 'fullname' })
     .lean(); // แปลงเป็น JSON object 
 
@@ -202,7 +202,7 @@ const getPostTopic = async (req, res) => {
 
     const posts = await Post.find({ topicId: topicId })
     .select('title content likes commentCount createdAt')
-    .populate({ path: 'topicId', select: 'name description' })
+    .populate({ path: 'topicId', select: 'name description icon' })
     .populate({ path: 'userId', select: 'fullname' })
     .sort({ createdAt: -1 }) // เรียงจากใหม่ไปเก่า
     .lean(); // แปลงเป็น JSON object
@@ -253,7 +253,7 @@ const getPostsTopInTopic = async (req, res) => {
 
     const posts = await Post.find({ topicId: topicId })
     .select('title content likes commentCount createdAt')
-    .populate({ path: 'topicId', select: 'name description' })
+    .populate({ path: 'topicId', select: 'name description icon' })
     .populate({ path: 'userId', select: 'fullname' })
     .sort({ likes: -1 }) // เรียงตามจำนวน likes มากที่สุด
     .limit(5) // จำกัดผลลัพธ์ 5 โพสต์
@@ -310,7 +310,7 @@ const getPostDetail = async (req, res) =>{
 
         const posts = await Post.findById(id)
         .select('title content likes commentCount createdAt')
-        .populate({ path: 'topicId', select: 'name' })
+        .populate({ path: 'topicId', select: 'name icon' })
         .populate({ path: 'userId', select: 'fullname' })
         .lean(); // แปลงเป็น JSON object
         
