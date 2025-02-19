@@ -19,4 +19,6 @@ npm install bcryptjs body-parser cookie-parser cors dotenv express jsonwebtoken 
 ```
 
 ## ใช้ไอคอน Font Awesome
+```bash
 - npm install --save @fortawesome/fontawesome-free
+```

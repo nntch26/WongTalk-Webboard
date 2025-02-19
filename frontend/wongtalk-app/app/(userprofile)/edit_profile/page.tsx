@@ -24,16 +24,14 @@ export default function EditProfile() {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
+    const [fileOld, setfileOld] = useState();
+
     useEffect(() => {
         const fetchProfile = async () => {
             try {
                 const data = await getProfile(); // ดึงข้อมูลจาก API
-                setUser({
-                    fullname: data.fullname,
-                    username: data.username,
-                    email: data.email,
-                    image: data.image,
-                });
+                setUser(data);
+                setfileOld(data.image)
             } catch (error) {
                 setError("Failed to fetch profile.");
             }
@@ -42,20 +40,50 @@ export default function EditProfile() {
         fetchProfile();
     }, []);
 
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setSelectedImage(file);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, files } = e.target;
+
+        if (files && files[0]) {
+            const file = files[0];
+            setUser((prev) => ({
+                ...prev,
+                [name]: file, // เก็บไฟล์ใน state
+            }));
+        } else {
+            
+            setUser((prev) => ({
+                ...prev,
+                [name]: value,
+            }));
         }
+
+        // เคลียร์ error ถ้ามีค่า error อยู่
+        if (error) setError(null);
     };
 
+
+
     const handleSubmit = async (e: React.FormEvent) => {
+        console.log(user)
+        console.log(fileOld)
+
         e.preventDefault();
+        const formData = new FormData();
+        formData.append("fullname", user.fullname);
+        formData.append("username", user.username);
+        formData.append("email", user.email);
+        
+        if (fileOld) {
+            formData.append("fileOld", fileOld);
+        }
+
+        if (user.image) {
+            formData.append("image", user.image);
+        }
 
         try {
-            const updatedUser = await editProfile(user); // ส่งข้อมูลที่แก้ไขไปที่ API
+            const updatedUser = await editProfile(formData); // ส่งข้อมูลที่แก้ไขไปที่ API
             router.push("/profile"); // แก้ไขสำเร็จให้ไปที่หน้าโปรไฟล์
         } catch (err: any) {
             setError(err.message || "Profile update failed.");
@@ -81,13 +109,13 @@ export default function EditProfile() {
                         {/* Profile Picture */}
                         <div className="absolute -top-14 sm:-top-16 flex flex-col items-center">
                             <img
-                                src={`/uploads/${user.image}`}
-                                alt="Profile picture"
+                                src={`/uploads/${fileOld || user.image}`}
+                                alt="Profile Image"
                                 className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-[#080E13]"
                             />
 
                             {/*  */}
-                            <label className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                            {/* <label className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                                 <span className="text-white text-sm">
                                     Change Photo
                                 </span>
@@ -97,7 +125,7 @@ export default function EditProfile() {
                                     accept="image/*"
                                     onChange={handleImageChange}
                                 />
-                            </label>
+                            </label> */}
                             {/*  */}
 
                             <div className="mt-6 text-center">
@@ -119,7 +147,11 @@ export default function EditProfile() {
                             </h2>
                             <hr className="border-t-2 border-[rgba(255,255,255,0.1)] mb-8" />
 
-                            <form className="space-y-4" onSubmit={handleSubmit}>
+                            <form
+                                className="space-y-4"
+                                onSubmit={handleSubmit}
+                                encType="multipart/form-data"
+                            >
                                 {/* Name Fields */}
                                 {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
@@ -152,14 +184,10 @@ export default function EditProfile() {
                                     </label>
                                     <input
                                         type="text"
+                                        name="fullname"
                                         value={user.fullname}
                                         className="w-full px-4 py-2 rounded-lg bg-[#191C24] border border-[rgba(255,255,255,0.1)] text-[#E8E9EA] focus:outline-none focus:border-[#30E48E]"
-                                        onChange={(e) =>
-                                            setUser({
-                                                ...user,
-                                                fullname: e.target.value,
-                                            })
-                                        }
+                                        onChange={handleChange}
                                     />
                                 </div>
                                 {/* Username */}
@@ -169,14 +197,10 @@ export default function EditProfile() {
                                     </label>
                                     <input
                                         type="text"
+                                        name="username"
                                         value={user.username}
                                         className="w-full px-4 py-2 rounded-lg bg-[#191C24] border border-[rgba(255,255,255,0.1)] text-[#E8E9EA] focus:outline-none focus:border-[#30E48E]"
-                                        onChange={(e) =>
-                                            setUser({
-                                                ...user,
-                                                username: e.target.value,
-                                            })
-                                        }
+                                        onChange={handleChange}
                                     />
                                 </div>
 
@@ -187,14 +211,22 @@ export default function EditProfile() {
                                     </label>
                                     <input
                                         type="email"
+                                        name="email"
                                         value={user.email}
                                         className="w-full px-4 py-2 rounded-lg bg-[#191C24] border border-[rgba(255,255,255,0.1)] text-[#E8E9EA] focus:outline-none focus:border-[#30E48E]"
-                                        onChange={(e) =>
-                                            setUser({
-                                                ...user,
-                                                email: e.target.value,
-                                            })
-                                        }
+                                        onChange={handleChange}
+                                    />
+                                </div>
+
+                                {/* ProfileImage */}
+                                <div>
+                                    <label className="block text-sm text-[#E8E9EA]/60 mb-2">
+                                        Profile Picture
+                                    </label>
+                                    <input
+                                        type="file"
+                                        name="image"
+                                        onChange={handleChange}
                                     />
                                 </div>
 
