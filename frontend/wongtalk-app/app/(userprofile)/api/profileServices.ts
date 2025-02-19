@@ -13,9 +13,9 @@ export const getProfile = async () => {
 }
 
 // แก้ไขข้อมูลโปรไฟล์
-export const editProfile = async (userData: { fullname: string; username: string; email: string; }) => {
+export const editProfile = async (data: FormData) => {
     try {
-        const res = await axios.put("http://localhost:8000/api/profile", userData, { withCredentials: true });
+        const res = await axios.post("http://localhost:8000/api/profile", data, { withCredentials: true });
         return res.data;
     } catch (error) {
         console.error("Error updating profile:", error);

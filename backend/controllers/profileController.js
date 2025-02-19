@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
 const moment = require("moment-timezone");
-
+const fs = require("fs").promises;
 
 // get Profile
 const getProfile = async (req, res) => {
@@ -20,42 +20,36 @@ const getProfile = async (req, res) => {
         };
 
         res.json(userProfile); // ส่งข้อมูลกลับไป
-        console.log(userProfile)
+        console.log(userProfile);
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }
 };
-
 
 // edit Profile
-const editProfile = async (req, res) => {
-    const { fullname, username, email, image } = req.body;
-    try {
-        const userId = req.user.id;
-        const user = await User.findById(userId);
+// const editProfile = async (req, res) => {
+//     const { fullname, username, email, image } = req.body;
+//     try {
+//         const userId = req.user.id;
+//         const user = await User.findById(userId);
 
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
+//         if (!user) {
+//             return res.status(404).json({ message: "User not found" });
+//         }
 
-        // อัพเดตข้อมูลผู้ใช้
-        user.fullname = fullname || user.fullname;
-        user.username = username || user.username;
-        user.email = email || user.email;
-        user.image = image || user.image;
-        await user.save();
+//         user.fullname = fullname || user.fullname;
+//         user.username = username || user.username;
+//         user.email = email || user.email;
+//         user.image = image || user.image;
+//         await user.save();
 
-        res.status(200).json({ message: "Profile updated successfully", user });
-    } catch (error) {
-        res.status(500).json({ message: "Server error" });
-    }
-};
+//         res.status(200).json({ message: "Profile updated successfully", user });
+//     } catch (error) {
+//         res.status(500).json({ message: "Server error" });
+//     }
+// };
 
-
-
-// upload Profileimage
 const multer = require("multer");
-
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "../frontend/wongtalk-app/public/uploads/"); // บันทึกไปที่ folder นี้
@@ -68,33 +62,52 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const uploadImage = async (req, res) => {
-    const imageName = req.file.filename;
+// Edit Profile
+const editProfile = async (req, res) => {
     try {
-        const userId = req.user.id; // ดึง user id
-        const user = await User.findById(userId); // หา user
+        const { fullname, username, email, fileOld } = req.body; // ดึงข้อมูลจาก req.body (ข้อความ)
 
-        user.image = imageName; // update ข้อมูล
-        await user.save(); // บันทึก
+        const userId = req.user.id; // ดึง user id
+        const user = await User.findById(userId); // หา user ในฐานข้อมูล
+        let imageName = req.file ? req.file.filename : user.image; // ถ้าไม่มีให้เป็น ชื่อเดิม
+
+        if (fileOld && req.file) {
+            try {
+                await fs.unlink(
+                    "../frontend/wongtalk-app/public/uploads/" + fileOld
+                );
+                console.log("Remove success");
+            } catch (err) {
+                console.log("Error removing file:", err);
+            }
+        }
+
+        user.fullname = fullname || user.fullname;
+        user.username = username || user.username;
+        user.email = email || user.email;
+        user.image = imageName || user.image;
+        await user.save(); // บันทึกข้อมูลทั้งหมด
 
         res.status(200).json({
-            message: "Image uploaded successfully",
-            imageName: imageName,
+            message: "Profile updated successfully",
+            // user: {
+            //     fullname: user.fullname,
+            //     username: user.username,
+            //     email: user.email,
+            //     image: user.image,
+            // },
         });
     } catch (error) {
-        console.log("Upload error:", error);
+        console.log("Update profile error:", error);
         res.status(500).json({
-            message: "Error uploading image",
+            message: "Error updating profile",
             error: error.message,
         });
     }
 };
 
-
-
 module.exports = {
     getProfile,
     editProfile,
-    uploadImage,
-    upload
+    upload,
 };
