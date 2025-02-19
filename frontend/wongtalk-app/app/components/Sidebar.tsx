@@ -16,10 +16,10 @@ export default function Sidebar() {
                 {/* <!-- หน้าแรก --> */}
                 <div className="px-3 py-4">
                     <div className="space-y-2">
-                        <Link href="#" className={styles.sidenavitem}>
+                        <Link href="/" className={styles.sidenavitem}>
                             <i className="fa-regular fa-comment-dots mr-3"></i><span>My Feed</span>
                        </Link>
-                        <Link href="#" className={styles.sidenavitem}>
+                        <Link href={"/latest"} className={styles.sidenavitem}>
                             <i className="fa-solid fa-fire mr-3"></i><span>New Posts</span>
                        </Link>
                         <Link href="#" className={styles.sidenavitem}>

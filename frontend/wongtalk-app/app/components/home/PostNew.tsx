@@ -32,7 +32,7 @@ export default function PostNew() {
     <>
         {/* <!-- Post ใหม่ย่อยๆ --> */}
         {postsnew.map((postnew)=>(
-            <div className="flex items-center space-x-3">
+            <div key={postnew._id} className="flex items-center space-x-3">
                 <img src="user.png" alt="Avatar" className="p-1 w-10 rounded-f "/>
                 <div>
                     <Link href="#">

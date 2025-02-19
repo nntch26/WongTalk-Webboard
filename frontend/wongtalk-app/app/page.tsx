@@ -1,5 +1,10 @@
+"use client";
 import Image from "next/image";
 import styles from "./components/styles/Maincontent.module.css";
+import { useState, useEffect } from "react";
+
+import { fetchPost } from "@/app/(home)/api/postServices";
+import { Post } from "@/types/types";
 
 import Sidebar from "./components/Sidebar";
 import TopicList from "./components/home/TopicList";
@@ -8,6 +13,26 @@ import PostNew from "./components/home/PostNew";
 
 
 export default function Home() {
+
+  const [posts,setPosts] = useState<Post[]>([])
+  
+  useEffect (() => {
+      const getposts = async() =>{
+          try{
+              const getdata = await fetchPost()
+              console.log("data ",getdata)
+              setPosts(getdata)
+
+
+          }catch (error){
+              console.log('Error fetching ',error)
+          }
+      }
+      getposts()
+  }, []);
+
+  console.log("--->",posts)
+
   return (
     <>  
       <Sidebar/>
@@ -37,8 +62,16 @@ export default function Home() {
                 {/* ฝั่งซ้าย โพส */}
                 <div className="flex-1">
                   {/* <!-- Post  --> */}
-                    <PostCard/>
+                  {posts && posts.length > 0 ? (
+                        posts.map((post) => {
+                            console.log("Post Data:", post);  
+                            return <PostCard key={post._id} post={post} />;
+                        })
+                    ) : (
+                        <div>Loading...</div>
+                    )}
 
+                    
                     {/* <!-- ปุ่มดูเพิ่มเติม --> */}
                     <div className="text-center mt-6">
                         <button className="px-6 py-2 bg-gray-800 text-gray-300 rounded-full hover:bg-gray-700">
