@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { fetchPostNew } from "@/app/(home)/api/postServices";
+import { fetchPostTop } from "@/app/(home)/api/postServices";
 import { Post } from "@/types/types";
 
 import Sidebar from "@/app/components/Sidebar";
@@ -17,7 +17,7 @@ export default function page() {
     useEffect(() => {
         const getposts = async () => {
             try {
-                const getdata = await fetchPostNew();
+                const getdata = await fetchPostTop();
                 console.log("data ", getdata);
                 setPostsnew(getdata);
             } catch (error) {
@@ -45,7 +45,7 @@ export default function page() {
                 {/* <!-- ส่วนโพสอื่นๆ --> */}
                 <div className="max-w-7xl mx-auto p-4">
                     <h3 className="text-2xl md:text-4xl font-bold mb-8">
-                        Latest Posts 
+                        Top Posts
                     </h3>
 
                     <hr className="border-0 h-px bg-gray-800 rounded-xl my-5 w-full mx-auto" />

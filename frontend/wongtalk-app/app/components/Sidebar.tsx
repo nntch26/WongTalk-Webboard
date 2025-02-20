@@ -24,7 +24,7 @@ export default function Sidebar() {
                                 <i className="fa-solid fa-fire mr-3"></i>
                                 <span>New Posts</span>
                             </Link>
-                            <Link href="#" className={styles.sidenavitem}>
+                            <Link href={"/top"} className={styles.sidenavitem}>
                                 <i className="fa-solid fa-arrow-up-right-dots mr-3"></i>
                                 <span>Top Posts</span>
                             </Link>
