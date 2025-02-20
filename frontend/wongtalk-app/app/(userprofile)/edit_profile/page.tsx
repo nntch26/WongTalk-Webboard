@@ -7,19 +7,19 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getProfile, editProfile } from "../api/profileServices";
 
-interface Profile {
-    fullname: string;
-    username: string;
-    email: string;
-    image: string;
-}
+// type
+import { UserProfile } from "@/types/types";
+
+
 
 export default function EditProfile() {
-    const [user, setUser] = useState<Profile>({
+    const [user, setUser] = useState<UserProfile>({
         fullname: "",
         username: "",
         email: "",
         image: "",
+        posts: [], 
+        createdAt: "",
     });
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();

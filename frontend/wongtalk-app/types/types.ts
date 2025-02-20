@@ -26,4 +26,19 @@ export interface Post{
     createdPost: string
 }
 
+export interface UserProfile {
+    fullname: string;
+    username: string;
+    email: string;
+    posts: Post[];
+    image: string;
+    createdAt: string;
+}
 
+export interface RegisterForm {
+    fullname: string;
+    username: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+}

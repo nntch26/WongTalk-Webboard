@@ -1,124 +1,169 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { logout } from "../(auth)/api/authServices";
-import { useRouter } from "next/navigation";
 
+// import { useRouter } from "next/navigation";
+
+import { getProfile } from "../(userprofile)/api/profileServices";
 import styles from "./styles/Navbar.module.css";
+import Router from "next/router";
+// type
+import { UserProfile } from "@/types/types";
 
 export default function Navbar() {
-    const router = useRouter();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [sidenavOpen, setSidenavOpen] = useState<boolean>(false);
 
-    // จัดการตอน logout
-    const handleLogout = async () => {
-        const res = await logout();
-        if (res.success) {
-            router.push("/login"); // กลับไปหน้า login
+    
+    const [profile, setProfile] = useState<UserProfile | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const fetchProfile = async () => {
+        try {
+            const data = await getProfile();
+            setProfile(data);
+        } catch (error) {
+            console.error("Failed to fetch profile:", error);
         }
     };
+    
+    // ดึง user
+    useEffect(() => {
+        fetchProfile();
+    }, []);
 
 
-  const toggleSidenav = (): void => {
-    console.log(sidenavOpen)
-    setSidenavOpen(!sidenavOpen);
-  };
+
+    const toggleSidenav = (): void => {
+        console.log(sidenavOpen);
+        setSidenavOpen(!sidenavOpen);
+    };
 
     // ฟังก์ชันเปิดปิด sidenav ถ้าคลิกด้านนอก
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent): void => {
-        const sidenav = document.getElementById('sidenav');
-        const toggleButton = document.getElementById('toggle-button');
-        const overlay = document.getElementById('overlay');
+            const sidenav = document.getElementById("sidenav");
+            const toggleButton = document.getElementById("toggle-button");
+            const overlay = document.getElementById("overlay");
 
-        // ตรวจสอบว่า click outside หรือไม่
-        if (
-            sidenavOpen &&
-            sidenav &&
-            toggleButton &&
-            overlay &&
-            !sidenav.contains(event.target as Node) &&
-            !toggleButton.contains(event.target as Node) &&
-            !overlay.contains(event.target as Node)
-        ) {
-            setSidenavOpen(false);
-        }
+            // ตรวจสอบว่า click outside หรือไม่
+            if (
+                sidenavOpen &&
+                sidenav &&
+                toggleButton &&
+                overlay &&
+                !sidenav.contains(event.target as Node) &&
+                !toggleButton.contains(event.target as Node) &&
+                !overlay.contains(event.target as Node)
+            ) {
+                setSidenavOpen(false);
+            }
         };
 
-        document.addEventListener('click', handleClickOutside);
+        document.addEventListener("click", handleClickOutside);
 
         return () => {
-        document.removeEventListener('click', handleClickOutside);
+            document.removeEventListener("click", handleClickOutside);
         };
     }, [sidenavOpen]);
 
-
+    if (!profile) {
+        return <p>Profile not found</p>;
+    }
 
     return (
         <>
-        {/* Navbar */}
-        <nav className={`${styles.navbartop} fixed top-0 left-0 right-0`}>
-            <div className="flex items-center justify-between p-4">
+            {/* Navbar */}
+            <nav className={`${styles.navbartop} fixed top-0 left-0 right-0`}>
+                <div className="flex items-center justify-between p-4">
+                    {/* <!-- ส่วนฝั่งซ้าย navbar --> */}
+                    <div className="flex items-center gap-4">
+                        <button
+                            id="toggle-button"
+                            className="p-2 hover:text-gray-400 rounded-full lg:hidden"
+                            onClick={toggleSidenav}
+                        >
+                            <i className="fas fa-bars text-xl"></i>
+                        </button>
 
-                {/* <!-- ส่วนฝั่งซ้าย navbar --> */}
-                <div className="flex items-center gap-4">
-                    <button id="toggle-button" className="p-2 hover:text-gray-400 rounded-full lg:hidden" onClick={toggleSidenav}>
-                        <i className="fas fa-bars text-xl"></i>
-                    </button>
+                        {/* <!-- ส่วน logo --> */}
+                        <div className="flex items-center hidden lg:block">
+                            <Link href="/" className={styles.logo}>
+                                <img src="logo2.png" alt="Logo" />
+                                <span className="font-bold text-2xl">
+                                    Wong
+                                    <span className="text-[--primary-color]">
+                                        Talk .
+                                    </span>
+                                </span>
+                            </Link>
+                        </div>
+                    </div>
 
-                    {/* <!-- ส่วน logo --> */}
-                    <div className="flex items-center hidden lg:block">
-                        <Link href="/" className={styles.logo}>
-                            <img src="logo2.png" alt="Logo" />
-                            <span className="font-bold text-2xl">Wong<span className="text-[--primary-color]">Talk .</span></span>
+                    {/* Search bar */}
+                    <div className="flex items-center flex-1 max-w-2xl mx-4">
+                        <div className="flex flex-1">
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                className={styles.searchbar}
+                            />
+                            <button className="px-6 py-2 bg-gray-900 border border-l-0 border-gray-600 rounded-r-full hover:bg-gray-800">
+                                <i className="fas fa-search text-gray-300"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* <!-- ส่วนฝั่งขวา navbar --> */}
+                    <div className="flex items-center gap-5">
+                        <Link
+                            href="/createpost"
+                            className={`${styles.btncus} text-center md:flex px-3 py-2 rounded-lg items-center`}
+                        >
+                            <i className="fa-regular fa-square-plus text-l md:text-xl"></i>
+                            <span className="hidden md:block ml-2 text-base md:text-l font-semibold">
+                                Post
+                            </span>
+                        </Link>
+
+                        <Link
+                            href="/profile"
+                            className="flex items-center space-x-2"
+                        >
+                            <img
+                                // src=""
+                                src={`/uploads/${profile.image}`}
+                                alt="Profile picture"
+                                className=" w-10 h-10 rounded-full"
+                            />
+                            {/* <span className="text-white hidden md:block">
+                                Username
+                            </span> */}
+                        </Link>
+
+                        <Link
+                            href="/login"
+                            className="text-white cursor-pointer hover:text-[#30E48E]"
+                        >
+                            Login
                         </Link>
                     </div>
                 </div>
 
-
-                {/* Search bar */}
-                <div className="flex items-center flex-1 max-w-2xl mx-4">
-                    <div className="flex flex-1">
-                        <input type="text" placeholder="Search..." className={styles.searchbar} />
-                        <button className="px-6 py-2 bg-gray-900 border border-l-0 border-gray-600 rounded-r-full hover:bg-gray-800">
-                            <i className="fas fa-search text-gray-300"></i>
-                        </button>
-                    </div>
-                </div>
-
-
-                {/* <!-- ส่วนฝั่งขวา navbar --> */}
-                <div className="flex items-center gap-2">
-                
-                    <Link href="/createpost" className={`${styles.btncus} text-center md:flex px-3 py-2 rounded-lg items-center`}>
-                        <i className="fa-regular fa-square-plus text-l md:text-xl"></i>
-                        <span className="hidden md:block ml-2 text-base md:text-l font-semibold">Post</span>
-                    </Link>
-
-                    <Link href="/profile" className="flex items-center space-x-2">
-                        <img src="user.png" alt="Avatar" className="p-1 w-10 rounded-full" />
-                        <span className="text-white hidden md:block">Username</span>
-                    </Link>
-
-                    <Link href="/login" 
-                        className="text-white cursor-pointer hover:text-[#30E48E]">Login
-                    </Link>
-                
-                </div>
-            </div>
-
-            {/* Overlay */}
-            {sidenavOpen && (
-                <div id="overlay" className="fixed inset-0 bg-white bg-opacity-50 z-40 transition-transform duration-300 ease-in-out md:hidden"></div>
-            )}
-        </nav>
-
+                {/* Overlay */}
+                {sidenavOpen && (
+                    <div
+                        id="overlay"
+                        className="fixed inset-0 bg-white bg-opacity-50 z-40 transition-transform duration-300 ease-in-out md:hidden"
+                    ></div>
+                )}
+            </nav>
         </>
     );
-    
 
-    {/* // return ( */}
+    {
+        /* // return ( */
+    }
     //     <>
     //         {/* Navbar */}
     //         <nav className="p-4 flex justify-between items-center px-4 sm:px-32 bg-[#080E13] fixed top-0 w-full z-10">

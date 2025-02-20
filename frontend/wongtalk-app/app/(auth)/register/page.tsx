@@ -4,13 +4,9 @@ import Link from "next/link";
 import { register } from "../api/authServices";
 import { useRouter } from "next/navigation";
 
-interface RegisterForm {
-    fullname: string;
-    username: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-}
+// type
+import { RegisterForm } from "@/types/types";
+
 
 export default function Register() {
     const [formData, setFormData] = useState<RegisterForm>({
