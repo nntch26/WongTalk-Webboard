@@ -22,8 +22,8 @@ router.get("/posts", getAllPost);
 router.get("/posts/latest", getLatestPost);
 router.get("/posts/top", getPostsTop);
 
-router.get("/t/:topicName", getPostTopic);
-router.get("/t/:topicName/top", getPostsTopInTopic);
+router.post("/topic", getPostTopic);
+router.post("/topic/top", getPostsTopInTopic);
 
 router.get("/posts/:id", getPostDetail);
 

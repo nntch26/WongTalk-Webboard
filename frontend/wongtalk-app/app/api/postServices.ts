@@ -5,6 +5,7 @@ import { Post } from "@/types/types";
 import axios from "axios";
 
 
+// โพสทั้งหมด
 export const fetchPost = async (): Promise<Post[]> => {
 
     try{
@@ -38,7 +39,7 @@ export const fetchPostNew = async (): Promise<Post[]> => {
         }
 
         const alldata = await res.json()
-        console.log("data: " , alldata.data)
+        // console.log("data: " , alldata.data)
         return alldata.data
 
 
@@ -61,7 +62,7 @@ export const fetchPostTop = async (): Promise<Post[]> => {
         }
 
         const alldata = await res.json()
-        console.log("data: " , alldata.data)
+        // console.log("data: " , alldata.data)
         return alldata.data
 
 

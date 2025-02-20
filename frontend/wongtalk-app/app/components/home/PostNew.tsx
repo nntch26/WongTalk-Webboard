@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { fetchPostNew } from "@/app/(home)/api/postServices";
+import { fetchPostNew } from "@/app/api/postServices";
 import { Post } from "@/types/types";
 
 import styles from "../styles/Maincontent.module.css";

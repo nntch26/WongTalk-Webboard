@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { fetchPostTop } from "@/app/(home)/api/postServices";
+import { fetchPostTop } from "@/app/api/postServices";
 import { Post } from "@/types/types";
 
 import Sidebar from "@/app/components/Sidebar";

@@ -42,7 +42,7 @@ export default function PostCard({ post }: { post: Post }) {
                     {/* <!-- ส่วนหัวข้อ และเนื้อหา --> */}
                     <div>
                         <h1 className={`${styles.posttitle} text-xl md:text-2xl`}>
-                            <Link href="#">{post.title}</Link>
+                            <Link href='#'>{post.title}</Link>
                         </h1>
                     
                         <p className={`${styles.postcontent} text-sm md:text-base line-clamp-1`}>{post.content}</p>

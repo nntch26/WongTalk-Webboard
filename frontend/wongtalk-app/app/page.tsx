@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "./components/styles/Maincontent.module.css";
 import { useState, useEffect } from "react";
 
-import { fetchPost } from "@/app/(home)/api/postServices";
+import { fetchPost } from "@/app/api/postServices";
 import { Post } from "@/types/types";
 
 import Sidebar from "./components/Sidebar";
@@ -19,7 +19,7 @@ export default function Home() {
         const getposts = async () => {
             try {
                 const getdata = await fetchPost();
-                console.log("data ", getdata);
+                // console.log("data ", getdata);
                 setPosts(getdata);
             } catch (error) {
                 console.log("Error fetching ", error);
