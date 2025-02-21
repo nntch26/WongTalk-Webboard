@@ -1,12 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { register } from "../api/authServices";
+import { register } from "../../api/authServices";
 import { useRouter } from "next/navigation";
 
 // type
 import { RegisterForm } from "@/types/types";
-
 
 export default function Register() {
     const [formData, setFormData] = useState<RegisterForm>({
@@ -29,7 +28,6 @@ export default function Register() {
         // เคลียร์ error ถ้ามีค่า error อยู่
         if (error) setError(null);
     };
-
 
     const validateForm = () => {
         if (
@@ -68,14 +66,18 @@ export default function Register() {
         if (!validateForm()) return;
 
         try {
-            await register(
+            const result = await register(
                 formData.fullname,
                 formData.username,
                 formData.email,
                 formData.password,
                 formData.confirmPassword
             );
-            router.push("/login");
+
+            // set userId ไปที่ session เพื่อให้หน้า recommend ใช้
+            const userId = result.user._id;
+            sessionStorage.setItem("userId", userId);
+            router.push("/recommend");
         } catch (err: any) {
             setError(err.response?.data?.message || "Registration failed");
         }

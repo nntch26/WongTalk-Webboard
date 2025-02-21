@@ -4,7 +4,7 @@ import Link from "next/link";
 
 // import { useRouter } from "next/navigation";
 
-import { getProfile, getToken } from "../(userprofile)/api/profileServices";
+import { getProfile, getToken } from "../api/profileServices";
 import styles from "./styles/Navbar.module.css";
 import Router from "next/router";
 // type
@@ -14,10 +14,9 @@ export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [sidenavOpen, setSidenavOpen] = useState<boolean>(false);
 
-    
     const [profile, setProfile] = useState<User | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [token, setToken] = useState<string | null>(null)
+    const [token, setToken] = useState<string | null>(null);
 
     const fetchProfile = async () => {
         try {
@@ -26,12 +25,8 @@ export default function Navbar() {
                 const data = await getProfile();
                 setProfile(data);
                 setToken(token);
-                console.log("FFFF")
                 return;
             }
-            
-
-            
         } catch (error) {
             console.error("Failed to fetch profile:", error);
         }
@@ -82,97 +77,93 @@ export default function Navbar() {
     // if (token) {
     //     console.log("tokennnn")
     // }
-        return (
-            <>
-                {/* Navbar */}
-                <nav
-                    className={`${styles.navbartop} fixed top-0 left-0 right-0`}
-                >
-                    <div className="flex items-center justify-between p-4">
-                        {/* <!-- ส่วนฝั่งซ้าย navbar --> */}
-                        <div className="flex items-center gap-4">
-                            <button
-                                id="toggle-button"
-                                className="p-2 hover:text-gray-400 rounded-full lg:hidden"
-                                onClick={toggleSidenav}
-                            >
-                                <i className="fas fa-bars text-xl"></i>
-                            </button>
+    return (
+        <>
+            {/* Navbar */}
+            <nav className={`${styles.navbartop} fixed top-0 left-0 right-0`}>
+                <div className="flex items-center justify-between p-4">
+                    {/* <!-- ส่วนฝั่งซ้าย navbar --> */}
+                    <div className="flex items-center gap-4">
+                        <button
+                            id="toggle-button"
+                            className="p-2 hover:text-gray-400 rounded-full lg:hidden"
+                            onClick={toggleSidenav}
+                        >
+                            <i className="fas fa-bars text-xl"></i>
+                        </button>
 
-                            {/* <!-- ส่วน logo --> */}
-                            <div className="flex items-center hidden lg:block">
-                                <Link href="/" className={styles.logo}>
-                                    <img src="/logo2.png" alt="Logo" />
-                                    <span className="font-bold text-2xl">
-                                        Wong
-                                        <span className="text-[--primary-color]">
-                                            Talk .
-                                        </span>
+                        {/* <!-- ส่วน logo --> */}
+                        <div className="flex items-center hidden lg:block">
+                            <Link href="/" className={styles.logo}>
+                                <img src="/logo2.png" alt="Logo" />
+                                <span className="font-bold text-2xl">
+                                    Wong
+                                    <span className="text-[--primary-color]">
+                                        Talk .
                                     </span>
-                                </Link>
-                            </div>
-                        </div>
-
-                        {/* Search bar */}
-                        <div className="flex items-center flex-1 max-w-2xl mx-4">
-                            <div className="flex flex-1">
-                                <input
-                                    type="text"
-                                    placeholder="Search..."
-                                    className={styles.searchbar}
-                                />
-                                <button className="px-6 py-2 bg-gray-900 border border-l-0 border-gray-600 rounded-r-full hover:bg-gray-800">
-                                    <i className="fas fa-search text-gray-300"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* <!-- ส่วนฝั่งขวา navbar --> */}
-                        <div className="flex items-center gap-5">
-                            <Link
-                                href="/createpost"
-                                className={`${styles.btncus} text-center md:flex px-3 py-2 rounded-lg items-center`}
-                            >
-                                <i className="fa-regular fa-square-plus text-l md:text-xl"></i>
-                                <span className="hidden md:block ml-2 text-base md:text-l font-semibold">
-                                    Post
                                 </span>
                             </Link>
+                        </div>
+                    </div>
 
+                    {/* Search bar */}
+                    <div className="flex items-center flex-1 max-w-2xl mx-4">
+                        <div className="flex flex-1">
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                className={styles.searchbar}
+                            />
+                            <button className="px-6 py-2 bg-gray-900 border border-l-0 border-gray-600 rounded-r-full hover:bg-gray-800">
+                                <i className="fas fa-search text-gray-300"></i>
+                            </button>
+                        </div>
+                    </div>
 
-                            {token &&  profile ?  (
-                                <Link
+                    {/* <!-- ส่วนฝั่งขวา navbar --> */}
+                    <div className="flex items-center gap-5">
+                        <Link
+                            href="/createpost"
+                            className={`${styles.btncus} text-center md:flex px-3 py-2 rounded-lg items-center`}
+                        >
+                            <i className="fa-regular fa-square-plus text-l md:text-xl"></i>
+                            <span className="hidden md:block ml-2 text-base md:text-l font-semibold">
+                                Post
+                            </span>
+                        </Link>
+
+                        {token && profile ? (
+                            <Link
                                 href="/profile"
                                 className="flex items-center space-x-2"
-                                >
+                            >
                                 <img
                                     src={`/uploads/${profile.image}`}
                                     alt="Profile picture"
                                     className=" w-10 h-10 rounded-full"
-                                    />
+                                />
                             </Link>
-
-                                ) : (
-                                    <Link
-                                    href="/login"
-                                    className="text-white cursor-pointer hover:text-[#30E48E]"
-                                    >
+                        ) : (
+                            <Link
+                                href="/login"
+                                className="text-white cursor-pointer hover:text-[#30E48E]"
+                            >
                                 Login
                             </Link>
-                            )}
-                        </div>
+                        )}
                     </div>
+                </div>
 
-                    {/* Overlay */}
-                    {sidenavOpen && (
-                        <div
-                            id="overlay"
-                            className="fixed inset-0 bg-white bg-opacity-50 z-40 transition-transform duration-300 ease-in-out md:hidden"
-                        ></div>
-                    )}
-                </nav>
-            </>
-        );
+                {/* Overlay */}
+                {sidenavOpen && (
+                    <div
+                        id="overlay"
+                        className="fixed inset-0 bg-white bg-opacity-50 z-40 transition-transform duration-300 ease-in-out md:hidden"
+                    ></div>
+                )}
+            </nav>
+        </>
+    );
 
     {
         /* // return ( */

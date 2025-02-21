@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { login } from "../api/authServices";
+import { login } from "../../api/authServices";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -10,7 +10,6 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

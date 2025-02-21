@@ -25,7 +25,9 @@ export const register = async (
         password,
         confirmPassword,
     });
+    console.log(res.data)
     return res.data;
+    
 };
 
 // Logout
