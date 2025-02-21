@@ -16,6 +16,26 @@ const getAllTopic = async (req, res) => {
     }
 };
 
+
+const getTopic = async (req, res) => {
+    try {
+        const { topicId } = req.body;
+
+        const getTopic = await Topic.find({ _id: topicId }).select("name description icon");
+        
+            res.status(200).json({
+                success: true,
+                data: getTopic,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error...",
+        });
+    }
+};
+
 module.exports = {
     getAllTopic,
+    getTopic
 };

@@ -8,12 +8,12 @@ import { useRouter } from "next/navigation";
 import { getProfile, editProfile } from "../api/profileServices";
 
 // type
-import { UserProfile } from "@/types/types";
+import { User } from "@/types/types";
 
 
 
 export default function EditProfile() {
-    const [user, setUser] = useState<UserProfile>({
+    const [user, setUser] = useState<User>({
         fullname: "",
         username: "",
         email: "",

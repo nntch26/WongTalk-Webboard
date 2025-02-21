@@ -201,18 +201,20 @@ const getPostTopic = async (req, res) => {
                 .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
-        console.log(modifiedPosts);
+        console.log("modifiedPosts: ",modifiedPosts);
 
+        // ถ้า topic นั้นไม่มีมี โพส ให้ส่งแค่ข้อมูล topic
         if (posts.length === 0) {
-            return res.status(404).json({
-                message: "No posts found for this topic.",
-            });
+            return res.status(404).json({ message: "Not found", error })
+           
+           
         }
 
         res.status(200).json({
             success: true,
             data: modifiedPosts,
         });
+
     } catch (error) {
         res.status(500).json({ message: "Server Error", error });
     }

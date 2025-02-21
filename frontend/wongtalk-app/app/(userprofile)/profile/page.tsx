@@ -9,11 +9,11 @@ import { useRouter } from "next/navigation";
 
 import Navbar from "@/app/components/Navbar";
 // type
-import { UserProfile } from "@/types/types";
+import { User } from "@/types/types";
 
 export default function Profile() {
     const router = useRouter();
-    const [profile, setProfile] = useState<UserProfile | null>(null);
+    const [profile, setProfile] = useState<User | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const fetchProfile = async () => {
