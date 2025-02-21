@@ -25,7 +25,9 @@ export default function TopicList() {
         }
     }
 
-    const handleNavigate = (id:string, name:string) =>{
+    const handleNavigate = (e: React.MouseEvent, id:string, name:string) =>{
+        e.preventDefault(); // ทำให้ไม่รีเฟรชหน้า
+
         sessionStorage.setItem("itopic_id", id)
         router.push('/topic/'+ name)
     }
@@ -39,7 +41,7 @@ export default function TopicList() {
     return (
         <>
             {topics.map((topic) => (
-                <button onClick={() => handleNavigate(topic._id, topic.name)} key={topic._id}
+                <button onClick={(e) => handleNavigate(e, topic._id, topic.name)}  key={topic._id}
                 className={`${styles.topicitem} px-3 py-2  w-full flex items-center`}>
                     <i className={`${topic.icon} text-base md:text-l`}></i>
                     <span className="text-xs md:text-sm text-center ml-2"> {topic.name}</span>

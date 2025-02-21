@@ -57,3 +57,19 @@ export const fetchPostTopic = async(topicId: string) =>{
         return[]
     }
 }
+
+
+// ดึงข้อมูลของโพส ที่ topic นี้ ยอดนิยม
+export const fetchPostTopicTop = async(topicId: string) =>{
+
+    try{
+        const respone = await axios.post('http://localhost:8000/api/topic/top',{ topicId:topicId })
+        // ส่ง topic id ใน body
+        console.log("fetch topic one: ", respone.data)
+        return respone.data
+
+    }catch (error:unknown){
+        console.log(error)
+        return[]
+    }
+}

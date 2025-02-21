@@ -2,66 +2,88 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { Post, Topic } from '@/types/types'
-import { fetchPostTopic, fetchTopic } from '@/app/api/topicServices'
+import { fetchPostTopic, fetchTopic, fetchPostTopicTop } from '@/app/api/topicServices'
 
 import PostCard from '@/app/components/home/PostCard';
 import Link from 'next/link';
 import TopicList from '@/app/components/home/TopicList';
+import { handleClientScriptLoad } from 'next/script';
+
+
 
 export default function page() {
-
-    const [postTopic, setPostTopic] = useState<Post[]>([])
-    const [topic, setTopic] = useState<Topic[]>([])
-
+    const [active, setActive] = useState<boolean>(false);
+    const [postTopic, setPostTopic] = useState<Post[]>([]);
+    const [topic, setTopic] = useState<Topic[]>([]);
     const [topicId, setTopicId] = useState<string | null>(null);
-
+    const [isTop, setIsTop] = useState<boolean>(false); // ใช้เช็คว่าเป็น Top หรือ Latest
+    
     useEffect(() => {
-        const storedId = sessionStorage.getItem("itopic_id");// รับค่า ID ที่ส่งมา
-        setTopicId(storedId); 
-        // console.log(sessionStorage.getItem("itopic_id"))
-
+        const storedId = sessionStorage.getItem("itopic_id");
+        setTopicId(storedId);
     }, []);
     
-    console.log(topicId)
-
-
     useEffect(() => {
-        if (topicId) { // รอจนกว่า topicId มีค่า
-            getPostTopic(topicId);
-            getTopic(topicId)
+        if (topicId) {
+            // ดึงข้อมูลตามค่า isTop ว่าเป็น Top หรือ Latest
+            if (isTop) {
+                getPostTopicTop(topicId);
+            } else {
+                getPostTopic(topicId);
+            }
+            getTopic(topicId);  // ดึงข้อมูลจาก topic
         }
-    }, [topicId]);
-
-    // ดึงข้อมูบ topic ตาม id 
-    const getTopic = async(topicId:string) =>{
-        try{
-            const respone = await fetchPostTopic(topicId)
-            console.log("topic:",respone.data)
-            setPostTopic(respone.data)
+    }, [topicId, isTop]); // จะรันใหม่เมื่อ topicId หรือ isTop เปลี่ยน
+    
 
 
-        }catch(error){
-            console.log(error)
+    // ดึงข้อมูล topic ตาม topicId
+    const getPostTopic = async (topicId: string) => {
+        try {
+            const response = await fetchPostTopic(topicId);
+            console.log("Topic latest:", response.data);
+            setPostTopic(response.data); // อัพเดตข้อมูล latest
+        } catch (error) {
+            console.log(error);
         }
-
-    }
-
-   
-    // ดึงข้อมูบ topic ตัวเดียว
-    const getPostTopic = async(topicId:string) =>{
-        try{
-            const respone = await fetchTopic(topicId)
-            console.log("topic 1 :",respone.data)
-            setTopic(respone.data)
-
-
-        }catch(error){
-            console.log(error)
+    };
+    
+    // ดึงข้อมูล topic
+    const getTopic = async (topicId: string) => {
+        try {
+            const response = await fetchTopic(topicId);
+            console.log("Topic details:", response.data);
+            setTopic(response.data);
+        } catch (error) {
+            console.log(error);
         }
-
-    }
-
-
+    };
+    
+    // ดึงข้อมูล Top posts ตาม topicId
+    const getPostTopicTop = async (topicId: string) => {
+        try {
+            const response = await fetchPostTopicTop(topicId);
+            console.log("Topic Top:", response.data);
+            setPostTopic(response.data); // อัพเดตข้อมูล top
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    
+    // ฟังก์ชันเมื่อคลิกที่ "Top"
+    const handleClickTop = (e: React.MouseEvent, topicId: string) => {
+        e.preventDefault();
+        setIsTop(true); // เปลี่ยนเป็น Top
+        setActive(true); // เปลี่ยนสถานะ active
+    };
+    
+    // ฟังก์ชันเมื่อคลิกที่ "Latest"
+    const handleClickLatest = (e: React.MouseEvent, topicId: string) => {
+        e.preventDefault();
+        setIsTop(false); // เปลี่ยนเป็น Latest
+        setActive(true); // เปลี่ยนสถานะ active
+    };
+    
     
     if (!topicId) {
         return <div>Loading...</div>; // รอให้ id โหลดมา
@@ -70,10 +92,11 @@ export default function page() {
 
   return (
     <>
+    
         { topic ?(
          topic.map((topic) => (
             <div key={topic._id}>
-
+              
                 {/* <!-- Header Section --> */}
                 <header className="relative h-64 rounded-lg overflow-hidden">
                     {/* <!-- <img src="https://www.manga-news.com/public/images/univers/naruto-univers-header.webp" alt="Header Image" className="w-full h-full object-cover"> --> */}
@@ -106,10 +129,13 @@ export default function page() {
                             <div className="bg-[--second-DarkMidnight] rounded-t-lg border-b border-[--border-color]">
                                 <div className="flex flex-wrap items-center justify-between p-6">
                                     <div className="flex flex-wrap space-x-4">
-                                        <span className="font-bold text-[--primary-color] text-base md:text-lg">Latest</span>
-                                        <div className="flex flex-wrap space-x-2 text-text">
-                                            <span className="hover:text-primary cursor-pointer">Top</span>
-                                        </div>
+                                        <button className={`font-bold hover:text-primary text-base md:text-lg ${!isTop ? 'text-[--primary-color]': 'text-gray-500'}`}
+                                                onClick={(e) => handleClickLatest(e, topic._id)}>Latest</button>
+
+                                        <button className="flex flex-wrap space-x-2 text-base"
+                                                onClick={(e) => handleClickTop(e, topic._id)}>
+                                            <span className={`font-bold hover:text-primary text-base md:text-lg ${isTop ? 'text-[--primary-color]': 'text-gray-500'}`}>Top</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
