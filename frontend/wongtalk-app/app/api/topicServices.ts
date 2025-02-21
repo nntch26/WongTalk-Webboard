@@ -32,6 +32,21 @@ export const fetchTopics = async () => {
 export const fetchTopic = async(topicId: string) =>{
 
     try{
+        const respone = await axios.post('http://localhost:8000/api/getTopic',{ topicId:topicId })
+        // ส่ง topic id ใน body
+        console.log("fetch topic one: ", respone.data)
+        return respone.data
+
+    }catch (error:unknown){
+        console.log(error)
+        return[]
+    }
+}
+
+// ดึงข้อมูลของโพส ที่ topic นี้
+export const fetchPostTopic = async(topicId: string) =>{
+
+    try{
         const respone = await axios.post('http://localhost:8000/api/topic',{ topicId:topicId })
         // ส่ง topic id ใน body
         console.log("fetch topic one: ", respone.data)

@@ -8,13 +8,14 @@ import { getProfile, getToken } from "../(userprofile)/api/profileServices";
 import styles from "./styles/Navbar.module.css";
 import Router from "next/router";
 // type
-import { UserProfile } from "@/types/types";
+import { User } from "@/types/types";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [sidenavOpen, setSidenavOpen] = useState<boolean>(false);
 
-    const [profile, setProfile] = useState<UserProfile | null>(null);
+    
+    const [profile, setProfile] = useState<User | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [token, setToken] = useState<string | null>(null)
 

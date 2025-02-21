@@ -7,11 +7,6 @@ export interface Topic {
 }
 
 
-export interface User{
-    _id: string;
-    fullname: string;
-    
-}
 
 export interface Post{
     _id: string;
@@ -26,7 +21,7 @@ export interface Post{
     createdPost: string
 }
 
-export interface UserProfile {
+export interface User {
     fullname: string;
     username: string;
     email: string;

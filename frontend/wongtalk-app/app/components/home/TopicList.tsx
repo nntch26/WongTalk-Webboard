@@ -5,11 +5,14 @@ import { useEffect, useState } from 'react';
 import { fetchTopics } from "@/app/api/topicServices";
 import { Topic } from "@/types/types";
 
+import { useRouter } from "next/navigation";
+
 import styles from "../styles/Maincontent.module.css";
 
 
 export default function TopicList() {  
     const [topics, setTopics] = useState<Topic[]>([]) 
+    const router = useRouter();
 
     const getTopics = async() =>{
         try{
@@ -22,6 +25,11 @@ export default function TopicList() {
         }
     }
 
+    const handleNavigate = (id:string, name:string) =>{
+        sessionStorage.setItem("itopic_id", id)
+        router.push('/topic/'+ name)
+    }
+
 
 
     useEffect(() => {
@@ -30,17 +38,14 @@ export default function TopicList() {
 
     return (
         <>
-            <div className="flex gap-3 p-3 overflow-x-auto whitespace-nowrap">
-                <button className="px-3 py-2 bg-gray-800 text-white rounded-lg  text-sm">All</button>
-                {topics.map((topic) => (
-                    <Link href={`/topic/${topic._id}`} key={topic._id} 
-                    className={`${styles.topicitem} px-3 py-2  w-full flex items-center`}>
-                        <i className={`${topic.icon} text-base md:text-l`}></i>
-                        <span className="text-xs md:text-sm text-center ml-2"> {topic.name}</span>
-                    </Link>
-                ))}
-                
-            </div>    
+            {topics.map((topic) => (
+                <button onClick={() => handleNavigate(topic._id, topic.name)} key={topic._id}
+                className={`${styles.topicitem} px-3 py-2  w-full flex items-center`}>
+                    <i className={`${topic.icon} text-base md:text-l`}></i>
+                    <span className="text-xs md:text-sm text-center ml-2"> {topic.name}</span>
+                </button>
+            ))}
+            
     
         </>
     )
