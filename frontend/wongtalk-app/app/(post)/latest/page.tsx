@@ -37,9 +37,12 @@ export default function page() {
                 id="main-content"
                 className="pt-16 ml-0 md:ml-64 transition-margin duration-300 ease-in-out"
             >
-                {/* <!-- ส่วน topic  --> */}
+               {/* <!-- ส่วน topic  --> */}
                 <div className="max-w-6xl mx-auto px-4 mt-8 mb-4">
-                    <TopicList />
+                    <div className="flex gap-3 p-3 overflow-x-auto whitespace-nowrap">
+                        <button className="px-3 py-2 bg-gray-800 text-white rounded-lg  text-sm">All</button>
+                        <TopicList />
+                    </div>
                 </div>
 
                 {/* <!-- ส่วนโพสอื่นๆ --> */}

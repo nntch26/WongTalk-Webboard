@@ -78,3 +78,21 @@
     color: #9CA3AF;
     margin-bottom: 20px;
 }
+
+.space-y-4::-webkit-scrollbar {
+    display: none; /* ซ่อน scrollbar */
+}
+
+
+.btncusfol{
+    border: 1.5px solid var(--primary-color);
+    background-color: #37415100;
+    color: var(--primary-color);
+    border: 1.5px solid var(--primary-color);
+}
+
+.btncusfol:hover {
+    transition: background-color 0.3s ease-in-out;
+    background-color: var(--primary-color);
+    color: var(--background-Dark);
+}

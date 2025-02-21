@@ -104,7 +104,7 @@ export default function Home() {
                                 </div>
 
                                 {/* <!-- Posts list --> */}
-                                <div className="space-y-4">
+                                <div className="space-y-4 overflow-y-auto max-h-60">
                                     <PostNew />
                                 </div>
 

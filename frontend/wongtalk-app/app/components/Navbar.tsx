@@ -102,7 +102,7 @@ export default function Navbar() {
                             {/* <!-- ส่วน logo --> */}
                             <div className="flex items-center hidden lg:block">
                                 <Link href="/" className={styles.logo}>
-                                    <img src="logo2.png" alt="Logo" />
+                                    <img src="/logo2.png" alt="Logo" />
                                     <span className="font-bold text-2xl">
                                         Wong
                                         <span className="text-[--primary-color]">

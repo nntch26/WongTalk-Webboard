@@ -4,7 +4,7 @@ import { Topic} from "@/types/types";
 import axios from "axios";
 
 
-
+// ดึง topic หลายๆอัน
 export const fetchTopics = async () => {
 
     try{

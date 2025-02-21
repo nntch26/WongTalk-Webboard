@@ -29,7 +29,7 @@
 
 .btncus:hover {
     border: 1.5px solid var(--primary-color);
-    background-color: var(--background-Dark);
+    background-color: #37415100;
     color: var(--primary-color);
 }
 
