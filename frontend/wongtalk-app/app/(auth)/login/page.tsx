@@ -22,7 +22,7 @@ export default function Login() {
 
         try {
             const userData = await login(email, password);
-            router.push("/profile");
+            router.push("/");
             console.log(userData);
         } catch (err: any) {
             // alert("Invalid email or password");

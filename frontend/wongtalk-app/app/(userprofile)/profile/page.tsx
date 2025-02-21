@@ -8,6 +8,7 @@ import { logout } from "@/app/(auth)/api/authServices";
 import { useRouter } from "next/navigation";
 
 import Navbar from "@/app/components/Navbar";
+import Popup from "@/app/components/popupModel";
 // type
 import { UserProfile } from "@/types/types";
 
@@ -15,6 +16,7 @@ export default function Profile() {
     const router = useRouter();
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [isShow, setIsShow] = useState<boolean>(false);
 
     const fetchProfile = async () => {
         try {
@@ -24,7 +26,7 @@ export default function Profile() {
             console.error("Failed to fetch profile:", error);
         }
     };
-    
+
     useEffect(() => {
         fetchProfile();
     }, []);
@@ -33,13 +35,7 @@ export default function Profile() {
 
     if (!profile) return <p>Profile not found</p>;
 
-    // จัดการตอน logout
-    const handleLogout = async () => {
-        const res = await logout();
-        if (res.success) {
-            router.push("/login"); // กลับไปหน้า login
-        }
-    };
+
 
     return (
         <>
@@ -71,16 +67,22 @@ export default function Profile() {
 
                             {/* EditProfile */}
                             <div className="flex justify-end py-3">
-                                <i
-                                    className="fa-solid fa-arrow-right-from-bracket fa-xl sm:mt-5 text-[#E8E9EA]/60"
-                                    onClick={handleLogout}
-                                ></i>
-                                {/* <button
-                                onClick={handleLogout}
-                                className="px-4 py-2 bg-[#4B5563] text-[#E8E9EA] rounded-full text-sm sm:text-base font-bold hover:bg-opacity-90 transition-colors"
-                                >
-                                Logout
-                                </button> */}
+                                <button>
+                                    <i
+                                        className="fa-solid fa-arrow-right-from-bracket fa-xl sm:mt-5 text-[#E8E9EA]/60"
+                                        onClick={() => setIsShow(true)}
+                                    ></i>
+                                </button>
+
+                                <Popup
+                                    isOpen={isShow}
+                                    onClose={() => setIsShow(false)}
+                                    
+                                />
+
+
+
+                                
                             </div>
                         </div>
 

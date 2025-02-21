@@ -12,6 +12,19 @@ export const getProfile = async () => {
     }
 }
 
+// ดึง token จาก cookies
+export const getToken = async () => {
+    try {
+        const res = await axios.get("http://localhost:8000/api/gettoken", { withCredentials: true })
+        return res.data
+    } catch (error) {
+        console.error("Error fetching profile:", error);
+        throw error
+    }
+}
+
+
+
 // แก้ไขข้อมูลโปรไฟล์
 export const editProfile = async (data: FormData) => {
     try {
