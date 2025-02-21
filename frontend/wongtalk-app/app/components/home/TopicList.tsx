@@ -27,9 +27,9 @@ export default function TopicList() {
 
     const handleNavigate = (e: React.MouseEvent, id:string, name:string) =>{
         e.preventDefault(); // ทำให้ไม่รีเฟรชหน้า
-
+       
         sessionStorage.setItem("itopic_id", id)
-        router.push('/topic/'+ name)
+        router.push('/topic/')
     }
 
 
