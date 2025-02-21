@@ -77,7 +77,7 @@ const editProfile = async (req, res) => {
         const user = await User.findById(userId); // หา user ในฐานข้อมูล
         let imageName = req.file ? req.file.filename : user.image; // ถ้าไม่มีให้เป็น ชื่อเดิม
 
-        if (fileOld && req.file) {
+        if (fileOld && req.file && fileOld !== "default.png") {
             try {
                 await fs.unlink(
                     "../frontend/wongtalk-app/public/uploads/" + fileOld

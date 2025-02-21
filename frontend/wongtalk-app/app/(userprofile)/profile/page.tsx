@@ -3,8 +3,8 @@ import React from "react";
 import Link from "next/link";
 
 import { useState, useEffect } from "react";
-import { getProfile } from "../api/profileServices";
-import { logout } from "@/app/(auth)/api/authServices";
+import { getProfile } from "../../api/profileServices";
+import { logout } from "@/app/api/authServices";
 import { useRouter } from "next/navigation";
 
 import Navbar from "@/app/components/Navbar";
@@ -34,8 +34,6 @@ export default function Profile() {
     // window.location.reload();
 
     if (!profile) return <p>Profile not found</p>;
-
-
 
     return (
         <>
@@ -77,12 +75,7 @@ export default function Profile() {
                                 <Popup
                                     isOpen={isShow}
                                     onClose={() => setIsShow(false)}
-                                    
                                 />
-
-
-
-                                
                             </div>
                         </div>
 
