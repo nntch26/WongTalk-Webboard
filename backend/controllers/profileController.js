@@ -20,11 +20,17 @@ const getProfile = async (req, res) => {
         };
 
         res.json(userProfile); // ส่งข้อมูลกลับไป
-        console.log(userProfile);
+
+        // console.log(authToken);
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }
 };
+
+const getToken = async (req, res) => {
+    const authToken = req.cookies.token;
+    res.json(authToken)
+}
 
 // edit Profile
 // const editProfile = async (req, res) => {
@@ -108,6 +114,7 @@ const editProfile = async (req, res) => {
 
 module.exports = {
     getProfile,
+    getToken,
     editProfile,
     upload,
 };
