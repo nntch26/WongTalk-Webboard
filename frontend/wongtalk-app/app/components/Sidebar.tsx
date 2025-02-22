@@ -1,7 +1,35 @@
 import Link from "next/link";
 import styles from "./styles/Sidebar.module.css";
 
+import { userFollowTopic } from "../hook/useFollowTopic";
+import { useState, useEffect } from "react";
+import { getToken } from "../api/profileServices";
+
 export default function Sidebar() {
+    const { profile, topics, loading, error } = userFollowTopic();
+    const [token, setToken] = useState<string | null>(null);
+
+    const fetchProfile = async () => {
+            try {
+                const token = await getToken(); // ดึง token
+                if (token) {
+                    setToken(token);
+                    return;
+                }
+            } catch (error) {
+                console.error("Failed to fetch Token:", error);
+            }
+        };
+    
+        // ดึง user
+        useEffect(() => {
+            fetchProfile();
+        }, []);
+
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p className="text-red-500">{error}</p>;
+
     return (
         <>
             {/* <!-- Sidenav --> */}
@@ -42,51 +70,34 @@ export default function Sidebar() {
                         <h3 className="px-3 text-sm font-medium text-gray-400">
                             Following
                         </h3>
-                        <div className="space-y-2 mt-4">
-                            <Link
-                                href="#"
-                                className="px-3 py-2 topic-item w-full flex items-center "
-                            >
-                                <i className="fa-regular fa-comments text-base md:text-l"></i>
-                                <span className="text-xs md:text-sm text-center ml-2">
-                                    {" "}
-                                    General
-                                </span>
-                            </Link>
-
-                            <Link
-                                href="#"
-                                className="px-3 py-2 topic-item w-full flex items-center "
-                            >
-                                <i className="fa-regular fa-comments text-base md:text-l"></i>
-                                <span className="text-xs md:text-sm text-center ml-2">
-                                    {" "}
-                                    General
-                                </span>
-                            </Link>
-
-                            <Link
-                                href="#"
-                                className="px-3 py-2 topic-item w-full flex items-center "
-                            >
-                                <i className="fa-regular fa-comments text-base md:text-l"></i>
-                                <span className="text-xs md:text-sm text-center ml-2">
-                                    {" "}
-                                    General
-                                </span>
-                            </Link>
-
-                            <Link
-                                href="#"
-                                className="px-3 py-2 topic-item w-full flex items-center "
-                            >
-                                <i className="fa-regular fa-comments text-base md:text-l"></i>
-                                <span className="text-xs md:text-sm text-center ml-2">
-                                    {" "}
-                                    General
-                                </span>
-                            </Link>
-                        </div>
+                        {token ? (
+                            topics.length > 0 ? (
+                                topics.map((topic) => (
+                                    <div
+                                        className="space-y-2 mt-4"
+                                        key={topic._id}
+                                    >
+                                        <Link
+                                            href="#"
+                                            className="px-3 py-2 topic-item w-full flex items-center "
+                                        >
+                                            <i
+                                                className={`${topic.icon} text-base md:text-l`}
+                                            ></i>
+                                            <span className="text-xs md:text-sm text-center ml-2">
+                                                {topic.name}
+                                            </span>
+                                        </Link>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-gray-400">
+                                    You are not following any topics.
+                                </p>
+                            )
+                        ) : (
+                            <p></p>
+                        )}
                     </div>
                 </div>
             </div>

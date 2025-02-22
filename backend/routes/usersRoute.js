@@ -10,7 +10,7 @@ const {
 
 router.get("/users", getAllUser);
 router.get("/users/:id", getUser);
-router.get("/showfollow", showFollow);
+router.post("/showfollow", showFollow);
 
 router.post("/follow", followTopic);
 

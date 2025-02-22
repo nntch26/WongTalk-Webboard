@@ -40,7 +40,7 @@ export default function Popup({ isOpen, onClose }: PopupType) {
                             <div className="items-center gap-2 mt-3 flex flex-row">
                                 
                                 <button
-                                    className="w-full mt-2 p-2.5 flex-1 text-[#E8E9EA] hover:bg-opacity-90 rounded-md outline-none border ring-offset-2 ring-indigo-600 focus:ring-2"
+                                    className="w-full mt-2 p-2.5 flex-1 text-[#E8E9EA] hover:bg-opacity-90 rounded-md outline-none border ring-offset-2 ring-[#374151]-600 focus:ring-2"
                                     onClick={onClose}
                                 >
                                     Cancel

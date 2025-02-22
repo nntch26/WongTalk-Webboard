@@ -60,8 +60,8 @@ export default function EditProfile() {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        console.log(user);
-        console.log(fileOld);
+        // console.log(user);
+        // console.log(fileOld);
 
         e.preventDefault();
         const formData = new FormData();
@@ -149,31 +149,6 @@ export default function EditProfile() {
                                     onSubmit={handleSubmit}
                                     encType="multipart/form-data"
                                 >
-                                    {/* Name Fields */}
-                                    {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm text-[#E8E9EA]/60 mb-2">
-                                            First Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            defaultValue="Benjamin"
-                                            className="w-full px-4 py-2 rounded-lg bg-[#191C24] border border-[rgba(255,255,255,0.1)] text-[#E8E9EA] focus:outline-none focus:border-[#30E48E]"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm text-[#E8E9EA]/60 mb-2">
-                                            Last Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            defaultValue="Hoppe"
-                                            className="w-full px-4 py-2 rounded-lg bg-[#191C24] border border-[rgba(255,255,255,0.1)] text-[#E8E9EA] focus:outline-none focus:border-[#30E48E]"
-                                        />
-                                    </div>
-                                </div> */}
-
                                     {/* Fullname */}
                                     <div>
                                         <label className="block text-sm text-[#E8E9EA]/60 mb-2">
@@ -217,14 +192,33 @@ export default function EditProfile() {
 
                                     {/* ProfileImage */}
                                     <div>
-                                        <label className="block text-sm text-[#E8E9EA]/60 mb-2">
+                                        <label className="block w-full text-sm text-[#E8E9EA]/60 mb-2">
                                             Profile Picture
                                         </label>
-                                        <input
-                                            type="file"
-                                            name="image"
-                                            onChange={handleChange}
-                                        />
+
+                                        <div className="relative w-full">
+                                            <label
+                                                htmlFor="file-upload"
+                                                className="absolute left-0 top-0 h-full px-4 flex items-center bg-[#252A34] text-[#E8E9EA] text-sm rounded-l-lg cursor-pointer"
+                                            >
+                                                Choose File
+                                            </label>
+
+                                            <input
+                                                id="file-upload"
+                                                type="file"
+                                                name="image"
+                                                className="absolute left-0 w-full h-full opacity-0 cursor-pointer"
+                                                onChange={handleChange}
+                                            />
+
+                                            <input
+                                                type="text"
+                                                className="pl-[110px] w-full py-2 text-sm text-gray-900 border border-[rgba(255,255,255,0.1)] rounded-lg bg-[#191C24] focus:outline-none"
+                                                placeholder="No file chosen"
+                                                readOnly
+                                            />
+                                        </div>
                                     </div>
 
                                     {/* Buttons */}
