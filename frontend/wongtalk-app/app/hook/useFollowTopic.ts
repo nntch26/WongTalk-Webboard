@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getFollowTopic } from "../api/userServices";
 import { getProfile } from "../api/profileServices";
 import { User, Topic } from "@/types/types";
+import { getToken } from "../api/profileServices"; // นำเข้าฟังก์ชัน getToken
 
 export const userFollowTopic = () => {
     const [profile, setProfile] = useState<User | null>(null);
@@ -15,6 +16,14 @@ export const userFollowTopic = () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
+
+                const token = await getToken(); // ดึง token
+                if (!token) {
+                    // ถ้าไม่มี token, ไม่จำเป็นต้องดึงข้อมูลโปรไฟล์และหัวข้อ
+                    setLoading(false);
+                    return;
+                }
+
                 const data = await getProfile();
                 if (isMounted) setProfile(data);
 
