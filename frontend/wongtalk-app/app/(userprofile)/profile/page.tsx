@@ -21,6 +21,7 @@ export default function Profile() {
     const fetchProfile = async () => {
         try {
             const data = await getProfile();
+            
             setProfile(data);
         } catch (error) {
             console.error("Failed to fetch profile:", error);
@@ -33,7 +34,9 @@ export default function Profile() {
 
     // window.location.reload();
 
-    if (!profile) return <p>Profile not found</p>;
+    if (!profile) {
+        return <p>Profile not found</p>;
+    } 
 
     return (
         <>

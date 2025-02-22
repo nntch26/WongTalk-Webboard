@@ -20,7 +20,7 @@ export const fetchPost = async (): Promise<Post[]> => {
         return alldata.data
 
 
-    }catch(error: unknown){
+    }catch(error: any){
         console.log(error)
         return []
 
@@ -28,7 +28,7 @@ export const fetchPost = async (): Promise<Post[]> => {
     
 }
 
-// ฟังก์ชันดึงข้อมูลฌพสล่าสุด
+// ฟังก์ชันดึงข้อมูลโพสล่าสุด
 export const fetchPostNew = async (): Promise<Post[]> => {
 
     try{
@@ -43,7 +43,7 @@ export const fetchPostNew = async (): Promise<Post[]> => {
         return alldata.data
 
 
-    }catch(error: unknown){
+    }catch(error: any){
         console.log(error)
         return []
 
@@ -66,9 +66,32 @@ export const fetchPostTop = async (): Promise<Post[]> => {
         return alldata.data
 
 
-    }catch(error: unknown){
+    }catch(error: any){
         console.log(error)
         return []
+
+    }
+    
+}
+
+
+// สร้างโพสใหม่
+export const AddPost = async (newdata:FormData) => {
+
+    try{
+        const res = await axios.post('http://localhost:8000/api/posts/', newdata)
+        console.log("respone : ",res)
+        console.log("Post added successfully:", res);
+
+        return res
+
+
+    }catch(error: any){
+        if (axios.isAxiosError(error)) {
+            console.error("Error adding post:", error);
+            throw error;
+        }
+        return []; // ป้องกัน undefined 
 
     }
     

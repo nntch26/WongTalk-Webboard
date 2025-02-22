@@ -96,3 +96,33 @@
     background-color: var(--primary-color);
     color: var(--background-Dark);
 }
+
+.placeholder::placeholder {
+    font-weight: bold;
+    font-size: 2rem;
+  
+  }
+  
+.inputfocus:focus {
+    border-color: var(--primary-color); 
+    outline: none; 
+    background-color: #191C24;
+    font-size: 2.1rem;
+    transition: 0.3s ease-in-out;
+
+}
+
+.inputfocustext:focus{
+    outline: none; 
+    background-color: #191C24;
+    font-size: 1.1rem;
+    transition: 0.3s ease-in-out;
+
+}
+
+.inputfocustopic:focus{
+    outline: none; 
+    transition: 0.3s ease-in-out;
+    border-color: #9CA3AF;
+
+}

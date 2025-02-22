@@ -51,7 +51,7 @@ const getUser = async (req, res) => {
     }
 };
 
-// // อัพเดทข้อมูล
+
 // const updateProduct = async (req, res) => {
 //   try {
 //     const { id } = req.params;

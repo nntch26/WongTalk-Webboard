@@ -38,17 +38,18 @@ export default function Popup({ isOpen, onClose }: PopupType) {
                                 Are you sure you want to logout
                             </p>
                             <div className="items-center gap-2 mt-3 flex flex-row">
-                                <button
-                                    className="w-full mt-2 p-2.5 flex-1 text-white bg-red-600 hover:bg-opacity-90 rounded-md outline-none ring-offset-2 ring-red-600 focus:ring-2"
-                                    onClick={handleLogout}
-                                >
-                                    Logout
-                                </button>
+                                
                                 <button
                                     className="w-full mt-2 p-2.5 flex-1 text-[#E8E9EA] hover:bg-opacity-90 rounded-md outline-none border ring-offset-2 ring-indigo-600 focus:ring-2"
                                     onClick={onClose}
                                 >
                                     Cancel
+                                </button>
+                                <button
+                                    className="w-full mt-2 p-2.5 flex-1 text-white bg-red-600 hover:bg-opacity-90 rounded-md outline-none ring-offset-2 ring-red-600 focus:ring-2"
+                                    onClick={handleLogout}
+                                >
+                                    Logout
                                 </button>
                             </div>
                         </div>

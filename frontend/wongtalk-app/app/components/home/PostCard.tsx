@@ -33,8 +33,8 @@ export default function PostCard({ post }: { post: Post }) {
                         <div className="flex items-center gap-3">
                             <img src="user.png" alt="Avatar" className="w-10 h-10 rounded-full" />
                             <div>
-                                <div className="font-semibold text-sm md:text-base">{post.userId.fullname}</div>
-                                <div className="text-gray-500 text-sm md:text-base">{post.time}</div>
+                                <div className="text-sm md:text-base">{post.userId.fullname}</div>
+                                <div className="text-gray-500 text-sm md:text-md">{post.time}</div>
                             </div>
                         </div>
                         

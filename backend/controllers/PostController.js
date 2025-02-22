@@ -325,7 +325,8 @@ const getPostDetail = async (req, res) => {
 // สร้างโพสใหม่
 const createPost = async (req, res) => {
     try {
-        const { title, content, userId, topicId } = req.body;
+        const { title, content,topicId } = req.body;
+        const userId = req.user.id;
 
         // เช็คว่าข้อมูลทั้งหมดถูกส่งมาป่าว
         if (!title || !content || !userId || !topicId) {
@@ -358,7 +359,7 @@ const createPost = async (req, res) => {
         res.status(201).json({
             success: true,
             message: "Post created and added to user successfully.",
-            data: savedPost,
+            // data: savedPost,
         });
     } catch (error) {
         console.error(error.message);

@@ -17,7 +17,7 @@ export const fetchTopics = async () => {
         return data.data
 
 
-    }catch(error: unknown){
+    }catch(error: any){
         if (axios.isAxiosError(error)) {
             console.error('Axios error:', error.message);
         }
@@ -37,7 +37,7 @@ export const fetchTopic = async(topicId: string) =>{
         console.log("fetch topic one: ", respone.data)
         return respone.data
 
-    }catch (error:unknown){
+    }catch (error:any){
         console.log(error)
         return[]
     }
@@ -52,7 +52,7 @@ export const fetchPostTopic = async(topicId: string) =>{
         console.log("fetch topic one: ", respone.data)
         return respone.data
 
-    }catch (error:unknown){
+    }catch (error:any){
         console.log(error)
         return[]
     }
@@ -68,7 +68,7 @@ export const fetchPostTopicTop = async(topicId: string) =>{
         console.log("fetch topic one: ", respone.data)
         return respone.data
 
-    }catch (error:unknown){
+    }catch (error:any){
         console.log(error)
         return[]
     }

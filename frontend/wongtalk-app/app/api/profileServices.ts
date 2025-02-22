@@ -12,7 +12,7 @@ export const getProfile = async () => {
     }
 }
 
-// ดึง token จาก cookies
+// ดึง token จาก cookies เช็คการล็อกอิน
 export const getToken = async () => {
     try {
         const res = await axios.get("http://localhost:8000/api/gettoken", { withCredentials: true })

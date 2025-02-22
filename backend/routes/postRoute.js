@@ -14,6 +14,7 @@ const {
     getLatestPost,
     getPostsTop,
 } = require("../controllers/PostController");
+const { auth } = require("../middleware/auth");
 
 // ค้นหา
 router.get("/search", Search);
@@ -31,8 +32,9 @@ router.get("/posts/:id", getPostDetail);
 router.put("/posts/reactions", likePost);
 
 // เพิ่ม ลบ แก้ไข
-router.post("/posts", createPost);
-router.put("/posts/:id", updatePost);
-router.delete("/posts/:id", deletePost);
+router.post("/posts",auth, createPost);
+
+router.put("/posts/:id",auth, updatePost);
+router.delete("/posts/:id",auth, deletePost);
 
 module.exports = router;

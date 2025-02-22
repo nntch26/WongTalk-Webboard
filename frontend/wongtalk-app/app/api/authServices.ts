@@ -40,3 +40,4 @@ export const logout = async () => {
         return { success: false, error };
     }
 };
+
