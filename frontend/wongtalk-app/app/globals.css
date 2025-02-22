@@ -50,7 +50,9 @@ body {
   background: #515869;
 }
 
-
+.noscroll::-webkit-scrollbar {
+  display: none; /* ซ่อน scrollbar */
+}
 
 
 

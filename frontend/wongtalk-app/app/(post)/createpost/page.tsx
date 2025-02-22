@@ -12,8 +12,9 @@ import { getToken } from '@/app/api/profileServices';
 import {useRouter} from 'next/navigation';
 
 import { Topic } from "@/types/types";
-import { fetchTopics } from "@/app/api/topicServices";
+import { PostData } from '@/types/types';
 
+import { fetchTopics } from "@/app/api/topicServices";
 
 export default function page() {
     const [title, setTitle] = useState<string>("");
@@ -26,37 +27,22 @@ export default function page() {
     const router = useRouter()
 
 
-    // เช็คว่า user login หรือไม่
-    const checkUserLogged = async () => {
-
-        
-        const loggedIn = await getToken(); 
-        
-        if (!loggedIn) {
-            // ไม่สามารถสร้างโพสได้ถ้า user ยังไม่ login
-            console.log("User is not logged in. Please log in first.");
-
-            router.push('/login'); // เด้งไปหน้า login'
-            return; 
-        }
-
-    }
     
 
     // สร้างโพส
     const createPost = async () => {
         
         try {
-            const postData = {
+            const postData:PostData = {
                 title: title,
                 content: content,
                 topicId: topic
-            };;
+            };
 
             console.log("postData -> ",postData)
 
             const savedata  = await AddPost(postData)
-            // ถ้าสร้างได้
+            // ถ้าสร้างโพสได้
             if(savedata){
                 console.log('Post successfully created:');
                 setTitle("");
@@ -87,7 +73,7 @@ export default function page() {
     
     
 
-
+    // กดโพส
     const handleSubmit = async(e: React.FormEvent)=>{
         e.preventDefault();
         // เช็คก่อนว่า มีค่าป่าว
@@ -99,9 +85,39 @@ export default function page() {
         await createPost()
     }
 
+    // กด Save Draft
+
+    const handleSave = async (e: React.MouseEvent) =>{
+        e.preventDefault()
+
+        const savedata:PostData ={
+            title: title,
+            content : content,
+            topicId:topic
+        }
+
+        // save ลง localstorage แปลงเปน json ก่อนด้วย 
+        localStorage.setItem('savedata', JSON.stringify(savedata))
+    }
+
+    const SavaData = async() =>{
+
+        const getDatalocal = localStorage.getItem('savedata')
+        console.log(getDatalocal)
+
+        if(getDatalocal){
+            const getData = JSON.parse(getDatalocal);
+            setTitle(getData.title)
+            setContent(getData.content)
+            setTopic(getData.topicId)
+        }
+    }
+
+
     useEffect(()=>{
-        checkUserLogged()
+        SavaData()
         getTopics()
+
     }, [])
 
 
@@ -138,7 +154,7 @@ export default function page() {
                                     type="text" 
                                     placeholder="Post title" 
                                     value={title || ''}
-                                    onChange={(e) => setTitle(e.target.value)}
+                                    onChange={(e) => setTitle(e.target.value)} // เก็บค่าจาก input value ของ title
                                     className={`${stylesp.placeholder} ${stylesp.inputfocus} 
                                     w-full px-4 py-6 bg-[--second-DarkMidnight] border-b-2 border-[rgba(255,255,255,0.1)] rounded-lg text-lg`}
                                     maxLength={300}/>
@@ -179,7 +195,7 @@ export default function page() {
                             <button type="submit" className={`${styles.btncus} text-center md:flex px-4 py-2 rounded-lg items-center font-semibold`}>
                                 Post
                             </button>
-                            <button className="mr-3 px-4 py-2 font-semibold rounded-lg border border-[rgba(255,255,255,0.1)] hover:border-[#515869] ">
+                            <button onClick={handleSave} className="mr-3 px-4 py-2 font-semibold rounded-lg border border-[rgba(255,255,255,0.1)] hover:border-[#515869] ">
                                 Save Draft
                             </button>
                         </div>

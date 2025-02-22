@@ -25,48 +25,30 @@ export default function PostCard({ post }: { post: Post }) {
     
     return (
         <>
-            <div className={`${styles.postcard} rounded-xl p-4 mb-4 `}>
-                <div className="flex flex-col gap-4 ">
-                    <div>
-                        <div className="flex justify-between items-center mb-2">
-                            {/* <!-- User Info --> */}
-                            <div className="flex items-center gap-3">
-                                <img
-                                    src={`/uploads/${post.userId.image}`}
-                                    alt="Profile picture"
-                                    className="w-10 h-10 rounded-full"
-                                />
-                                <div>
-                                    <div className="text-sm md:text-base">
-                                        {post.userId.fullname}
-                                    </div>
-                                    <div className="text-gray-500 text-sm md:text-md">
-                                        {post.time}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* <!-- Topic --> */}
-                            <div className={`${styles.tagstopic} mt-2`}>
-                                <button
-                                    onClick={(e) =>
-                                        handleNavigate(e, post.topicId._id)
-                                    }
-                                    className="flex flex-col text-xs md:text-md font-semibold"
-                                >
-                                    <div
-                                        className={`${styles.tag} h-10 p-3 flex items-center `}
-                                    >
-                                        <i
-                                            className={`${post.topicId.icon} text-base mr-3`}
-                                        ></i>
-                                        <span className="text-center">
-                                            {post.topicId.name}
-                                        </span>
-                                    </div>
-                                </button>
+        <div className={`${styles.postcard} rounded-xl p-4 mb-4 `}>
+            <div className="flex flex-col gap-4 ">
+                <div>
+                    <div className="flex justify-between items-center mb-2">
+                        {/* <!-- User Info --> */}
+                        <div className="flex items-center gap-3">
+                            <img src="#" alt="Avatar" className="w-10 h-10 rounded-full" />
+                            <div>
+                                <div className="text-sm md:text-base">{post.userId.fullname}</div>
+                                <div className="text-gray-500 text-sm md:text-md">{post.time}</div>
                             </div>
                         </div>
+                        
+                        {/* <!-- Topic --> */}
+                        <div className={`${styles.tagstopic} mt-2`}>
+                            <button onClick={(e) => handleNavigate(e, post.topicId._id)} className="flex flex-col text-xs md:text-md font-medium">
+                                <div className={`${styles.tag} h-10 p-3 flex items-center `}>
+                                    <i className={`${post.topicId.icon} text-base mr-3`}></i>
+                                    <span className="text-center">{post.topicId.name}</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
 
                         {/* <!-- ส่วนหัวข้อ และเนื้อหา --> */}
                         <div>

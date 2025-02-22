@@ -78,9 +78,7 @@
     margin-bottom: 20px;
 }
 
-.space-y-4::-webkit-scrollbar {
-    display: none; /* ซ่อน scrollbar */
-}
+
 
 
 .btncusfol{

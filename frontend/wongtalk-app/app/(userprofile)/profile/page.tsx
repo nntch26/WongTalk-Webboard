@@ -136,7 +136,7 @@ export default function Profile() {
 
                         {/* MyPost */}
                         {mypost ? (
-                            <div className="py-4 divide-y divide-[rgba(255,255,255,0.1)]">
+                            <div className="py-4 divide-y divide-[rgba(255,255,255,0.1)] noscroll overflow-y-auto max-h-64">
                                 {profile?.posts.map((post, index) => (
                                     <div
                                         key={index}
