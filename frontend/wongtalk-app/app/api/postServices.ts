@@ -2,6 +2,8 @@
 // api postServices.ts
 
 import { Post } from "@/types/types";
+import { PostData } from "@/types/types";
+
 import axios from "axios";
 
 
@@ -76,7 +78,7 @@ export const fetchPostTop = async (): Promise<Post[]> => {
 
 
 // สร้างโพสใหม่
-export const AddPost = async (newdata:FormData) => {
+export const AddPost = async (newdata:PostData) => {
 
     try{
         const res = await axios.post('http://localhost:8000/api/posts/', newdata, { withCredentials: true })

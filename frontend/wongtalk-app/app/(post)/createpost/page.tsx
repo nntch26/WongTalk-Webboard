@@ -11,11 +11,17 @@ import { getToken } from '@/app/api/profileServices';
 
 import {useRouter} from 'next/navigation';
 
+import { Topic } from "@/types/types";
+import { fetchTopics } from "@/app/api/topicServices";
+
+
 export default function page() {
     const [title, setTitle] = useState<string>("");
     const [content, setContent] = useState<string>("");
     const [topic, setTopic] = useState<string>("");
     const [error, setError] = useState<string>("");
+
+    const [topicList, setTopicList] = useState<Topic[]>([])
 
     const router = useRouter()
 
@@ -41,10 +47,13 @@ export default function page() {
     const createPost = async () => {
         
         try {
-            const postData = new FormData();
-            postData.append('title', title);
-            postData.append('content', content);
-            postData.append('topicId', topic);
+            const postData = {
+                title: title,
+                content: content,
+                topicId: topic
+            };;
+
+            console.log("postData -> ",postData)
 
             const savedata  = await AddPost(postData)
             // ถ้าสร้างได้
@@ -53,6 +62,7 @@ export default function page() {
                 setTitle("");
                 setContent("");
                 setTopic("");
+                router.push("/"); // เด้งไปหน้าแรก
             }
             
 
@@ -61,6 +71,18 @@ export default function page() {
             router.push('/login'); // เด้งไปหน้า login'
         }
     };
+
+    // ดีง topic 
+    const getTopics = async() =>{
+        try{
+            const getdata = await fetchTopics()
+            setTopicList(getdata);
+            console.log('Fetched topics:', getdata);
+
+        }catch(error){
+            console.error('Error fetching topics', error)
+        }
+    }
 
     
     
@@ -79,6 +101,7 @@ export default function page() {
 
     useEffect(()=>{
         checkUserLogged()
+        getTopics()
     }, [])
 
 
@@ -86,81 +109,86 @@ export default function page() {
   return (
     <>
     <Navbar/>
-    <div className="max-w-5xl mx-auto p-4 mt-24">
-        {/* <!-- Header Section --> */}
-        <header className="flex items-center justify-between mb-2">
-            <h1 className="text-xl md:text-4xl font-bold">Create Post</h1>
 
-            <div className="flex flex-row-reverse md:hidden">
-               
-                <button className="px-4 py-2 rounded-lg bg-[#01F681] text-[#080E13] font-medium hover:opacity-90 transition-opacity">
-                    Post
-                </button>
-            </div>
-            
-        </header>
+        <div className="max-w-5xl mx-auto p-4 mt-24">
+            {/* <!-- Header Section --> */}
+            <header className="flex items-center justify-between mb-2">
+                <h1 className="text-xl md:text-4xl font-bold">Create Post</h1>
 
-        {error && (<div className="error text-red-500">{error}</div>) }
-
-        <div className=" lg:grid-cols-3 gap-6 mb-5 p-4">
-            {/* <!-- ส่วนเขียนโพส --> */}
-            <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="lg:col-span-2 space-y-6">
-                    <div className='bg-[--second-DarkMidnight] rounded-lg p-4'>
-
-                    {/* <!-- Title Input --> */}
-                        <div className="space-y-4">
-                        <input 
-                            type="text" 
-                            placeholder="Post title" 
-                            value={title || ''}
-                            onChange={(e) => setTitle(e.target.value)}
-                            className={`${stylesp.placeholder} ${stylesp.inputfocus} 
-                            w-full px-4 py-6 bg-[--second-DarkMidnight] border-b-2 border-[rgba(255,255,255,0.1)] rounded-lg text-lg`}
-                            maxLength={300}/>
-
-                            <textarea 
-                                placeholder="Write your post content here..." 
-                                value={title || ''}
-                                onChange={(e) => setContent(e.target.value)}
-                                className={`${stylesp.inputfocustext} w-full px-4 py-3 bg-[--second-DarkMidnight] border border-[rgba(255,255,255,0.1)] rounded-lg min-h-[300px]`}
-                            ></textarea>
-                        </div>
-                    
-                    </div>
-
+                <div className="flex flex-row-reverse md:hidden">
                 
-                    {/* <!-- Tags Input --> */}
-                    <div className="space-y-2 p-4 bg-[#0F151A] rounded-lg border border-[rgba(255,255,255,0.1)]">
-                        <h3 className="text-l md:text-xl font-bold text-[#E8E9EA] mb-3">Choose Topic</h3>
-                        <select 
-                            className={`${stylesp.inputfocustopic} w-full px-4 py-3 bg-[#191C24] border border-[rgba(255,255,255,0.1)] rounded-lg `}
-                            value={topic || ''}  
-                            onChange={(e) => setTopic(e.target.value)} 
-                        >
-                            <option value="" disabled className="text-[#888]">Select a community</option>
-                            <option value="community1" className="bg-[--hover-DarkCharcoal] p-2">Community 1</option>
-                            <option value="community2" className="bg-[--hover-DarkCharcoal] p-2">Community 2</option>
-                            <option value="community3" className="bg-[--hover-DarkCharcoal] p-2">Community 3</option>
-                        </select>
-                    </div>
-
-
-                    <div className="flex flex-row-reverse hidden md:flex">
-                    
-                        <button type="submit" className={`${styles.btncus} text-center md:flex px-4 py-2 rounded-lg items-center font-semibold`}>
-                            Post
-                        </button>
-                        <button className="mr-3 px-4 py-2 font-semibold rounded-lg border border-[rgba(255,255,255,0.1)] hover:border-[#515869] ">
-                            Save Draft
-                        </button>
-                    </div>
-
+                    <button className="px-4 py-2 rounded-lg bg-[#01F681] text-[#080E13] font-medium hover:opacity-90 transition-opacity">
+                        Post
+                    </button>
                 </div>
-            </form>
-                       
+                
+            </header>
+
+            {error && (<div className="error text-red-500">{error}</div>) }
+
+            <div className=" lg:grid-cols-3 gap-6 mb-5 p-4">
+                {/* <!-- ส่วนเขียนโพส --> */}
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="lg:col-span-2 space-y-6">
+                        <div className='bg-[--second-DarkMidnight] rounded-lg p-4'>
+
+                            {/* <!-- Title Input --> */}
+                            <div className="space-y-4">
+                                <input 
+                                    type="text" 
+                                    placeholder="Post title" 
+                                    value={title || ''}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    className={`${stylesp.placeholder} ${stylesp.inputfocus} 
+                                    w-full px-4 py-6 bg-[--second-DarkMidnight] border-b-2 border-[rgba(255,255,255,0.1)] rounded-lg text-lg`}
+                                    maxLength={300}/>
+
+                                    <textarea 
+                                        placeholder="Write your post content here..." 
+                                        value={content || ''}
+                                        onChange={(e) => setContent(e.target.value)}
+                                        className={`${stylesp.inputfocustext} w-full px-4 py-3 bg-[--second-DarkMidnight] border border-[rgba(255,255,255,0.1)] rounded-lg min-h-[300px]`}
+                                    ></textarea>
+                            </div>
+                        
+                        </div>
+
+                    
+                        {/* <!-- Tags Input --> */}
+                        <div className="space-y-2 p-4 bg-[#0F151A] rounded-lg border border-[rgba(255,255,255,0.1)]">
+                            <h3 className="text-l md:text-xl font-bold text-[#E8E9EA] mb-3">Choose Topic</h3>
+                                <select 
+                                    className={`${stylesp.inputfocustopic} w-full px-4 py-3 bg-[#191C24] border border-[rgba(255,255,255,0.1)] rounded-lg `}
+                                    value={topic || ''}  
+                                    onChange={(e) => setTopic(e.target.value)} >
+                                    <option value='' disabled className="text-[#888]">Select a community</option>
+                                {/* ดึง topic */}
+                                {topicList.map((topics)=>(
+                                    <option key={topics._id} value={topics._id} className="bg-[--hover-DarkCharcoal] p-2">
+                                        {topics.name}
+                                    </option>
+                                ))}
+                                </select>
+                            
+                        
+                        </div>
+
+
+                        <div className="flex flex-row-reverse hidden md:flex">
+                        
+                            <button type="submit" className={`${styles.btncus} text-center md:flex px-4 py-2 rounded-lg items-center font-semibold`}>
+                                Post
+                            </button>
+                            <button className="mr-3 px-4 py-2 font-semibold rounded-lg border border-[rgba(255,255,255,0.1)] hover:border-[#515869] ">
+                                Save Draft
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+                        
+            </div>
         </div>
-    </div>
         
     </>
   )

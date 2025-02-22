@@ -10,21 +10,39 @@ import Sidebar from "@/app/components/Sidebar";
 import TopicList from "@/app/components/home/TopicList";
 import PostCard from "@/app/components/home/PostCard";
 import Navbar from "@/app/components/Navbar";
+import { Topic } from "@/types/types";
+import { fetchTopics } from "@/app/api/topicServices";
+
 
 export default function page() {
     const [postsnew, setPostsnew] = useState<Post[]>([]);
+    const [topics, setTopics] = useState<Topic[]>([]) 
 
+    const getposts = async () => {
+        try {
+            const getdata = await fetchPostTop();
+            console.log("data ", getdata);
+            setPostsnew(getdata);
+        } catch (error) {
+            console.log("Error fetching ", error);
+        }
+    };
+
+    const getTopics = async() =>{
+        try{
+            const getdata = await fetchTopics()
+            setTopics(getdata);
+            console.log('Fetched topics:', getdata);
+
+        }catch(error){
+            console.error('Error fetching topics', error)
+        }
+    }
+    
     useEffect(() => {
-        const getposts = async () => {
-            try {
-                const getdata = await fetchPostTop();
-                console.log("data ", getdata);
-                setPostsnew(getdata);
-            } catch (error) {
-                console.log("Error fetching ", error);
-            }
-        };
         getposts();
+        getTopics()
+
     }, []);
 
     return (
@@ -41,7 +59,9 @@ export default function page() {
                 <div className="max-w-6xl mx-auto px-4 mt-8 mb-6">
                     <div className="flex gap-3 p-3 overflow-x-auto whitespace-nowrap">
                         <button className="px-3 py-2 bg-gray-800 text-white rounded-lg  text-sm">All</button>
-                        <TopicList />
+                        {topics.map((topic) => (
+                            <TopicList key={topic._id} topic={topic} />
+                        ))}
                     </div>
                 </div>
 

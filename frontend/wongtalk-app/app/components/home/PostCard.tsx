@@ -31,7 +31,7 @@ export default function PostCard({ post }: { post: Post }) {
                     <div className="flex justify-between items-center mb-2">
                         {/* <!-- User Info --> */}
                         <div className="flex items-center gap-3">
-                            <img src="user.png" alt="Avatar" className="w-10 h-10 rounded-full" />
+                            <img src="#" alt="Avatar" className="w-10 h-10 rounded-full" />
                             <div>
                                 <div className="text-sm md:text-base">{post.userId.fullname}</div>
                                 <div className="text-gray-500 text-sm md:text-md">{post.time}</div>
@@ -52,7 +52,7 @@ export default function PostCard({ post }: { post: Post }) {
 
                     {/* <!-- ส่วนหัวข้อ และเนื้อหา --> */}
                     <div>
-                        <h1 className={`${styles.posttitle} text-xl md:text-2xl`}>
+                        <h1 className={`${styles.posttitle} text-xl md:text-2xl mb-2`}>
                             <Link href='#'>{post.title}</Link>
                         </h1>
                     

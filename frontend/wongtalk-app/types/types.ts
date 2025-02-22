@@ -7,7 +7,6 @@ export interface Topic {
 }
 
 
-
 export interface Post{
     _id: string;
     title: string;
@@ -20,6 +19,7 @@ export interface Post{
     time: string,
     createdPost: string
 }
+
 
 export interface User {
     _id?: string;
@@ -37,4 +37,12 @@ export interface RegisterForm {
     email: string;
     password: string;
     confirmPassword: string;
+}
+
+
+// โพส ส่ง api
+export interface PostData {
+    title: string;
+    content: string;
+    topicId: string;
 }
