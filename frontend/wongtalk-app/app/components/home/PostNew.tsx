@@ -27,7 +27,7 @@ export default function PostNew() {
         <>
             {/* <!-- Post ใหม่ย่อยๆ --> */}
             {postsnew.map((postnew) => (
-                <div key={postnew._id} className="flex items-center space-x-3">
+                <div key={postnew._id} className="flex items-center space-x-3 hover:scale-95 transition-all duration-500 ease-in-out">
                     <img
                         src="user.png"
                         alt="Avatar"

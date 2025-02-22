@@ -9,7 +9,7 @@ export default function TopicHead({topic}: {topic: Topic}) {
     <>
     <header className="container max-w-8xl mx-auto mt-32 bg-[--second-DarkMidnight] shadow-md rounded-lg mb-6 p-4">
         <div className="flex flex-col md:flex-row items-center justify-between py-4 px-8">
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-6 hover:scale-110 transition-all duration-500 ease-in-out">
             <i className={`${topic.icon} text-5xl rounded-full text-gray-200`} />
             <div className="flex flex-col">
             <h2 className="text-white text-xl font-semibold">{topic.name}</h2>
