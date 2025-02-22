@@ -71,7 +71,7 @@ export default function Home() {
 
                     <div className="flex flex-col lg:flex-row gap-6">
                         {/* ฝั่งซ้าย โพส */}
-                        <div className="flex-1">
+                        <div className="flex-1 ">
                             {/* <!-- Post  --> */}
                             {posts && posts.length > 0 ? (
                                 posts.map((post) => {

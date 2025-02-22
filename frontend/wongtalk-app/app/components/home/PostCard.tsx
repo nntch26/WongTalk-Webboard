@@ -1,21 +1,32 @@
 "use client";
 import React from 'react'
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { Post } from "@/types/types";
 
 import styles from "../styles/Maincontent.module.css";
 
 
+
 export default function PostCard({ post }: { post: Post }) {
-    
+
+    const router = useRouter();
     console.log("PostCard",post)
+
+    const handleNavigate = (e: React.MouseEvent, id:string) =>{
+        e.preventDefault(); // ทำให้ไม่รีเฟรชหน้า
+       
+        sessionStorage.setItem("itopic_id", id)
+        router.push('/topic/')
+    }
+
     
     
     return(
         <>
-        <div className={`${styles.postcard} rounded-xl p-4 mb-4`}>
-            <div className="flex flex-col gap-4">
+        <div className={`${styles.postcard} rounded-xl p-4 mb-4 `}>
+            <div className="flex flex-col gap-4 ">
                 <div>
                     <div className="flex justify-between items-center mb-2">
                         {/* <!-- User Info --> */}
@@ -29,12 +40,12 @@ export default function PostCard({ post }: { post: Post }) {
                         
                         {/* <!-- Topic --> */}
                         <div className={`${styles.tagstopic} mt-2`}>
-                            <Link href="#" className="flex flex-col text-xs md:text-md font-semibold">
+                            <button onClick={(e) => handleNavigate(e, post.topicId._id)} className="flex flex-col text-xs md:text-md font-semibold">
                                 <div className={`${styles.tag} h-10 p-3 flex items-center `}>
                                     <i className={`${post.topicId.icon} text-base mr-3`}></i>
                                     <span className="text-center">{post.topicId.name}</span>
                                 </div>
-                            </Link>
+                            </button>
                         </div>
                     </div>
 

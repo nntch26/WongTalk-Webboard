@@ -88,7 +88,7 @@ export default function page() {
                         >
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                    <div className="mb-5">
+                                    <div>
                                         <i
                                             className={`${topic.icon} text-base md:text-l`}
                                         ></i>
@@ -118,11 +118,10 @@ export default function page() {
                         </div>
                     ))}
                 </div>
-                <div className="flex justify-end">
+                <div className="flex justify-end mt-3">
                     <button
                         className="bg-[#30E48E] text-[#080E13] px-5 py-2 rounded-lg hover:bg-opacity-90 transition"
-                        onClick={handleDone}
-                    >
+                        onClick={handleDone}>
                         Done
                     </button>
                 </div>

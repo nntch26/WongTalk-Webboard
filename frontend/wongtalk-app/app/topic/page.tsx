@@ -48,7 +48,7 @@ export default function page() {
 
                 console.error(error);
             } finally {
-                setIsLoading(false); // ซ่อน Loading เมื่อโหลดเสร็จ 
+                setIsLoading(false); // ซ่อน Loading ตอนโหลดเสร็จ 
             }
         };
         fetchData();
@@ -119,13 +119,13 @@ export default function page() {
     }
 
 
-    // ฟังก์ชันเมื่อคลิกที่ "Top"
+    // ฟังก์ชัน คลิกปุ่ม Top
     const handleClickTop = (e: React.MouseEvent, topicId: string) => {
         e.preventDefault();
         setIsTop(true); // เปลี่ยนเป็น Top
     };
     
-    // ฟังก์ชันเมื่อคลิกที่ "Latest"
+    // ฟังก์ชัน คลิกปุ่ม Latest
     const handleClickLatest = (e: React.MouseEvent, topicId: string) => {
         e.preventDefault();
         setIsTop(false); // เปลี่ยนเป็น Latest
@@ -224,7 +224,7 @@ export default function page() {
 
                                                                 {topicList.map((topiclist)=>(
                                                                     <button onClick={(e) => handleClickTopic(e, topiclist._id, topiclist.name)} key={topiclist._id}
-                                                                        className={`${styles.topicitem} px-3 py-2  w-full flex items-center`}>
+                                                                        className={`${styles.topicitem} px-3 py-2  w-full flex items-center `}>
                                                                             <i className={`${topiclist.icon} text-base md:text-l`}></i>
                                                                             <span className="text-xs md:text-sm text-center ml-2"> {topiclist.name}</span>
                                                                     </button>
