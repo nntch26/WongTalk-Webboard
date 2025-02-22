@@ -1,7 +1,14 @@
 import Link from "next/link";
 import styles from "./styles/Sidebar.module.css";
 
+import { userFollowTopic } from "../hook/useFollowTopic";
+
 export default function Sidebar() {
+    const { profile, topics, loading, error } = userFollowTopic();
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p className="text-red-500">{error}</p>;
+
     return (
         <>
             {/* <!-- Sidenav --> */}
@@ -42,51 +49,23 @@ export default function Sidebar() {
                         <h3 className="px-3 text-sm font-medium text-gray-400">
                             Following
                         </h3>
-                        <div className="space-y-2 mt-4">
-                            <Link
-                                href="#"
-                                className="px-3 py-2 topic-item w-full flex items-center "
-                            >
-                                <i className="fa-regular fa-comments text-base md:text-l"></i>
-                                <span className="text-xs md:text-sm text-center ml-2">
-                                    {" "}
-                                    General
-                                </span>
-                            </Link>
-
-                            <Link
-                                href="#"
-                                className="px-3 py-2 topic-item w-full flex items-center "
-                            >
-                                <i className="fa-regular fa-comments text-base md:text-l"></i>
-                                <span className="text-xs md:text-sm text-center ml-2">
-                                    {" "}
-                                    General
-                                </span>
-                            </Link>
-
-                            <Link
-                                href="#"
-                                className="px-3 py-2 topic-item w-full flex items-center "
-                            >
-                                <i className="fa-regular fa-comments text-base md:text-l"></i>
-                                <span className="text-xs md:text-sm text-center ml-2">
-                                    {" "}
-                                    General
-                                </span>
-                            </Link>
-
-                            <Link
-                                href="#"
-                                className="px-3 py-2 topic-item w-full flex items-center "
-                            >
-                                <i className="fa-regular fa-comments text-base md:text-l"></i>
-                                <span className="text-xs md:text-sm text-center ml-2">
-                                    {" "}
-                                    General
-                                </span>
-                            </Link>
-                        </div>
+                        {topics.map((topic) => (
+                            <div className="space-y-2 mt-4" key={topic._id}>
+                                <Link
+                                    href="#"
+                                    className="px-3 py-2 topic-item w-full flex items-center "
+                                >
+                                    {/* <i className="fa-regular fa-comments text-base md:text-l"></i> */}
+                                    <i
+                                        className={`${topic.icon} text-base md:text-l`}
+                                    ></i>
+                                    <span className="text-xs md:text-sm text-center ml-2">
+                                        {" "}
+                                        {topic.name}
+                                    </span>
+                                </Link>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

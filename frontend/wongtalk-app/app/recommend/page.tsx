@@ -33,6 +33,7 @@ export default function page() {
             ...prev,
             [topicid]: !prev[topicid],
         }));
+        if (error) setError(null);
     };
 
     const handleDone = async () => {
@@ -82,7 +83,7 @@ export default function page() {
                     {dataTopic.map((topic) => (
                         // card
                         <div
-                            className=" rounded-lg p-4 border border-[#374151]"
+                            className="rounded-lg p-4 border border-[#374151]"
                             key={topic._id}
                         >
                             <div className="flex items-center justify-between">
