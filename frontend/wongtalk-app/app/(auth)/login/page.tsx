@@ -37,11 +37,9 @@ export default function Login() {
                 <div className="w-full min-h-[300px] p-4 sm:p-6 md:p-8 bg-[#0F151A] flex justify-center relative">
                     <div className="w-full max-w-sm relative pt-16">
                         <div className="absolute top-0 left-1/2 transform -translate-x-1/2">
-                            <img
-                                src="/logo2.png"
-                                alt="Logo"
-                                className="w-12 h-12"
-                            />
+                            <Link href={"/"}> 
+                                <img src="/logo2.png" alt="Logo"className="w-12 h-12"/>
+                            </Link>
                         </div>
 
                         <h3 className="text-2xl sm:text-3xl font-bold text-[#E8E9EA] mb-6 text-center">

@@ -12,42 +12,49 @@ import { getToken } from '@/app/api/profileServices';
 import {useRouter} from 'next/navigation';
 
 export default function page() {
-    const [title, setTitle] = useState<string | null>(null);
-    const [content, setContent] = useState<string | null>(null);
-    const [topic, setTopic] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [title, setTitle] = useState<string>("");
+    const [content, setContent] = useState<string>("");
+    const [topic, setTopic] = useState<string>("");
+    const [error, setError] = useState<string>("");
 
     const router = useRouter()
 
 
-    // // เช็คว่า user login หรือไม่
-    // const checkUserLogged = async () => {
-    //     const loggedIn = await getToken(); 
+    // เช็คว่า user login หรือไม่
+    const checkUserLogged = async () => {
+
         
-    //     if (!loggedIn) {
-    //         // ไม่สามารถสร้างโพสได้ถ้า user ยังไม่ login
-    //         console.log("User is not logged in.");
-    //         setError("User is not logged in. Please log in first.");
+        const loggedIn = await getToken(); 
+        
+        if (!loggedIn) {
+            // ไม่สามารถสร้างโพสได้ถ้า user ยังไม่ login
+            console.log("User is not logged in. Please log in first.");
 
-    //         router.push('/login'); // เด้งไปหน้า login'
-    //         return; 
-    //     }
+            router.push('/login'); // เด้งไปหน้า login'
+            return; 
+        }
 
-    // }
+    }
     
 
     // สร้างโพส
     const createPost = async () => {
         
         try {
-            // ส่งคำขอเพื่อสร้างโพส
             const postData = new FormData();
-            postData.append('title', title || '');
-            postData.append('content', content || '');
-            postData.append('topicId', topic || '');
+            postData.append('title', title);
+            postData.append('content', content);
+            postData.append('topicId', topic);
 
-            // const savedata  = await AddPost(postData)
-            console.log('Post successfully created:');
+            const savedata  = await AddPost(postData)
+            // ถ้าสร้างได้
+            if(savedata){
+                console.log('Post successfully created:');
+                setTitle("");
+                setContent("");
+                setTopic("");
+            }
+            
 
         } catch (error) {
             console.error('Error creating post:', error);
@@ -61,18 +68,17 @@ export default function page() {
 
     const handleSubmit = async(e: React.FormEvent)=>{
         e.preventDefault();
+        // เช็คก่อนว่า มีค่าป่าว
+        if (!title || !content || !topic) {
+            setError("Please fill in all fields.");
+            return;
+        }
 
-        // await checkUserLogged()
         await createPost()
-    
-
-    
-
     }
 
     useEffect(()=>{
-        createPost()
-
+        checkUserLogged()
     }, [])
 
 
@@ -93,6 +99,8 @@ export default function page() {
             </div>
             
         </header>
+
+        {error && (<div className="error text-red-500">{error}</div>) }
 
         <div className=" lg:grid-cols-3 gap-6 mb-5 p-4">
             {/* <!-- ส่วนเขียนโพส --> */}
@@ -150,10 +158,7 @@ export default function page() {
 
                 </div>
             </form>
-           
-
-            {error && (<div className="error">{error}</div>) }
-            
+                       
         </div>
     </div>
         

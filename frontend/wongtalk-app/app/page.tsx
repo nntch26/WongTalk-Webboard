@@ -1,10 +1,12 @@
 "use client";
 import Image from "next/image";
 import styles from "./components/styles/Maincontent.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"
 
+import { fetchTopics } from "@/app/api/topicServices";
 import { fetchPost } from "@/app/api/postServices";
 import { Post } from "@/types/types";
+import { Topic } from "@/types/types";
 
 import Sidebar from "./components/Sidebar";
 import TopicList from "./components/home/TopicList";
@@ -14,19 +16,35 @@ import Navbar from "./components/Navbar";
 
 export default function Home() {
     const [posts, setPosts] = useState<Post[]>([]);
+    const [topics, setTopics] = useState<Topic[]>([]) 
+
+
+    const getposts = async () => {
+        try {
+            const getdata = await fetchPost();
+            // console.log("data ", getdata);
+            setPosts(getdata);
+        } catch (error) {
+            console.log("Error fetching ", error);
+        }
+    };
+
+    const getTopics = async() =>{
+        try{
+            const getdata = await fetchTopics()
+            setTopics(getdata);
+            console.log('Fetched topics:', getdata);
+
+        }catch(error){
+            console.error('Error fetching topics', error)
+        }
+    }
 
     useEffect(() => {
-        const getposts = async () => {
-            try {
-                const getdata = await fetchPost();
-                // console.log("data ", getdata);
-                setPosts(getdata);
-            } catch (error) {
-                console.log("Error fetching ", error);
-            }
-        };
         getposts();
+        getTopics()
     }, []);
+
 
     console.log("--->", posts);
 
@@ -59,7 +77,11 @@ export default function Home() {
                 <div className="max-w-6xl mx-auto px-4 mt-8 mb-4">
                     <div className="flex gap-3 p-3 overflow-x-auto whitespace-nowrap">
                         <button className="px-3 py-2 bg-gray-800 text-white rounded-lg  text-sm">All</button>
-                        <TopicList />
+                            {topics.map((topic) => (
+                                <TopicList key={topic._id} topic={topic} />
+                            ))}
+
+                        
                     </div>
                 </div>
 
@@ -74,12 +96,9 @@ export default function Home() {
                         <div className="flex-1 ">
                             {/* <!-- Post  --> */}
                             {posts && posts.length > 0 ? (
-                                posts.map((post) => {
-                                    console.log("Post Data:", post);
-                                    return (
+                                posts.map((post) => (
                                         <PostCard key={post._id} post={post} />
-                                    );
-                                })
+                                    ))
                             ) : (
                                 <div>Loading...</div>
                             )}

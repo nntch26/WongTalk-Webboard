@@ -327,6 +327,7 @@ const createPost = async (req, res) => {
     try {
         const { title, content,topicId } = req.body;
         const userId = req.user.id;
+        console.log("createPost userId ->>", userId )
 
         // เช็คว่าข้อมูลทั้งหมดถูกส่งมาป่าว
         if (!title || !content || !userId || !topicId) {

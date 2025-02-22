@@ -79,7 +79,8 @@ export const fetchPostTop = async (): Promise<Post[]> => {
 export const AddPost = async (newdata:FormData) => {
 
     try{
-        const res = await axios.post('http://localhost:8000/api/posts/', newdata)
+        const res = await axios.post('http://localhost:8000/api/posts/', newdata, { withCredentials: true })
+        // withCredentials: true ดึง Token จาก Cookies อัตโนมัติ
         console.log("respone : ",res)
         console.log("Post added successfully:", res);
 
