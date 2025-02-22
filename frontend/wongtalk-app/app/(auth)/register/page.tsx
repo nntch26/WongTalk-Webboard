@@ -77,7 +77,7 @@ export default function Register() {
             // set userId ไปที่ session เพื่อให้หน้า recommend ใช้
             const userId = result.user._id;
             sessionStorage.setItem("userId", userId);
-            router.push("/recommend");
+            router.push("/login");
         } catch (err: any) {
             setError(err.response?.data?.message || "Registration failed");
         }

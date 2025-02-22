@@ -14,17 +14,13 @@ import { User, Topic } from "@/types/types";
 import { userFollowTopic } from "@/app/hook/useFollowTopic";
 
 export default function Profile() {
-
     const [isShow, setIsShow] = useState<boolean>(false);
     const [mypost, setMyPost] = useState<boolean>(true);
-
 
     const { profile, topics, loading, error } = userFollowTopic();
 
     if (loading) return <p>Loading...</p>;
-    if (error) return <p className="text-red-500">{error}</p>;
-    
-    
+    if (error) return <p>{error}</p>;
 
     return (
         <>
@@ -76,8 +72,6 @@ export default function Profile() {
                                 <h1 className="text-xl font-bold">
                                     {profile?.fullname}
                                 </h1>
-                                {/* <p className="text-[#E8E9EA]/60 text-sm sm:text-base">@Username_Benjamin</p> */}
-                                {/* <p className="text-sm sm:text-base">Wannabe employee</p> */}
                                 <p className="text-[#30E48E] text-sm sm:text-base">
                                     {profile?.username}
                                 </p>
@@ -102,10 +96,12 @@ export default function Profile() {
 
                         {/* Action Buttons */}
                         <div className="flex gap-2 mt-4">
-                            <button className="flex-1 py-2 sm:py-3 bg-gradient-to-r from-[rgba(0,255,124,1)] to-[#FCD34D] text-[#080E13] rounded-full text-sm sm:text-base font-bold hover:opacity-90 transition-opacity">
-                                Create Post
-                            </button>
-                            <Link href="./edit_profile" className="flex-1">
+                            <Link href="createpost" className="flex-1">
+                                <button className="w-full py-2 sm:py-3 bg-gradient-to-r from-[rgba(0,255,124,1)] to-[#FCD34D] text-[#080E13] rounded-full text-sm sm:text-base font-bold hover:opacity-90 transition-opacity">
+                                    Create Post
+                                </button>
+                            </Link>
+                            <Link href="edit_profile" className="flex-1">
                                 <button className="w-full py-2 sm:py-3 border border-[rgba(255,255,255,0.1)] rounded-full text-sm sm:text-base font-bold hover:bg-[#0F151A] transition-colors">
                                     Edit Profile
                                 </button>
@@ -175,11 +171,11 @@ export default function Profile() {
                             </div>
                         ) : (
                             // div Follow Tpic
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
                                 {topics.map((topic) => (
                                     <div
                                         key={topic._id}
-                                        className="rounded-lg p-4 border border-[#374151] transition duration-200 hover:bg-[#0F151A] hover:border-[#4B5563]"
+                                        className="rounded-lg p-4 border border-[#374151] transition duration-200 hover:bg-[#0F151A] hover:border-[#4B5563] text-center"
                                     >
                                         <i
                                             className={`${topic.icon} text-base md:text-l`}

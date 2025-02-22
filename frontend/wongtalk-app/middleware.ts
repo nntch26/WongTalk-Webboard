@@ -6,7 +6,8 @@ export function middleware(request: NextRequest) {
 
     if (!token) {
         console.log("No token found, redirecting to login...");
-        return NextResponse.redirect(new URL('/login', request.url))
+        const callbackUrl = encodeURIComponent(request.nextUrl.pathname); //ดึง path ปัจจุบันเพื่อเก็บเป็น callbackUrl และ encode เพื่อป้องกันตัวอีกษรพิเศษ
+        return NextResponse.redirect(new URL(`/login?callbackUrl=${callbackUrl}`, request.url));
     }
 
     return NextResponse.next()
@@ -16,7 +17,6 @@ export function middleware(request: NextRequest) {
 export const config = {
     matcher: [
         '/profile',
-        '/edit_profile',
         '/createpost/:path*'  
     ]
 }   

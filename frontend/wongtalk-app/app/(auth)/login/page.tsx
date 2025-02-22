@@ -4,6 +4,7 @@ import Link from "next/link";
 import { login } from "../../api/authServices";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -11,18 +12,27 @@ export default function Login() {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
+    const searchParams = useSearchParams(); // ดึงค่าจาก parameter
+    const callbackUrl = searchParams.get("callbackUrl") || "/";
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        
         if (!email || !password) {
             setError("Please enter email and password.");
             return;
         }
 
         try {
+            const userId = sessionStorage.getItem("userId");
+            if (userId) {
+                router.push("/recommend");
+                const userData = await login(email, password);
+                return;
+            }
             const userData = await login(email, password);
-            router.push("/");
-            console.log(userData);
+            router.push(callbackUrl);
+            // console.log(userData);
         } catch (err: any) {
             // alert("Invalid email or password");
             setError(err.response.data.message);
