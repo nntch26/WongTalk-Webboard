@@ -23,7 +23,7 @@ export default function PostCard({ post }: { post: Post }) {
 
     
     
-    return(
+    return (
         <>
         <div className={`${styles.postcard} rounded-xl p-4 mb-4 `}>
             <div className="flex flex-col gap-4 ">
@@ -50,35 +50,37 @@ export default function PostCard({ post }: { post: Post }) {
                     </div>
 
 
-                    {/* <!-- ส่วนหัวข้อ และเนื้อหา --> */}
-                    <div>
-                        <h1 className={`${styles.posttitle} text-xl md:text-2xl mb-2`}>
-                            <Link href='#'>{post.title}</Link>
-                        </h1>
-                    
-                        <p className={`${styles.postcontent} text-sm md:text-base line-clamp-1`}>{post.content}</p>
-                    </div>
-                    
-                    
-                    {/* <!-- Actions (Likes & Comments) --> */}
-                    <div className="flex items-center gap-4 text-gray-400 mt-4">
-                        <button className="flex items-center gap-2 hover:text-green-400 px-2 py-1 rounded">
-                            <i className="fa-solid fa-hands-clapping"></i>
-                            <span>{post.likes} Likes</span>
-                        </button>
-                        <button className="flex items-center gap-2 hover:text-green-400 px-2 py-1 rounded">
-                            <i className="fa-regular fa-comment-dots"></i>
-                            <span>{post.commentCount} Comments</span>
-                        </button>
-                    </div>
+                        {/* <!-- ส่วนหัวข้อ และเนื้อหา --> */}
+                        <div>
+                            <h1
+                                className={`${styles.posttitle} text-xl md:text-2xl mb-2`}
+                            >
+                                <Link href="#">{post.title}</Link>
+                            </h1>
 
+                            <p
+                                className={`${styles.postcontent} text-sm md:text-base line-clamp-1`}
+                            >
+                                {post.content}
+                            </p>
+                        </div>
+
+                        {/* <!-- Actions (Likes & Comments) --> */}
+                        <div className="flex items-center gap-4 text-gray-400 mt-4">
+                            <button className="flex items-center gap-2 hover:text-green-400 px-2 py-1 rounded">
+                                <i className="fa-solid fa-hands-clapping"></i>
+                                <span>{post.likes} Likes</span>
+                            </button>
+                            <button className="flex items-center gap-2 hover:text-green-400 px-2 py-1 rounded">
+                                <i className="fa-regular fa-comment-dots"></i>
+                                <span>{post.commentCount} Comments</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-         </div>
-
         </>
-    )
+    );
 
     
 

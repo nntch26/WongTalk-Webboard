@@ -57,7 +57,8 @@ export default function page() {
                 }
             }
             console.log("follow topic Done");
-            router.push("/login");
+            sessionStorage.removeItem("userId");
+            router.push("/");
         } else {
             console.error("User ID not available.");
         }
