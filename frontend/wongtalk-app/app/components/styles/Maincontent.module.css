@@ -126,16 +126,16 @@
 /* ///////////////////// Post detail ///////////////////////////// */
 .comment{
     background-color: var(--background-Dark);
-    border-radius: 12px;
+    border-radius: 8px;
     color: #6B7280;
     border: 1px solid #575d68;
-    height: 4rem;
+    height: 6rem;
 }
 
 .comment:focus{
     outline: none; 
     background-color: #191C24;
     color: var(--text-color);
-    height: 8rem;
+    /* height: 6rem; */
     transition: 0.3s ease-in-out;
 }

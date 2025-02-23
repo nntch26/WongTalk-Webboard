@@ -29,9 +29,9 @@ export default function PostNew() {
             {postsnew.map((postnew) => (
                 <div key={postnew._id} className="flex items-center space-x-3 hover:scale-95 transition-all duration-500 ease-in-out">
                     <img
-                        src="user.png"
+                        src={`/uploads/${postnew.userId.image}`}
                         alt="Avatar"
-                        className="p-1 w-10 rounded-f "
+                        className="w-10 h-10 rounded-full"
                     />
                     <div>
                         <Link href="#">

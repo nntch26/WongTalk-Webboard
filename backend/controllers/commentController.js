@@ -6,7 +6,12 @@ const Comment = require("../models/commentModel");
 // เพิ่มคอมเม้น
 const addComment = async (req, res) => {
     try {
-        const { postId, userId, content } = req.body;
+
+        const { postId, content } = req.body;
+        const userId = req.user.id;
+
+        console.log("backend add comment:",userId )
+        console.log("backend add comment:",postId, content )
 
         // สร้างคอมเม้นต์ใหม่
         const newComment = new Comment({
@@ -27,6 +32,7 @@ const addComment = async (req, res) => {
             data: newComment,
         });
     } catch (error) {
+        console.error(error);
         res.status(500).json({
             success: false,
             message: "Error adding comment",

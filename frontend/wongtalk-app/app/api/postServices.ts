@@ -1,8 +1,7 @@
 
 // api postServices.ts
 
-import { Post } from "@/types/types";
-import { PostData } from "@/types/types";
+import { Post, PostData } from "@/types/types";
 
 import axios from "axios";
 

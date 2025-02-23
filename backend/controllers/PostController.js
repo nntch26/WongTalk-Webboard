@@ -12,7 +12,7 @@ const getAllPost = async (req, res) => {
         const allPosts = await Post.find()
             .select("title content likes commentCount createdAt")
             .populate({ path: "topicId", select: "name icon" })
-            .populate({ path: "userId", select: "fullname" })
+            .populate({ path: "userId", select: "fullname image" })
             .lean();
 
         // สุ่มโพสต์
@@ -22,7 +22,6 @@ const getAllPost = async (req, res) => {
         const modifiedPosts = randomPosts.map((post) => ({
             ...post,
             likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
-            commentCount: post.commentCount?.length || 0, // ถ้าไม่มี comments ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
             createdPost: moment(post.createdAt)
                 .tz("Asia/Bangkok")
@@ -49,7 +48,7 @@ const getLatestPost = async (req, res) => {
         const allPosts = await Post.find()
             .select("title content likes commentCount createdAt")
             .populate({ path: "topicId", select: "name icon" })
-            .populate({ path: "userId", select: "fullname" })
+            .populate({ path: "userId", select: "fullname image" })
             .sort({ createdAt: -1 }) // เรียงจากใหม่ไปเก่า
             .lean();
 
@@ -57,7 +56,6 @@ const getLatestPost = async (req, res) => {
         const modifiedPosts = allPosts.map((post) => ({
             ...post,
             likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
-            commentCount: post.commentCount?.length || 0, // ถ้าไม่มี comments ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
             createdPost: moment(post.createdAt)
                 .tz("Asia/Bangkok")
@@ -87,7 +85,7 @@ const getPostsTop = async (req, res) => {
         const allPosts = await Post.find({ createdAt: { $gte: oneWeekAgo } })
             .select("title content likes commentCount createdAt")
             .populate({ path: "topicId", select: "name icon" })
-            .populate({ path: "userId", select: "fullname" })
+            .populate({ path: "userId", select: "fullname image" })
             .sort({ likes: -1 }) // เรียงจากมากไปน้อย
             .lean(); // แปลงเป็น JSON object
 
@@ -95,7 +93,6 @@ const getPostsTop = async (req, res) => {
         const modifiedPosts = allPosts.map((post) => ({
             ...post,
             likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
-            commentCount: post.commentCount?.length || 0, // ถ้าไม่มี comments ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
             createdPost: moment(post.createdAt)
                 .tz("Asia/Bangkok")
@@ -128,7 +125,7 @@ const Search = async (req, res) => {
         const allPosts = await Post.find()
             .select("title content likes commentCount createdAt")
             .populate({ path: "topicId", select: "name icon" })
-            .populate({ path: "userId", select: "fullname" })
+            .populate({ path: "userId", select: "fullname image" })
             .lean(); // แปลงเป็น JSON object
 
         // กรองโพสต์ที่ตรงกับคำค้นหา
@@ -146,7 +143,6 @@ const Search = async (req, res) => {
         const modifiedPosts = randomPosts.map((post) => ({
             ...post,
             likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
-            commentCount: post.commentCount?.length || 0, // ถ้าไม่มี comments ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
             createdPost: moment(post.createdAt)
                 .tz("Asia/Bangkok")
@@ -186,7 +182,7 @@ const getPostTopic = async (req, res) => {
         const posts = await Post.find({ topicId: topicId })
             .select("title content likes commentCount createdAt")
             .populate({ path: "topicId", select: "name description icon" })
-            .populate({ path: "userId", select: "fullname" })
+            .populate({ path: "userId", select: "fullname image" })
             .sort({ createdAt: -1 }) // เรียงจากใหม่ไปเก่า
             .lean(); // แปลงเป็น JSON object
 
@@ -194,7 +190,6 @@ const getPostTopic = async (req, res) => {
         const modifiedPosts = posts.map((post) => ({
             ...post,
             likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
-            commentCount: post.commentCount?.length || 0, // ถ้าไม่มี comments ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
             createdPost: moment(post.createdAt)
                 .tz("Asia/Bangkok")
@@ -235,7 +230,7 @@ const getPostsTopInTopic = async (req, res) => {
         const posts = await Post.find({ topicId: topicId })
             .select("title content likes commentCount createdAt")
             .populate({ path: "topicId", select: "name description icon" })
-            .populate({ path: "userId", select: "fullname" })
+            .populate({ path: "userId", select: "fullname image" })
             .sort({ likes: -1 }) // เรียงตามจำนวน likes มากที่สุด
             .limit(5) // จำกัดผลลัพธ์ 5 โพสต์
             .lean(); // แปลงเป็น JSON object
@@ -244,7 +239,6 @@ const getPostsTopInTopic = async (req, res) => {
         const modifiedPosts = posts.map((post) => ({
             ...post,
             likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
-            commentCount: post.commentCount?.length || 0, // ถ้าไม่มี comments ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
             createdPost: moment(post.createdAt)
                 .tz("Asia/Bangkok")
@@ -285,14 +279,13 @@ const getPostDetail = async (req, res) => {
         const posts = await Post.findById(id)
             .select("title content likes commentCount createdAt")
             .populate({ path: "topicId", select: "name icon" })
-            .populate({ path: "userId", select: "fullname" })
+            .populate({ path: "userId", select: "fullname image" })
             .lean(); // แปลงเป็น JSON object
 
         // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
         const modifiedPosts = Array.of(posts).map((post) => ({
             ...post,
             likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
-            commentCount: post.commentCount?.length || 0, // ถ้าไม่มี comments ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
             createdPost: moment(post.createdAt)
                 .tz("Asia/Bangkok")
@@ -304,10 +297,18 @@ const getPostDetail = async (req, res) => {
         }
 
         // ดึงข้อมูลคอมเม้นโพสต์นี้
-        const comments = await Comment.find({ postId: id }).populate(
-            "userId",
-            "fullname"
-        ); // ใช้ populate เพื่อดึงข้อมูลผู้ใช้ด้วย
+        const comments = await Comment.find({ postId: id })
+        .populate({ path: "userId", select: "fullname image" }) // ใช้ populate เพื่อดึงข้อมูลผู้ใช้ด้วย
+        .sort({ createdAt: -1 }) // เรียงจากใหม่ไปเก่า
+        .lean(); // แปลงเป็น JSON object
+        
+        // // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+        // const modifiedComment = Array.of(comments).map((comments) => ({
+        //     ...comments,
+        //     timeComents: moment(comments.createdAt).tz("Asia/Bangkok").fromNow(),
+        // }));
+
+        
         console.log(comments);
 
         res.status(200).json({

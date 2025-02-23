@@ -1,15 +1,22 @@
 "use client"
 import Link from 'next/link'
-import { fetchPostDetail } from '@/app/api/postServices'
 import { useState, useEffect } from 'react'
-import { PostDetail, Topic } from '@/types/types'
-import { useParams } from 'next/navigation'
-import { fetchPostTopic, fetchPostTopicTop, fetchTopic } from '@/app/api/topicServices'
+import { useParams, useRouter  } from 'next/navigation'
+
+import { PostDetail, Topic, CommentData } from '@/types/types'
+
+import { fetchPostDetail } from '@/app/api/postServices'
+import { fetchTopic } from '@/app/api/topicServices'
+import { AddComment } from '@/app/api/commentServices'
+import { getToken } from '@/app/api/profileServices'
 
 import TopicTag from '@/app/components/topic/TopicTag'
 import TopicSidebar from '@/app/components/topic/TopicSidebar '
+import PopupModalComment from '@/app/components/popup/PopupModalComment'
+
 import styles from '@/app/components/styles/Maincontent.module.css'
-import { useRouter } from "next/navigation";
+
+
 
 
 export default function page() {
@@ -17,6 +24,13 @@ export default function page() {
     const [topic, setTopic] = useState<Topic| null>(null)
     const [topicList, setTopicList] = useState<Topic[]>([]);
     const [topicId, setTopicId] = useState<string>("");
+    const [content, setContent] = useState<string>("");
+
+
+    const [error, setError] = useState<string>("");
+    const [isFocused, setIsFocused] = useState<boolean>(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // จำลองสถานะล็อกอิน
+    const [showModal, setShowModal] = useState(false);
     const router = useRouter()
 
 
@@ -24,7 +38,7 @@ export default function page() {
     const { id } = useParams() as {id:string}; // ID เปน string
     console.log("page param:",id)
 
-
+    // ดึง post detail
     const getPostDetail = async (postid:string) => {
         try{
             const getpost = await fetchPostDetail(postid)
@@ -68,6 +82,28 @@ export default function page() {
         }
     }
 
+    // สร้างคอมเม้น
+    const addComment = async()=>{
+        try {
+            const commentData:CommentData = {
+                postId: post?.Post[0]._id || "",
+                content: content,
+            };
+
+            console.log("commentData -> ",commentData)
+            const savedata  = await AddComment(commentData)
+
+            // ถ้าสร้างคอมมเม้นได้
+            if(savedata){
+                console.log('Comment successfully created:');
+                setContent("");
+            }
+        } catch (error) {
+            console.error('Error creating Comment:', error);
+        }
+
+    }
+
      // กดเลือก topic ในหน้านี้
     const handleClickTopic = (e:React.MouseEvent, id:string) =>{
         e.preventDefault(); // ทำให้ไม่รีเฟรชหน้า
@@ -76,14 +112,53 @@ export default function page() {
         router.push('/topic/')
     }
 
+    // กดคอมเม้นโพส
+    const handleSubmitComment = (e: React.FormEvent) =>{
+        e.preventDefault(); // ทำให้ไม่รีเฟรชหน้า
+        if (!content) {
+            setError("Please fill in all fields.");
+            return;
+        } 
+        
+        addComment() // โยนไปฟฟังก์ชัน เพิ่มคอมเม้น
+
+    }
+
+    // เช็คว่า user login หรือไม่
+    const checkUserLogged = async () => {
+        const loggedIn = await getToken(); 
+        
+        if (!loggedIn) {
+            // ไม่สามารถgเม้นได้ถ้า user ยังไม่ login
+            console.log("User is not logged in.");
+            return; 
+        }else{
+            console.log("User is logged in.");
+            setIsLoggedIn(true)
+            return; 
+        }
+
+    }
+
+    // เช็คว่า loggin ยัง
+    const handleFocus = () => {
+        if (!isLoggedIn) {
+            setShowModal(true); // ตั้งให้โชว์ popup
+        }else{
+            // ถ้าล็อคอิน ก้เม้นได้ ให้โชว์ปุ่ม
+            setIsFocused(true)
+        }
+        
+    };
 
     useEffect(() => {
       getPostDetail(id)
       getTopicList()
-    }, [id]); // เรียกเมื่อ id เปลี่ยนแปลง
-  
-  
+      checkUserLogged() // เช้คก่อนว่า login ยัง
+      
 
+    }, [post]); // ถ้าโพส หรือ คอมเม้นเปลี่ยนแปลง ให้รันใหม่
+  
     useEffect(() => {
       console.log("topicid:", topicId)
 
@@ -94,14 +169,14 @@ export default function page() {
     }, [topicId]);  // เรียกตอน setTopicId ใน getPostDetail แล้ว
   
   console.log("topic->>:", topic)
-
+  console.log("allcommment ->>:", post?.allComments)
 
   return (
 
     <>
     {/* <!-- ส่วน  conetnt --> */}
   
-  <div className="container mx-auto mt-32">
+  <div className="container mx-auto mt-28">
       {/* <!-- ปุ่มย้อนกลับ --> */}
       <div className="flex items-center mb-4 mt-8 ml-4">
         <Link href={'/'} className="flex items-center text-l md:text-xl text-while hover:text-green-400">
@@ -123,7 +198,7 @@ export default function page() {
                   <div className="flex items-start mb-3">
                     <div className="w-full">
                         <div className="flex items-center gap-3">
-                            <img src="#" alt="Avatar" className="w-10 h-10 rounded-full" />
+                            <img src={`/uploads/${post.Post[0].userId.image}`} alt="Avatar" className="w-10 h-10 rounded-full" />
                             <div>
                                 <div className="text-sm md:text-base text-[--primary-color]">{post.Post[0].userId.fullname}</div>
                                 <div className="text-gray-500 text-sm md:text-md">{post.Post[0].time}</div>
@@ -135,11 +210,8 @@ export default function page() {
                   {/* <!-- content post --> */}
                   <div className="mb-3 text-while">
                       <h1 className="text-xl md:text-4xl font-bold mb-3">{post.Post[0].title}</h1>
-
                      {/* <!-- Topic tag--> */}
                       <TopicTag key={post.Post[0].topicId._id} post={post.Post[0]} />
-
-
                       <p className="text-xs md:text-base">{post.Post[0].content} </p>
                   
                   </div>
@@ -165,7 +237,7 @@ export default function page() {
               {/* <!-- ส่วน Comment --> */}
               <div id='allcomment' className="flex-1 mt-8">
 
-                  {/* <!-- Comment input --> */}
+                  {/* <!-- All Comments --> */}
                   <div className="p-4 lg:p-8 mb-4 bg-[--second-DarkMidnight] rounded-xl">
                       <div className="flex items-center mb-6 ml-4">
                           <i className="fa-regular fa-comment-dots text-lg md:text-3xl"></i>
@@ -173,42 +245,80 @@ export default function page() {
                               <h3 className="text-lg md:text-3xl font-semibold text-gray-200 ml-2">All Comments</h3>
                           </span>
                       </div>
-                      <form action="#" method="POST">
-                          <div className='flex  gap-4 mb-4'>
-                            <img src="#" alt="Avatar" className="w-10 h-10 rounded-full bg-slate-500" />
-                            <textarea className={`${styles.comment} w-full p-4 mb-2`} name="text" rows={3} placeholder="Type comment here... " ></textarea>
-                          </div>
-                          <div className="text-right">
-                            <button type='submit' className="px-4 py-2 bg-green-400 text-gray-900 font-semibold rounded-lg hover:bg-green-600">Post</button>
-                          </div>
+
+                      {error && (<div className="error text-red-500">{error}</div>) }
+
+                      {/* <!-- Comment input --> */}
+                      <form onSubmit={handleSubmitComment}>
+
+                            <div className='flex  gap-4 mb-4'>
+                                <img src="#" alt="Avatar" className="w-10 h-10 rounded-full bg-slate-500" />
+                                <textarea className={`${styles.comment} w-full p-4 mb-2`} 
+                                    name="text" rows={3} 
+                                    placeholder="Type comment here... "
+                                    value={content || ''}
+                                    onChange={(e) => setContent(e.target.value)}
+                                    onFocus={handleFocus} // ถ้าคลิกให้โชว์ปุ่ม
+                                    onBlur={(e) => !e.target.value && setIsFocused(false)} // ซ่อนปุ่มถ้าไม่มีข้อความไร
+                                    readOnly={!isLoggedIn} // พิมไม่ได้ ถ้ายังไม่ล็อคอิน
+                                ></textarea>
+                            </div>
+
+                            {isFocused &&(
+                                <div className="text-right">
+                                    <button type='submit' className="px-4 py-2 bg-green-400 text-gray-900 font-semibold rounded-lg hover:bg-green-600">Post</button>
+                                </div>
+                            )}
                       </form>
+
+                    {/* โชว์ตอน user จะคอมเม้น แต่ยังไม่ login */}
+                      {showModal && <PopupModalComment onClose={() => setShowModal(false)} />}
 
                       <hr className="border-0 h-px bg-gray-800 rounded-xl my-5 w-full mx-auto" />
 
                       {/* <!-- all comment --> */}
-                      <div className="mt-10 p-4 lg:p-8 mb-6 border border-solid rounded-lg border-gray-500">
-                          <div className="flex items-start">
-                              
-                              <div className="flex-1">
-                                  <div className="flex items-center justify-between">
-                                      <div className="post-header flex items-center">
-                                          <img src="user.png" alt="Avatar" className="avatar p-1 w-10 rounded-full"/>
-                                          <div className="post-meta ml-3">
-                                              <div className="author-name text-sm md:text-base">Jess Lee for The DEV Team</div>
-                                              <div className="post-date text-sm md:text-base">Jan 1</div>
-                                          </div>
-                                      </div>
-                                      <form action="#" method="POST" className="inline">
-                                        <input type="hidden" name="delete" value="{{i.id}}"/>
-                                        <button type="submit" className="text-blue-600 font-semibold hover:underline">edit</button>
-                                        <button type="submit" className="text-red-600 font-semibold hover:underline">Delete</button>
-                                      </form>
-                                  </div>
-                                  <p className="mt-2 text-while break-words">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Possimus quaerat doloribus repudiandae, minima cum hic, perferendis unde tempora quasi deserunt enim expedita.</p>
-                              </div>
-                          </div>
-                      </div>
+                        {/* card คอมเม้นคนอื่น */}
+                    {post.allComments.length > 0 ? (
+                        post.allComments.map((commentother) => (
+                            <div className="p-4 mb-6 border border-solid rounded-lg border-gray-500"
+                                >
+                                <div className="flex items-start">
+                                    <div className="flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                        <img
+                                            src={`/uploads/${commentother.userId.image}`}
+                                            alt="Avatar"
+                                            className="w-10 h-10 rounded-full"
+                                        />
+                                        <div>
+                                            <div className="text-sm md:text-base text-[--primary-color]">
+                                            {commentother.userId.fullname}</div>
+                                            <div className="text-gray-500 text-sm md:text-md">
+                                            {commentother.createdAt}
+                                            </div>
+                                        </div>
+                                        </div>
 
+                                        {/* แก้ไขและลบคอมเมนต์ */}
+                                        <div>
+                                            <button className="text-blue-600 font-semibold hover:underline">
+                                            Edit
+                                        </button>
+                                        <button className="text-red-600 font-semibold hover:underline">
+                                            Delete
+                                        </button>
+                                        </div>
+                                    </div>
+
+                                    <p className="mt-2 text-white break-words text-sm md:text-md">{commentother.content}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                        ) : (
+                        <p>No comments available</p>
+                        )}
                   </div>
               </div>
 

@@ -48,6 +48,12 @@ export interface PostData {
     topicId: string;
 }
 
+// คอมเม้น ส่ง api
+export interface CommentData {
+    content: string;
+    postId: string;
+}
+
 
 // คอมเม้น
 export interface Comment{
@@ -59,9 +65,15 @@ export interface Comment{
    
 }
 
+// // เวลาคอมเม้น
+// export interface CommentPack {
+//     comment: Comment;
+//     // timeComents: string;
+// }
+
 export interface PostDetail{
     Post: Post[];
-    allComments: Comment[]; 
+    allComments: Comment[]
 }
 
 export interface FollowButtonProps {

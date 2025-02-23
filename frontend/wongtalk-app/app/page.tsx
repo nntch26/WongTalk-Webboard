@@ -145,7 +145,7 @@ export default function Home() {
                                     <p className="text-sm text-slate-300">
                                         A platform for asking questions and
                                         sharing knowledge. The more you ask, the
-                                        more you discover!{" "}
+                                        more you discover!
                                     </p>
                                 </div>
                             </div>

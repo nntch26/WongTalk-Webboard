@@ -27,8 +27,6 @@ export default function page() {
     const router = useRouter()
 
 
-    
-
     // สร้างโพส
     const createPost = async () => {
         
