@@ -3,19 +3,13 @@ import React from "react";
 import Link from "next/link";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { getProfile } from "../../api/profileServices";
-import { getFollowTopic } from "@/app/api/userServices";
-import { useRouter } from "next/navigation";
-
 import Navbar from "@/app/components/Navbar";
 import Popup from "@/app/components/popupModel";
-// type
-import { User, Topic } from "@/types/types";
 import { userFollowTopic } from "@/app/hook/useFollowTopic";
 import { followTopic } from "@/app/api/followServices";
 
 export default function Profile() {
-    const { profile, topics, loading, error, refetch } = userFollowTopic();
+    const { profile, topics, loading, error, fetchData } = userFollowTopic();
     const [isShow, setIsShow] = useState<boolean>(false);
     const [mypost, setMyPost] = useState<boolean>(true);
     const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
@@ -47,8 +41,8 @@ export default function Profile() {
             await followTopic(userId, topicId);
             setSelectedTopic(null);
             
-            // รี หลังจากที่ลบ unfollow 
-            refetch();
+            // รีหน้า หลังจากที่ลบ unfollow 
+            await fetchData();
 
         } catch (error) {
             console.error("Error unfollowing topic:", error);
