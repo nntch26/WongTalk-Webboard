@@ -14,9 +14,9 @@ export default function TopicSidebar (topic : {topic:Topic}) {
             <div key={gettopic._id}>
                 <h2 className="text-xl font-bold mb-3">{gettopic.name}</h2>
                 <p className="text-sm mb-4">{gettopic.description}</p>
-                <button className= "w-full text-center bg-[--primary-color] hover:bg-green-400 py-1 rounded text-sm text-[--second-DarkMidnight] font-semibold">
+                {/* <button className= "w-full text-center bg-[--primary-color] hover:bg-green-400 py-1 rounded text-sm text-[--second-DarkMidnight] font-semibold">
                     Follow
-                </button>
+                </button> */}
             </div>
 
         </div>

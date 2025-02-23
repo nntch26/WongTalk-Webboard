@@ -140,7 +140,7 @@ export default function Profile() {
 
                         {/* MyPost */}
                         {mypost ? (
-                            <div className="py-4 divide-y divide-[rgba(255,255,255,0.1)] noscroll overflow-y-auto max-h-64">
+                            <div className="py-4 divide-y divide-[rgba(255,255,255,0.1)] noscroll overflow-y-auto max-h-[26rem]">
                                 {profile?.posts.map((post, index) => (
                                     <div
                                         key={index}
@@ -157,6 +157,8 @@ export default function Profile() {
                                                     {profile.fullname}
                                                 </span>
                                             </div>
+                                            <p className="text-sm text-gray-600">{profile.createdAt}</p>
+
                                             <p className="mt-1 text-sm sm:text-base break-words">
                                                 {post.content}
                                             </p>
@@ -168,6 +170,7 @@ export default function Profile() {
                                                         {post.commentCount}
                                                     </span>
                                                 </button>
+    
                                             </div>
                                         </div>
                                     </div>
