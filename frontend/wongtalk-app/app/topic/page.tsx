@@ -13,13 +13,13 @@ import TopicSidebar from '@/app/components/topic/TopicSidebar ';
 
 export default function page() {
     const [postTopic, setPostTopic] = useState<Post[]>([]);
-    const [topic, setTopic] = useState<Topic[]>([]);
+    const [topic, setTopic] = useState<Topic| null>(null)
     const [topicId, setTopicId] = useState<string | null>(null);
     const [topicList, setTopicList] = useState<Topic[]>([]);
     const [isTop, setIsTop] = useState<boolean>(false); // ใช้เช็คว่าเป็น Top หรือ Latest
     const [isLoading, setIsLoading] = useState(false);
 
-    // ดึง session topic id
+    // ดึง session topic id ที่กดมาจากหน้าอื่น
     useEffect(() => {
         const storedId = sessionStorage.getItem("itopic_id");
         if (storedId) {
@@ -98,7 +98,7 @@ export default function page() {
 
         try{
             const response = await fetchTopic(id)
-            setTopic(response.data) // ดึงส่วน data 
+            setTopic(response.data[0]) // ดึงส่วน data 
 
         }catch(error){
             console.log(error)
@@ -106,7 +106,8 @@ export default function page() {
     }
     
 
-    const handleClickTopic = (e:React.MouseEvent, id:string, name:string) =>{
+    // กดเลือก topic ในหน้านี้
+    const handleClickTopic = (e:React.MouseEvent, id:string) =>{
         e.preventDefault(); // ทำให้ไม่รีเฟรชหน้า
         
         if (id === topicId) return; // ถ้ากด ID เดิม ให้ return ออกไปเลย (ไม่โหลดใหม่)
@@ -133,9 +134,6 @@ export default function page() {
     };
 
 
-
-    
-    
     if (!topicId) {
         return null // รอให้ id โหลดมา
     }
@@ -149,10 +147,11 @@ export default function page() {
                 <div className="h-0.5 bg-[--primary-color] animate-[loading_1s_ease-in-out_infinite]"></div>
             </div>
         )}
-        {topic[0] && ( 
+        
+        {topic && ( 
             <>
                 {/* <!-- header --> */}
-                <TopicHead key={topic[0]._id} topic={topic[0]} />
+                <TopicHead key={topic._id} topic={topic} />
 
                 <div className="container mx-auto px-4 mt-8 ">
                     <div className="flex flex-col lg:flex-row gap-6 justify-center">
@@ -202,46 +201,11 @@ export default function page() {
                         </div>
 
                         {/* <!-- Sidebar --> */}
-                        <div className="max-h-max w-full md:w-1/4 hidden md:block">
-                            <div className="space-y-4">
-                                <div>
-                                    {/* <!-- Right Sidebar --> */}
-                                    <div className="hidden lg:block space-y-4">
-                                            
-                                            <TopicSidebar key={topic[0]._id} topic={topic[0]} />
-
-                                            {/* <!-- Other Topics Card --> */}
-                                            <div className="p-4 rounded-lg bg-[--second-DarkMidnight]">
-                                                <div className="max-h-max w-full ">
-                                                    <div className="space-y-4">
-                                                        <div>
-                                                            <div className="flex justify-between items-center mb-4">
-                                                                <span className="font-bold text-primary">Other Topics</span>
-                                                                <span className="text-text"><i className="fa-solid fa-bars-staggered"></i></span>
-                                                            </div>
-
-                                                            <div className="space-y-2 overflow-y-auto max-h-60 pr-2">
-
-                                                                {topicList.map((topiclist)=>(
-                                                                    <button onClick={(e) => handleClickTopic(e, topiclist._id, topiclist.name)} key={topiclist._id}
-                                                                        className={`${styles.topicitem} px-3 py-2  w-full flex items-center `}>
-                                                                            <i className={`${topiclist.icon} text-base md:text-l`}></i>
-                                                                            <span className="text-xs md:text-sm text-center ml-2"> {topiclist.name}</span>
-                                                                    </button>
-                                                                ))}
-                                                            
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        
+                        <TopicSidebar key={topic._id} 
+                            topic={topic}
+                            topiclist={topicList}
+                            onClickTopic={handleClickTopic} 
+                        />
                     </div>
                 </div>
             </>

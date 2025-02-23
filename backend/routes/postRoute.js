@@ -26,6 +26,7 @@ router.get("/posts/top", getPostsTop);
 router.post("/topic", getPostTopic);
 router.post("/topic/top", getPostsTopInTopic);
 
+// post detail
 router.get("/posts/:id", getPostDetail);
 
 // กดไลค์

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Post } from "@/types/types";
 
 import styles from "../styles/Maincontent.module.css";
-
+import TopicTag from '../topic/TopicTag';
 
 
 export default function PostCard({ post }: { post: Post }) {
@@ -38,29 +38,19 @@ export default function PostCard({ post }: { post: Post }) {
                             </div>
                         </div>
                         
-                        {/* <!-- Topic --> */}
-                        <div className={`${styles.tagstopic} mt-2`}>
-                            <button onClick={(e) => handleNavigate(e, post.topicId._id)} className="flex flex-col text-xs md:text-md font-medium">
-                                <div className={`${styles.tag} h-10 p-3 flex items-center `}>
-                                    <i className={`${post.topicId.icon} text-base mr-3`}></i>
-                                    <span className="text-center">{post.topicId.name}</span>
-                                </div>
-                            </button>
-                        </div>
+                      {/* <!-- Topic tag--> */}
+                      <TopicTag key={post.topicId._id} post={post} />
+                      
                     </div>
 
 
                         {/* <!-- ส่วนหัวข้อ และเนื้อหา --> */}
                         <div>
-                            <h1
-                                className={`${styles.posttitle} text-xl md:text-2xl mb-2`}
-                            >
-                                <Link href="#">{post.title}</Link>
+                            <h1 className={`${styles.posttitle} text-xl md:text-2xl mb-2`}>
+                                <Link href={`/detail/${post._id}`}>{post.title}</Link>
                             </h1>
 
-                            <p
-                                className={`${styles.postcontent} text-sm md:text-base line-clamp-1`}
-                            >
+                            <p className={`${styles.postcontent} text-sm md:text-base line-clamp-1`}>
                                 {post.content}
                             </p>
                         </div>

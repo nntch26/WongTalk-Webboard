@@ -10,7 +10,7 @@ export const fetchTopics = async () => {
     try{
         const { data } = await axios.get<{ data: Topic[] }>('http://localhost:8000/api/getAllTopic')
         //{ "data": [ { "id": 1, "title": "Topic 1" }... ] }
-        console.log("respone : ",data)
+        console.log("Topics respone : ",data)
 
         // const alldata = await res.json()
         // console.log(data)
@@ -34,7 +34,7 @@ export const fetchTopic = async(topicId: string) =>{
     try{
         const respone = await axios.post('http://localhost:8000/api/getTopic',{ topicId:topicId })
         // ส่ง topic id ใน body
-        console.log("fetch topic one: ", respone.data)
+        console.log("fetch topic one respone : ", respone.data)
         return respone.data
 
     }catch (error:any){
@@ -49,7 +49,7 @@ export const fetchPostTopic = async(topicId: string) =>{
     try{
         const respone = await axios.post('http://localhost:8000/api/topic',{ topicId:topicId })
         // ส่ง topic id ใน body
-        console.log("fetch topic one: ", respone.data)
+        console.log("Post topic respone : ", respone.data)
         return respone.data
 
     }catch (error:any){
@@ -65,7 +65,7 @@ export const fetchPostTopicTop = async(topicId: string) =>{
     try{
         const respone = await axios.post('http://localhost:8000/api/topic/top',{ topicId:topicId })
         // ส่ง topic id ใน body
-        console.log("fetch topic one: ", respone.data)
+        console.log("Post topic Toprespone : ", respone.data)
         return respone.data
 
     }catch (error:any){

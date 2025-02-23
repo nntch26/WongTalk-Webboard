@@ -2,6 +2,7 @@
 import Image from "next/image";
 import styles from "./components/styles/Maincontent.module.css";
 import { useState, useEffect } from "react"
+import Link from "next/link";
 
 import { fetchTopics } from "@/app/api/topicServices";
 import { fetchPost } from "@/app/api/postServices";
@@ -68,17 +69,19 @@ export default function Home() {
                     </div>
                 </div>
 
+
                 {/* <!-- ส่วน topic  --> */}
                 <div className="max-w-6xl mx-auto px-4 mt-8 mb-4">
                     <div className="flex gap-3 p-3 overflow-x-auto whitespace-nowrap">
-                        <button className="px-3 py-2 bg-gray-800 text-white rounded-lg  text-sm">All</button>
+                            <Link href={'/'} className="px-3 py-2 bg-gray-800 text-white rounded-lg  text-sm">All</Link>
+
                             {topics.map((topic) => (
                                 <TopicList key={topic._id} topic={topic} />
                             ))}
 
-                        
                     </div>
                 </div>
+
 
                 {/* <!-- ส่วนโพสอื่นๆ --> */}
                 <div className="max-w-7xl mx-auto p-4">

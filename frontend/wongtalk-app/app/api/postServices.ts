@@ -8,18 +8,13 @@ import axios from "axios";
 
 
 // โพสทั้งหมด
-export const fetchPost = async (): Promise<Post[]> => {
+export const fetchPost = async () => {
 
     try{
-        const res = await fetch('http://localhost:8000/api/posts/')
+        const { data } = await axios.get<{ data: Post[] }>('http://localhost:8000/api/posts/')
 
-        if(!res.ok){
-            throw new Error('Failed to fetch data')
-        }
-
-        const alldata = await res.json()
-        console.log("data: " , alldata.data)
-        return alldata.data
+        console.log("Post respone: " , data.data)
+        return data.data
 
 
     }catch(error: any){
@@ -31,18 +26,13 @@ export const fetchPost = async (): Promise<Post[]> => {
 }
 
 // ฟังก์ชันดึงข้อมูลโพสล่าสุด
-export const fetchPostNew = async (): Promise<Post[]> => {
+export const fetchPostNew = async () => {
 
     try{
-        const res = await fetch('http://localhost:8000/api/posts/latest')
+        const { data } = await axios.get<{ data: Post[] }>('http://localhost:8000/api/posts/latest')
 
-        if(!res.ok){
-            throw new Error('Failed to fetch data')
-        }
-
-        const alldata = await res.json()
         // console.log("data: " , alldata.data)
-        return alldata.data
+        return data.data
 
 
     }catch(error: any){
@@ -54,18 +44,11 @@ export const fetchPostNew = async (): Promise<Post[]> => {
 }
 
 // ฟังก์ชันดึงข้อมูลยอดไลค์เยอะสุด
-export const fetchPostTop = async (): Promise<Post[]> => {
+export const fetchPostTop = async () => {
 
     try{
-        const res = await fetch('http://localhost:8000/api/posts/top')
-
-        if(!res.ok){
-            throw new Error('Failed to fetch data')
-        }
-
-        const alldata = await res.json()
-        // console.log("data: " , alldata.data)
-        return alldata.data
+        const { data } = await axios.get<{ data: Post[] }>('http://localhost:8000/api/posts/top')
+        return data.data
 
 
     }catch(error: any){
@@ -73,6 +56,24 @@ export const fetchPostTop = async (): Promise<Post[]> => {
         return []
 
     }
+    
+}
+
+
+// Detail post แต่ละโพส
+export const fetchPostDetail = async (postId:string) =>{
+    try{
+        const { data } = await axios.get<Post>(`http://localhost:8000/api/posts/${postId}`);
+        console.log("post detail respone : ", data.data)
+        return data.data
+
+
+    }catch(error: any){
+        console.log(error)
+        return []
+
+    }
+    
     
 }
 

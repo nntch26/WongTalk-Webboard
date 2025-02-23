@@ -124,7 +124,7 @@ export default function page() {
 
   return (
     <>
-    <Navbar/>
+    {/* <Navbar/> */}
 
         <div className="max-w-5xl mx-auto p-4 mt-24">
             {/* <!-- Header Section --> */}

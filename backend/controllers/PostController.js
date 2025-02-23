@@ -269,6 +269,8 @@ const getPostsTopInTopic = async (req, res) => {
     }
 };
 
+
+// post deatil
 const getPostDetail = async (req, res) => {
     try {
         const { id } = req.params;
@@ -310,8 +312,11 @@ const getPostDetail = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            Post: modifiedPosts,
-            allComments: comments,
+            data:{
+                Post: modifiedPosts,
+                allComments: comments,
+            }
+
         });
     } catch (error) {
         console.error(error.message);

@@ -35,11 +35,11 @@ export default function Sidebar() {
     return (
         <>
             {/* <!-- Sidenav --> */}
-            <div id="sidenav"className={`${styles.sidebarcus} sidebar-cus fixed top-20 left-0 h-full w-64  z-40 transform md:translate-x-0 -translate-x-full transition-transform duration-300 ease-in-out`}>
+            <div id="sidenav"className={`${styles.sidebarcus} sidebar-cus fixed top-16 left-0 h-full w-64  z-40 transform md:translate-x-0 -translate-x-full transition-transform duration-300 ease-in-out`}>
                 <div className="overflow-y-auto h-full">
                     {/* <!-- หน้าแรก --> */}
                     <div className="px-3 py-4">
-                        <div className="space-y-2">
+                        <div className="space-y-2 mt-4 mb-4">
                             <Link href="/" className={styles.sidenavitem}>
                                 <i className="fa-regular fa-comment-dots mr-3"></i>
                                 <span>My Feed</span>

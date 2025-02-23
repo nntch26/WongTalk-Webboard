@@ -8,6 +8,7 @@ export interface Topic {
 
 
 export interface Post{
+    data: any;
     _id: string;
     title: string;
     content: string;
@@ -45,4 +46,20 @@ export interface PostData {
     title: string;
     content: string;
     topicId: string;
+}
+
+
+// คอมเม้น
+export interface Comment{
+    _id : string,
+    postId: Topic;
+    userId : User
+    content : string,
+    createdAt: string;
+   
+}
+
+export interface PostDetail{
+    Post: Post[];
+    allComments: Comment[]; 
 }

@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 import { fetchPostNew } from "@/app/api/postServices";
 import { Post } from "@/types/types";
@@ -45,7 +46,7 @@ export default function page() {
 
     return (
         <div>
-            <Navbar />
+            {/* <Navbar /> */}
             <Sidebar />
 
             {/* <!-- Main Content --> */}
@@ -56,8 +57,9 @@ export default function page() {
                {/* <!-- ส่วน topic  --> */}
                 <div className="max-w-6xl mx-auto px-4 mt-8 mb-6">
                     <div className="flex gap-3 p-3 overflow-x-auto whitespace-nowrap">
-                        <button className="px-3 py-2 bg-gray-800 text-white rounded-lg  text-sm">All</button>
-                         {topics.map((topic) => (
+                        <Link href={'/'} className="px-3 py-2 bg-gray-800 text-white rounded-lg  text-sm">All</Link>
+
+                        {topics.map((topic) => (
                             <TopicList key={topic._id} topic={topic} />
                         ))}
                     </div>
