@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { getProfile } from "../../api/profileServices";
 import { getFollowTopic } from "@/app/api/userServices";
 import { useRouter } from "next/navigation";
@@ -12,44 +12,46 @@ import Popup from "@/app/components/popupModel";
 // type
 import { User, Topic } from "@/types/types";
 import { userFollowTopic } from "@/app/hook/useFollowTopic";
+import { followTopic } from "@/app/api/followServices";
 
 export default function Profile() {
-    const { profile, topics, loading, error } = userFollowTopic();
+    const { profile, topics, loading, error, refetch } = userFollowTopic();
     const [isShow, setIsShow] = useState<boolean>(false);
     const [mypost, setMyPost] = useState<boolean>(true);
-    const [selected, setSelected] = useState<{ [key: string]: boolean }>({});
-    const dropdownRef = useRef<HTMLDivElement | null>(null);
+    const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // เริ่มต้น set state ให้เป็น false
-    useEffect(() => {
-        const selectStart = topics.reduce((acc, topic) => {
-            acc[topic._id] = false;
-            return acc;
-        }, {} as { [key: string]: boolean });
-        setSelected(selectStart);
-    }, [topics]);
-
-    const handleSelect = (e: React.MouseEvent, topicid: string) => {
+    const handleSelect = (e: React.MouseEvent, topicId: string) => {
         e.preventDefault();
-        setSelected((prev) => ({
-            ...prev,
-            [topicid]: !prev[topicid],
-        }));
+        e.stopPropagation();
+        setSelectedTopic((prevId) => (prevId === topicId ? null : topicId)); // ถ้ากดหัวข้อเดิมให้เป็น null เพื่อปิด dropdown แต่ถ้ากดอันอื่นให้เป็น id ของอันนั้น
     };
 
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = useCallback((event: MouseEvent) => {
         if (
             dropdownRef.current &&
             !dropdownRef.current.contains(event.target as Node)
         ) {
-            // ปิด dropdown โดยตั้งค่า selected ให้เป็น false
-            setSelected((prev) => {
-                const newSelected = { ...prev };
-                for (const key in newSelected) {
-                    newSelected[key] = false; // ปิด dropdown ทั้งหมด
-                }
-                return newSelected;
-            });
+            setSelectedTopic(null);
+        }
+    }, []);
+
+    const handleUnfollow = async (topicId: string, e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const userId = profile?._id;
+        if (!userId) return;
+
+        try {
+            await followTopic(userId, topicId);
+            setSelectedTopic(null);
+            
+            // รี หลังจากที่ลบ unfollow 
+            refetch();
+
+        } catch (error) {
+            console.error("Error unfollowing topic:", error);
         }
     };
 
@@ -58,7 +60,7 @@ export default function Profile() {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []);
+    }, [handleClickOutside]);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
@@ -194,7 +196,9 @@ export default function Profile() {
                                                     {profile.fullname}
                                                 </span>
                                             </div>
-                                            <p className="text-sm text-gray-600">{profile.createdAt}</p>
+                                            <p className="text-sm text-gray-600">
+                                                {profile.createdAt}
+                                            </p>
 
                                             <p className="mt-1 text-sm sm:text-base break-words">
                                                 {post.content}
@@ -207,7 +211,6 @@ export default function Profile() {
                                                         {post.commentCount}
                                                     </span>
                                                 </button>
-    
                                             </div>
                                         </div>
                                     </div>
@@ -223,26 +226,33 @@ export default function Profile() {
                                     >
                                         <i
                                             className="fa-solid fa-ellipsis-vertical absolute top-3 right-3 cursor-pointer text-gray-500 text-xl hover:text-[#E8E9EA] transition"
-                                            onClick={(e) => {
-                                                e.stopPropagation(); // ป้องกันการเกิดเหตุการณ์คลิกที่ div หลัก
-                                                handleSelect(e, topic._id);
-                                            }}
-                                        ></i>
+                                            onClick={(e) =>
+                                                handleSelect(e, topic._id)
+                                            }
+                                        />
 
-                                        <div ref={dropdownRef}>
-                                            {selected[topic._id] && (
-                                                <div className="absolute top-8 right-5 bg-[#1E293B] border border-[#374151] rounded-md shadow-lg p-1">
-                                                    <button className="text-red-500 text-sm px-2 py-1 hover:font-bold rounded-md transition">
-                                                        Unfollow
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </div>
+                                        {selectedTopic === topic._id && (
+                                            <div
+                                                ref={dropdownRef}
+                                                className="absolute top-8 right-5 bg-[#1E293B] border border-[#374151] rounded-md shadow-lg p-1 z-10"
+                                            >
+                                                <button
+                                                    className="text-red-500 text-sm px-2 py-1 hover:font-bold rounded-md transition"
+                                                    onClick={(e) =>
+                                                        handleUnfollow(
+                                                            topic._id,
+                                                            e
+                                                        )
+                                                    }
+                                                >
+                                                    Unfollow
+                                                </button>
+                                            </div>
+                                        )}
 
                                         <i
                                             className={`${topic.icon} text-base md:text-l`}
-                                        ></i>
-
+                                        />
                                         <h1>{topic.name}</h1>
                                     </div>
                                 ))}

@@ -5,12 +5,15 @@ import { fetchTopics } from "../api/topicServices";
 import { followTopic } from "../api/followServices";
 import { Topic } from "@/types/types";
 import { useRouter } from "next/navigation";
+import styles from "@/app/components/styles/Maincontent.module.css";
+import FollowButton from "../components/followButton";
+import Link from "next/link";
 
-export default function page() {
+export default function Recommend() {
     const [dataTopic, setdataTopic] = useState<Topic[]>([]);
     const [selected, setSelected] = useState<{ [key: string]: boolean }>({});
     const [error, setError] = useState<string | null>(null);
-    const router = useRouter()
+    const router = useRouter();
 
     const getTopics = async () => {
         try {
@@ -18,6 +21,7 @@ export default function page() {
             setdataTopic(data);
 
             const selectStart = data.reduce((acc, topic) => {
+                // สร้าง obj เพื่อเก็บ state ของแต่ละตัว
                 acc[topic._id] = false; // ตั้งค่าปุ่ม Follow เริ่มต้นให้เป็น false
                 return acc;
             }, {} as { [key: string]: boolean });
@@ -27,42 +31,27 @@ export default function page() {
         }
     };
 
-    const handleSelect = (e: React.MouseEvent, topicid: string) => {
-        e.preventDefault;
+    const handleFollowChange = (topicId: string) => {
         setSelected((prev) => ({
             ...prev,
-            [topicid]: !prev[topicid],
+            [topicId]: !prev[topicId],
         }));
         if (error) setError(null);
     };
 
-    const handleDone = async () => {
-        const userId = sessionStorage.getItem("userId");
-        if (userId) {
+    // const handleDone = async () => {
+    //     const hasFollowedTopics = Object.values(selected).some(
+    //         (value) => value
+    //     );
 
-            // เข็คว่า follow topic อย่างน้อย 1 หรือไม่
-            const counter = Object.values(selected).some(
-                (value) => value
-            );
+    //     if (!hasFollowedTopics) {
+    //         setError("Please follow at least one topic.");
+    //         return;
+    //     }
 
-            if (!counter) {
-                setError("Please follow at least one topic."); 
-                return;
-            }
-
-
-            for (const top in selected) {
-                if (selected[top]) {
-                    await followTopic(userId, top);
-                }
-            }
-            console.log("follow topic Done");
-            sessionStorage.removeItem("userId");
-            router.push("/");
-        } else {
-            console.error("User ID not available.");
-        }
-    };
+    //     sessionStorage.removeItem("userId");
+    //     router.push("/");
+    // };
 
     useEffect(() => {
         getTopics();
@@ -100,18 +89,13 @@ export default function page() {
                                         </h3>
                                     </div>
                                 </div>
-                                <button
-                                    className={`${
-                                        selected[topic._id]
-                                            ? "bg-[#374151] text-[#E8E9EA]"
-                                            : "bg-[#30E48E] text-[#080E13]"
-                                    } font-medium hover:bg-opacity-90 px-4 py-1 rounded-full text-sm transition`}
-                                    onClick={(e) => handleSelect(e, topic._id)}
-                                >
-                                    {selected[topic._id]
-                                        ? "Following"
-                                        : "Follow"}
-                                </button>
+
+                                {/* button Follow */}
+                                <FollowButton
+                                    topicId={topic._id}
+                                    isFollowing={selected[topic._id]}
+                                    onFollowChange={handleFollowChange}
+                                />
                             </div>
                             <p className="text-gray-400 text-sm mt-2">
                                 {topic.description}
@@ -120,11 +104,16 @@ export default function page() {
                     ))}
                 </div>
                 <div className="flex justify-end mt-3">
-                    <button
-                        className="bg-[#30E48E] text-[#080E13] px-5 py-2 rounded-lg hover:bg-opacity-90 transition"
-                        onClick={handleDone}>
-                        Done
-                    </button>
+                    <Link href="/">
+                        <button
+                            className="bg-[#30E48E] text-[#080E13] px-5 py-2 rounded-lg hover:bg-opacity-90 transition"
+                            onClick={() => {
+                                sessionStorage.removeItem("userId");
+                            }}
+                        >
+                            Done
+                        </button>
+                    </Link>
                 </div>
             </div>
         </>

@@ -16,8 +16,8 @@ export default function Popup({ isOpen, onClose }: PopupType) {
     const handleLogout = async () => {
         const res = await logout();
         if (res.success) {
-            sessionStorage.removeItem("userId");
-            router.push("/"); // กลับไปหน้าแรก
+            localStorage.removeItem("userId")
+            router.push("/"); // กลับไป post หน้าแรก
         }
     };
 

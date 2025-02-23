@@ -24,15 +24,11 @@ export default function Login() {
         }
 
         try {
-            const userId = sessionStorage.getItem("userId");
-            if (userId) {
-                router.push("/recommend");
-                const userData = await login(email, password);
-                return;
-            }
             const userData = await login(email, password);
-            router.push(callbackUrl);
-            // console.log(userData);
+            const path = sessionStorage.getItem("userId") ? "/recommend" : callbackUrl;
+
+            localStorage.setItem("userId", userData.user._id); 
+            router.push(path);
         } catch (err: any) {
             // alert("Invalid email or password");
             setError(err.response.data.message);
