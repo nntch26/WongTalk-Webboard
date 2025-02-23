@@ -78,7 +78,5 @@ export interface PostDetail{
 
 export interface FollowButtonProps {
     topicId: string;
-    isFollowing: boolean;
     onFollowChange: (topicId: string) => void;
-    className?: string;
 }

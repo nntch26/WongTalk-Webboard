@@ -20,12 +20,6 @@ export default function Recommend() {
             const data = await fetchTopics();
             setdataTopic(data);
 
-            const selectStart = data.reduce((acc, topic) => {
-                // สร้าง obj เพื่อเก็บ state ของแต่ละตัว
-                acc[topic._id] = false; // ตั้งค่าปุ่ม Follow เริ่มต้นให้เป็น false
-                return acc;
-            }, {} as { [key: string]: boolean });
-            setSelected(selectStart);
         } catch (error) {
             console.error("Failed to fetch profile:", error);
         }
@@ -39,19 +33,6 @@ export default function Recommend() {
         if (error) setError(null);
     };
 
-    // const handleDone = async () => {
-    //     const hasFollowedTopics = Object.values(selected).some(
-    //         (value) => value
-    //     );
-
-    //     if (!hasFollowedTopics) {
-    //         setError("Please follow at least one topic.");
-    //         return;
-    //     }
-
-    //     sessionStorage.removeItem("userId");
-    //     router.push("/");
-    // };
 
     useEffect(() => {
         getTopics();
@@ -93,7 +74,6 @@ export default function Recommend() {
                                 {/* button Follow */}
                                 <FollowButton
                                     topicId={topic._id}
-                                    isFollowing={selected[topic._id]}
                                     onFollowChange={handleFollowChange}
                                 />
                             </div>

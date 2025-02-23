@@ -37,11 +37,11 @@ export const userFollowTopic = () => {
 
     useEffect(() => {
         fetchData();
-    }, [reload]); // ทำ useEffect ทุกครั้งที่ reload เปลี่ยน
+    }, []);
 
     // ทำเพื่อให้เปลี่ยน refetch เมื่อลบ unfollow
     const refetch = () => setReload((prev) => !prev);
 
-    return { profile, topics, loading, error, refetch };
+    return { profile, topics, loading, error, fetchData };
 };
 
