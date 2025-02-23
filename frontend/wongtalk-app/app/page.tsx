@@ -17,7 +17,7 @@ import Navbar from "./components/Navbar";
 
 export default function Home() {
     const [posts, setPosts] = useState<Post[]>([]);
-    const [topics, setTopics] = useState<Topic[]>([]) 
+    const [topicList, setTopicList] = useState<Topic[]>([]) 
 
 
     const getposts = async () => {
@@ -30,16 +30,26 @@ export default function Home() {
         }
     };
 
+    // ดึง topic list ทั้งหมด
     const getTopics = async() =>{
         try{
-            const getdata = await fetchTopics()
-            setTopics(getdata);
-            console.log('Fetched topics:', getdata);
+            const cachedTopics = localStorage.getItem("topics"); // ดึงข้อมูลจาก localStorage
 
+            if (cachedTopics) {
+                setTopicList(JSON.parse(cachedTopics));  // ถ้ามีข้อมูลใน localStorage แล้ว ก้ใช้ข้อมูลนั้น
+
+            } else {
+                // ถ้ายังไม่มี ก้ดึง api มาใหม่
+                const getdata = await fetchTopics();
+                setTopicList(getdata);
+                localStorage.setItem("topics", JSON.stringify(getdata)); // เก็บเข้า localStorage
+                console.log('Fetched topics:', getdata);
+            }
         }catch(error){
             console.error('Error fetching topics', error)
         }
     }
+   
 
     useEffect(() => {
         getposts();
@@ -75,7 +85,7 @@ export default function Home() {
                     <div className="flex gap-3 p-3 overflow-x-auto whitespace-nowrap">
                             <Link href={'/'} className="px-3 py-2 bg-gray-800 text-white rounded-lg  text-sm">All</Link>
 
-                            {topics.map((topic) => (
+                            {topicList.map((topic) => (
                                 <TopicList key={topic._id} topic={topic} />
                             ))}
 

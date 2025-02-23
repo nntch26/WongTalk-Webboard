@@ -19,10 +19,11 @@ const getAllTopic = async (req, res) => {
 
 const getTopic = async (req, res) => {
     try {
+        console.log("get topic backend: ", req.body)
         const { topicId } = req.body;
 
         const getTopic = await Topic.find({ _id: topicId }).select("name description icon");
-        
+            console.log("get topic backend: ", getTopic)
             res.status(200).json({
                 success: true,
                 data: getTopic,

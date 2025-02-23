@@ -12,12 +12,12 @@ import TopicList from "@/app/components/home/TopicList";
 import PostCard from "@/app/components/home/PostCard";
 import Navbar from "@/app/components/Navbar";
 import { Topic } from "@/types/types";
-import { fetchTopics } from "@/app/api/topicServices";
+
 
 
 export default function page() {
     const [postsnew, setPostsnew] = useState<Post[]>([]);
-    const [topics, setTopics] = useState<Topic[]>([]) 
+    const [topics, setTopicList] = useState<Topic[]>([]) 
 
     const getposts = async () => {
         try {
@@ -29,11 +29,14 @@ export default function page() {
         }
     };
 
-    const getTopics = async() =>{
+    const getTopicList = async() =>{
         try{
-            const getdata = await fetchTopics()
-            setTopics(getdata);
-            console.log('Fetched topics:', getdata);
+            const getdata = localStorage.getItem("topics"); // ดึงข้อมูลจาก localStorage
+
+            if (getdata) {
+                setTopicList(JSON.parse(getdata));  // ถ้ามีข้อมูลใน localStorage แล้ว ก้ใช้ข้อมูลนั้น
+                console.log('Fetched topics:', getdata);
+            }
 
         }catch(error){
             console.error('Error fetching topics', error)
@@ -42,7 +45,7 @@ export default function page() {
     
     useEffect(() => {
         getposts();
-        getTopics()
+        getTopicList()
 
     }, []);
 

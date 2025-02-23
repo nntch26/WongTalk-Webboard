@@ -12,11 +12,11 @@ import TopicList from "@/app/components/home/TopicList";
 import PostCard from "@/app/components/home/PostCard";
 import Navbar from "@/app/components/Navbar";
 import { Topic } from "@/types/types";
-import { fetchTopics } from "@/app/api/topicServices";
+
 
 export default function page() {
     const [postsnew, setPostsnew] = useState<Post[]>([]);
-    const [topics, setTopics] = useState<Topic[]>([]) 
+    const [topics, setTopicList] = useState<Topic[]>([]) 
 
     const getposts = async () => {
         try {
@@ -28,11 +28,14 @@ export default function page() {
         }
     };
 
-    const getTopics = async() =>{
+    const getTopicList = async() =>{
         try{
-            const getdata = await fetchTopics()
-            setTopics(getdata);
-            console.log('Fetched topics:', getdata);
+            const getdata = localStorage.getItem("topics"); // ดึงข้อมูลจาก localStorage
+
+            if (getdata) {
+                setTopicList(JSON.parse(getdata));  // ถ้ามีข้อมูลใน localStorage แล้ว ก้ใช้ข้อมูลนั้น
+                console.log('Fetched topics:', getdata);
+            }
 
         }catch(error){
             console.error('Error fetching topics', error)
@@ -41,7 +44,7 @@ export default function page() {
     
     useEffect(() => {
         getposts();
-        getTopics()
+        getTopicList()
     }, []);
 
     return (
@@ -69,7 +72,7 @@ export default function page() {
                 <div className="max-w-7xl mx-auto p-4">
                     <div className="text-2xl md:text-4xl font-bold mb-8">
                         <i className="fa-solid fa-fire mr-5 text-[--primary-color] "></i>
-                        <span >Top Posts</span>
+                        <span >New Posts</span>
                     </div>
 
                     <hr className="border-0 h-px bg-gray-800 rounded-xl my-5 w-full mx-auto" />

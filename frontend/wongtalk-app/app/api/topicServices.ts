@@ -47,6 +47,7 @@ export const fetchTopic = async(topicId: string) =>{
 export const fetchPostTopic = async(topicId: string) =>{
 
     try{
+        console.log("api topic to backend:", topicId)
         const respone = await axios.post('http://localhost:8000/api/topic',{ topicId:topicId })
         // ส่ง topic id ใน body
         console.log("Post topic respone : ", respone.data)

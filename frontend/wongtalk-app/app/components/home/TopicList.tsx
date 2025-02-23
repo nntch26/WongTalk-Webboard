@@ -1,8 +1,6 @@
 'use client';
 
 import Link from "next/link";
-import { useEffect, useState } from 'react';
-import { fetchTopics } from "@/app/api/topicServices";
 import { Topic } from "@/types/types";
 
 import { useRouter } from "next/navigation";

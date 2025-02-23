@@ -13,8 +13,8 @@ import {useRouter} from 'next/navigation';
 
 import { Topic } from "@/types/types";
 import { PostData } from '@/types/types';
+import { fetchTopics } from '@/app/api/topicServices';
 
-import { fetchTopics } from "@/app/api/topicServices";
 
 export default function page() {
     const [title, setTitle] = useState<string>("");
@@ -58,13 +58,21 @@ export default function page() {
         }
     };
 
-    // ดีง topic 
-    const getTopics = async() =>{
+     // ดึงข้อมูล topic หลายๆอัน
+    const getTopicList = async() =>{
         try{
-            const getdata = await fetchTopics()
-            setTopicList(getdata);
-            console.log('Fetched topics:', getdata);
+            const cachedTopics = localStorage.getItem("topics"); // ดึงข้อมูลจาก localStorage
 
+            if (cachedTopics) {
+                setTopicList(JSON.parse(cachedTopics));  // ถ้ามีข้อมูลใน localStorage แล้ว ก้ใช้ข้อมูลนั้น
+
+            } else {
+                // ถ้ายังไม่มี ก้ดึง api มาใหม่
+                const getdata = await fetchTopics();
+                setTopicList(getdata);
+                localStorage.setItem("topics", JSON.stringify(getdata)); // เก็บเข้า localStorage
+                console.log('Fetched topics:', getdata);
+            }
         }catch(error){
             console.error('Error fetching topics', error)
         }
@@ -116,7 +124,7 @@ export default function page() {
 
     useEffect(()=>{
         SavaData()
-        getTopics()
+        getTopicList()
 
     }, [])
 

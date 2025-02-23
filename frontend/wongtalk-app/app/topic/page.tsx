@@ -83,15 +83,25 @@ export default function page() {
 
      
     // ดึงข้อมูล topic หลายๆอัน
-    const getTopicList = async () => {
-        try {
-            const response = await fetchTopics();
-            console.log("Topic details:", response);
-            setTopicList(response);
-        } catch (error) {
-            console.log(error);
+    const getTopicList = async() =>{
+        try{
+            const cachedTopics = localStorage.getItem("topics"); // ดึงข้อมูลจาก localStorage
+
+            if (cachedTopics) {
+                setTopicList(JSON.parse(cachedTopics));  // ถ้ามีข้อมูลใน localStorage แล้ว ก้ใช้ข้อมูลนั้น
+
+            } else {
+                // ถ้ายังไม่มี ก้ดึง api มาใหม่
+                const getdata = await fetchTopics();
+                setTopicList(getdata);
+                localStorage.setItem("topics", JSON.stringify(getdata)); // เก็บเข้า localStorage
+                console.log('Fetched topics:', getdata);
+            }
+        }catch(error){
+            console.error('Error fetching topics', error)
         }
-    };
+    }
+    
 
     // ดึง topic อันเดียว
     const getTopicOne = async(id:string) =>{

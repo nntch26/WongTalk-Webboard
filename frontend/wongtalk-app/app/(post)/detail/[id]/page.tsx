@@ -4,7 +4,7 @@ import { fetchPostDetail } from '@/app/api/postServices'
 import { useState, useEffect } from 'react'
 import { PostDetail, Topic } from '@/types/types'
 import { useParams } from 'next/navigation'
-import { fetchPostTopic, fetchTopics, fetchPostTopicTop, fetchTopic } from '@/app/api/topicServices'
+import { fetchPostTopic, fetchPostTopicTop, fetchTopic } from '@/app/api/topicServices'
 
 import TopicTag from '@/app/components/topic/TopicTag'
 import TopicSidebar from '@/app/components/topic/TopicSidebar '
@@ -13,43 +13,47 @@ import { useRouter } from "next/navigation";
 
 
 export default function page() {
-  const [post, setPost] = useState<PostDetail | null>(null)
-  const [topic, setTopic] = useState<Topic| null>(null)
-  const [topicList, setTopicList] = useState<Topic[]>([]);
-  const [topicId, setTopicId] = useState<string>("");
-  const router = useRouter()
+    const [post, setPost] = useState<PostDetail | null>(null)
+    const [topic, setTopic] = useState<Topic| null>(null)
+    const [topicList, setTopicList] = useState<Topic[]>([]);
+    const [topicId, setTopicId] = useState<string>("");
+    const router = useRouter()
 
 
-  // แกะ id จาก url params ที่ส่งมา {id: '67b9e00b487e6cfbd13c01b1'}
-  const { id } = useParams() as {id:string}; // ID เปน string
-  console.log("page param:",id)
+    // แกะ id จาก url params ที่ส่งมา {id: '67b9e00b487e6cfbd13c01b1'}
+    const { id } = useParams() as {id:string}; // ID เปน string
+    console.log("page param:",id)
 
 
-  const getPostDetail = async (postid:string) => {
-    try{
-        const getpost = await fetchPostDetail(postid)
-        console.log("get post detail All: ", getpost)
-        console.log("get post detail: ", getpost.Post[0])
-        console.log("get id topic : ", getpost.Post[0].topicId._id)
+    const getPostDetail = async (postid:string) => {
+        try{
+            const getpost = await fetchPostDetail(postid)
+            console.log("get post detail All: ", getpost)
+            console.log("get post detail: ", getpost.Post[0])
+            console.log("get id topic : ", getpost.Post[0].topicId._id)
 
-        setPost(getpost)
-        setTopicId(getpost.Post[0].topicId._id)
-        
-    }catch(error){
-      console.log(error)
-    }
-  }
-
-   // ดึงข้อมูล topic หลายๆอัน
-    const getTopicList = async () => {
-        try {
-            const response = await fetchTopics();
-            console.log("Topic List:", response);
-            setTopicList(response);
-        } catch (error) {
-            console.log(error);
+            setPost(getpost)
+            setTopicId(getpost.Post[0].topicId._id)
+            
+        }catch(error){
+        console.log(error)
         }
-    };
+    }
+
+    // ดึงข้อมูล topic หลายๆอัน
+    const getTopicList = async() =>{
+        try{
+            const getdata = localStorage.getItem("topics"); // ดึงข้อมูลจาก localStorage
+
+            if (getdata) {
+                setTopicList(JSON.parse(getdata));  // ถ้ามีข้อมูลใน localStorage แล้ว ก้ใช้ข้อมูลนั้น
+                console.log('Fetched topics:', getdata);
+            }
+
+        }catch(error){
+            console.error('Error fetching topics', error)
+        }
+    }
 
     // ดึง topic อันเดียว
     const getTopicOne = async(id:string) =>{
@@ -72,22 +76,22 @@ export default function page() {
         router.push('/topic/')
     }
 
+
     useEffect(() => {
       getPostDetail(id)
       getTopicList()
-  }, [id]); // เรียกเมื่อ id เปลี่ยนแปลง
+    }, [id]); // เรียกเมื่อ id เปลี่ยนแปลง
   
   
 
-  useEffect(() => {
+    useEffect(() => {
       console.log("topicid:", topicId)
 
       if (topicId) { // เช็ค topicId มีค่ายัง แล้วค่อยเรียก
           getTopicOne(topicId);
-          
       }
       
-  }, [topicId]);  // เรียกตอน setTopicId ใน getPostDetail แล้ว
+    }, [topicId]);  // เรียกตอน setTopicId ใน getPostDetail แล้ว
   
   console.log("topic->>:", topic)
 
@@ -95,8 +99,6 @@ export default function page() {
   return (
 
     <>
-    
-
     {/* <!-- ส่วน  conetnt --> */}
   
   <div className="container mx-auto mt-32">
@@ -212,8 +214,6 @@ export default function page() {
 
           </div>
           )}
-          
-          
 
           {/* <!-- Right Sidebar --> */}
           {topic &&(
@@ -223,17 +223,10 @@ export default function page() {
             onClickTopic={handleClickTopic} 
             />
           )}
-           
 
       </div> 
-
-      
-
-    
-
   </div>
 
-    
     </>
   )
 }
