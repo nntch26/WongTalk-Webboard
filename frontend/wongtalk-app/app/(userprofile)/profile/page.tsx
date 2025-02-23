@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getProfile } from "../../api/profileServices";
 import { getFollowTopic } from "@/app/api/userServices";
 import { useRouter } from "next/navigation";
@@ -14,10 +14,51 @@ import { User, Topic } from "@/types/types";
 import { userFollowTopic } from "@/app/hook/useFollowTopic";
 
 export default function Profile() {
+    const { profile, topics, loading, error } = userFollowTopic();
     const [isShow, setIsShow] = useState<boolean>(false);
     const [mypost, setMyPost] = useState<boolean>(true);
+    const [selected, setSelected] = useState<{ [key: string]: boolean }>({});
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-    const { profile, topics, loading, error } = userFollowTopic();
+    // เริ่มต้น set state ให้เป็น false
+    useEffect(() => {
+        const selectStart = topics.reduce((acc, topic) => {
+            acc[topic._id] = false;
+            return acc;
+        }, {} as { [key: string]: boolean });
+        setSelected(selectStart);
+    }, [topics]);
+
+    const handleSelect = (e: React.MouseEvent, topicid: string) => {
+        e.preventDefault();
+        setSelected((prev) => ({
+            ...prev,
+            [topicid]: !prev[topicid],
+        }));
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (
+            dropdownRef.current &&
+            !dropdownRef.current.contains(event.target as Node)
+        ) {
+            // ปิด dropdown โดยตั้งค่า selected ให้เป็น false
+            setSelected((prev) => {
+                const newSelected = { ...prev };
+                for (const key in newSelected) {
+                    newSelected[key] = false; // ปิด dropdown ทั้งหมด
+                }
+                return newSelected;
+            });
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
@@ -171,12 +212,30 @@ export default function Profile() {
                             </div>
                         ) : (
                             // div Follow Tpic
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-8">
                                 {topics.map((topic) => (
                                     <div
                                         key={topic._id}
-                                        className="rounded-lg p-4 border border-[#374151] transition duration-200 hover:bg-[#0F151A] hover:border-[#4B5563] text-center"
+                                        className="relative rounded-lg p-4 border border-[#374151] transition duration-200 hover:bg-[#0F151A] hover:border-[#4B5563]"
                                     >
+                                        <i
+                                            className="fa-solid fa-ellipsis-vertical absolute top-3 right-3 cursor-pointer text-gray-500 text-xl hover:text-[#E8E9EA] transition"
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // ป้องกันการเกิดเหตุการณ์คลิกที่ div หลัก
+                                                handleSelect(e, topic._id);
+                                            }}
+                                        ></i>
+
+                                        <div ref={dropdownRef}>
+                                            {selected[topic._id] && (
+                                                <div className="absolute top-8 right-5 bg-[#1E293B] border border-[#374151] rounded-md shadow-lg p-1">
+                                                    <button className="text-red-500 text-sm px-2 py-1 hover:font-bold rounded-md transition">
+                                                        Unfollow
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+
                                         <i
                                             className={`${topic.icon} text-base md:text-l`}
                                         ></i>
