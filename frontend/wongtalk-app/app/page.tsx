@@ -16,15 +16,19 @@ import PostNew from "./components/home/PostNew";
 import Navbar from "./components/Navbar";
 
 export default function Home() {
-    const [posts, setPosts] = useState<Post[]>([]);
-    const [topicList, setTopicList] = useState<Topic[]>([]) 
+    const [allPosts, setAllPosts] = useState<Post[]>([]);
+    const [morePosts, setMorePosts] = useState<Post[]>([]);
 
+    const [topicList, setTopicList] = useState<Topic[]>([]) 
+    const [num, setNum] = useState<number>(2)
 
     const getposts = async () => {
         try {
             const getdata = await fetchPost();
             // console.log("data ", getdata);
-            setPosts(getdata);
+            setAllPosts(getdata); // เก็บโพสต์ทั้งหมด
+            setMorePosts(getdata.slice(0, num)); // แสดงเฉพาะ 2 โพสแรก
+
         } catch (error) {
             console.log("Error fetching ", error);
         }
@@ -49,15 +53,26 @@ export default function Home() {
             console.error('Error fetching topics', error)
         }
     }
+
+    //show more โชว์โพสอื่นๆ เพิ่ม
+    const handleeShowMorePost = () => {
+        console.log(num)
+        setNum(num + 2) // เพิ่มค่า num แต่ numจะไม่เปลี่ยนทันที แลย + ไปตรงๆ
+        setMorePosts(allPosts.slice(0, num+2)); // ถ้ากดครั้งแรกไปแล้ว ให้โชว์เพิ่มอีก 
+        console.log(num)
+        
+    }
+
    
 
+    // โหลด ครั้งเดียว
     useEffect(() => {
+        getTopics();
         getposts();
-        getTopics()
     }, []);
 
 
-    console.log("--->", posts);
+    console.log("Post home page :", morePosts)
 
     return (
         <>
@@ -103,8 +118,8 @@ export default function Home() {
                         {/* ฝั่งซ้าย โพส */}
                         <div className="flex-1 ">
                             {/* <!-- Post  --> */}
-                            {posts && posts.length > 0 ? (
-                                posts.map((post) => (
+                            {morePosts && morePosts.length > 0 ? (
+                                morePosts.map((post) => (
                                         <PostCard key={post._id} post={post} />
                                     ))
                             ) : (
@@ -112,12 +127,16 @@ export default function Home() {
                             )}
 
                             {/* <!-- ปุ่มดูเพิ่มเติม --> */}
-                            <div className="text-center mt-6">
-                                <button className="px-6 py-2 bg-gray-800 text-gray-300 rounded-full hover:bg-gray-700">
-                                    more
-                                    <i className="fas fa-chevron-down ml-2"></i>
+                            {morePosts.length < allPosts.length &&(
+                                <div className="text-center mt-6">
+                                <button className="px-6 py-2 bg-gray-800 text-gray-300 rounded-full hover:bg-gray-700"
+                                        onClick={()=>(handleeShowMorePost())}> {/* <!-- กดปุ่ม แล้วเปลี่ยนค่า t f ให้แสดงโพสเพิ่ม --> */}
+                                        View All
+                                        <i className="fas fa-chevron-down ml-2"></i>
                                 </button>
                             </div>
+                            )}
+                            
                         </div>
 
                         {/* ฝั่งขวา sidenav  */}

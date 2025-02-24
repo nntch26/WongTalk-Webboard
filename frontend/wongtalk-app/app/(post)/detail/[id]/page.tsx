@@ -26,7 +26,6 @@ export default function page() {
     const [topicId, setTopicId] = useState<string>("");
     const [content, setContent] = useState<string>("");
 
-
     const [error, setError] = useState<string>("");
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false); // จำลองสถานะล็อกอิน

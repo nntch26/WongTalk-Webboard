@@ -46,13 +46,6 @@ export default function TopicHead({ topic }: { topic: Topic }) {
                         topicId={topic._id}
                         onFollowChange={handleFollowChange}
                     />
-
-                    {/* <button
-                        className={`${styles.btncusfol} text-sm md:text-base font-semibold text-center flex px-3 py-2 rounded-lg items-center`}
-                    >
-                        <i className="fa-solid fa-bell mr-2"></i>{" "}
-                        <span>Follow</span>
-                    </button> */}
                 </div>
                 <div className="border-t border-gray-600 flex space-x-4 p-3 text-sm"></div>
             </header>
