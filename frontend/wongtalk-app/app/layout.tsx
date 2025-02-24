@@ -5,15 +5,17 @@ import { Kanit } from 'next/font/google'; // ฟอนต์
 import '@fortawesome/fontawesome-free/css/all.css';
 import Navbar from "./components/Navbar";
 
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-});
+// const geistSans = Geist({
+//     variable: "--font-geist-sans",
+//     subsets: ["latin"],
+// });
 
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
-});
+// const geistMono = Geist_Mono({
+//     variable: "--font-geist-mono",
+//     subsets: ["latin"],
+// });
+
+const kanit = Kanit({ weight: "500" })
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -29,7 +31,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                className={`${kanit.className} antialiased`}
             >
                 {/* <Navbar/> */}
                 
