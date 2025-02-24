@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+// import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Kanit } from 'next/font/google'; // ฟอนต์
 import '@fortawesome/fontawesome-free/css/all.css';
