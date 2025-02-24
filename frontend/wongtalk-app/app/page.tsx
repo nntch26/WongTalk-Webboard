@@ -20,7 +20,7 @@ export default function Home() {
     const [morePosts, setMorePosts] = useState<Post[]>([]);
 
     const [topicList, setTopicList] = useState<Topic[]>([]) 
-    const [num, setNum] = useState<number>(2)
+    const [num, setNum] = useState<number>(5)
 
     const getposts = async () => {
         try {
@@ -57,8 +57,8 @@ export default function Home() {
     //show more โชว์โพสอื่นๆ เพิ่ม
     const handleeShowMorePost = () => {
         console.log(num)
-        setNum(num + 2) // เพิ่มค่า num แต่ numจะไม่เปลี่ยนทันที แลย + ไปตรงๆ
-        setMorePosts(allPosts.slice(0, num+2)); // ถ้ากดครั้งแรกไปแล้ว ให้โชว์เพิ่มอีก 
+        setNum(num + 5) // เพิ่มค่า num แต่ numจะไม่เปลี่ยนทันที เลย + ไปตรงๆ
+        setMorePosts(allPosts.slice(0, num+5)); // ถ้ากดครั้งแรกไปแล้ว ให้โชว์เพิ่มอีก 
         console.log(num)
         
     }

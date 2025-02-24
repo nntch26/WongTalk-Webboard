@@ -23,9 +23,9 @@ const getAllPost = async (req, res) => {
             ...post,
             likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
-            createdPost: moment(post.createdAt)
-                .tz("Asia/Bangkok")
-                .format("YYYY-MM-DD HH:mm:ss"),
+            // createdPost: moment(post.createdAt)
+            //     .tz("Asia/Bangkok")
+            //     .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
         console.log(modifiedPosts);
@@ -57,9 +57,9 @@ const getLatestPost = async (req, res) => {
             ...post,
             likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
-            createdPost: moment(post.createdAt)
-                .tz("Asia/Bangkok")
-                .format("YYYY-MM-DD HH:mm:ss"),
+            // createdPost: moment(post.createdAt)
+            //     .tz("Asia/Bangkok")
+            //     .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
         console.log(modifiedPosts);
@@ -94,9 +94,9 @@ const getPostsTop = async (req, res) => {
             ...post,
             likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
-            createdPost: moment(post.createdAt)
-                .tz("Asia/Bangkok")
-                .format("YYYY-MM-DD HH:mm:ss"),
+            // createdPost: moment(post.createdAt)
+            //     .tz("Asia/Bangkok")
+            //     .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
         console.log(modifiedPosts);
@@ -144,9 +144,9 @@ const Search = async (req, res) => {
             ...post,
             likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
-            createdPost: moment(post.createdAt)
-                .tz("Asia/Bangkok")
-                .format("YYYY-MM-DD HH:mm:ss"),
+            // createdPost: moment(post.createdAt)
+            //     .tz("Asia/Bangkok")
+            //     .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
         console.log(modifiedPosts);
@@ -191,9 +191,9 @@ const getPostTopic = async (req, res) => {
             ...post,
             likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
-            createdPost: moment(post.createdAt)
-                .tz("Asia/Bangkok")
-                .format("YYYY-MM-DD HH:mm:ss"),
+            // createdPost: moment(post.createdAt)
+            //     .tz("Asia/Bangkok")
+            //     .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
         console.log("modifiedPosts: ",modifiedPosts);
@@ -240,9 +240,9 @@ const getPostsTopInTopic = async (req, res) => {
             ...post,
             likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
-            createdPost: moment(post.createdAt)
-                .tz("Asia/Bangkok")
-                .format("YYYY-MM-DD HH:mm:ss"),
+            // createdPost: moment(post.createdAt)
+            //     .tz("Asia/Bangkok")
+            //     .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
         console.log(modifiedPosts);
@@ -283,13 +283,14 @@ const getPostDetail = async (req, res) => {
             .lean(); // แปลงเป็น JSON object
 
         // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+        
         const modifiedPosts = Array.of(posts).map((post) => ({
             ...post,
             likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
-            createdPost: moment(post.createdAt)
-                .tz("Asia/Bangkok")
-                .format("YYYY-MM-DD HH:mm:ss"),
+            // createdPost: moment(post.createdAt)
+            //     .tz("Asia/Bangkok")
+            //     .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
         if (!modifiedPosts) {
@@ -301,12 +302,13 @@ const getPostDetail = async (req, res) => {
         .populate({ path: "userId", select: "fullname image" }) // ใช้ populate เพื่อดึงข้อมูลผู้ใช้ด้วย
         .sort({ createdAt: -1 }) // เรียงจากใหม่ไปเก่า
         .lean(); // แปลงเป็น JSON object
-        
-        // // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
-        // const modifiedComment = Array.of(comments).map((comments) => ({
-        //     ...comments,
-        //     timeComents: moment(comments.createdAt).tz("Asia/Bangkok").fromNow(),
-        // }));
+
+        // แปลงข้อมูล
+        const modifiedComment = comments.map((comment) => ({
+            ...comment,
+            createdAt: moment(comment.createdAt).tz("Asia/Bangkok").format("MMM D"), // แปลงวันที่
+        }));
+
 
         
         console.log(comments);
@@ -315,7 +317,7 @@ const getPostDetail = async (req, res) => {
             success: true,
             data:{
                 Post: modifiedPosts,
-                allComments: comments,
+                allComments: modifiedComment,
             }
 
         });

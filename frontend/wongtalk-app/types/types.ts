@@ -18,7 +18,6 @@ export interface Post{
     likes: number;
     createdAt: string;
     time: string,
-    createdPost: string
 }
 
 

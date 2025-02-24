@@ -1,7 +1,9 @@
+"use client"
 import React from 'react'
 import { Topic } from '@/types/types'
 import styles from "../styles/Maincontent.module.css"
-
+import FollowButton from '../followButton';
+import { useState } from 'react';
 
 export default function TopicSidebar (
     {topic, topiclist, onClickTopic} : {
@@ -13,6 +15,17 @@ export default function TopicSidebar (
 
     console.log(topic, topiclist, onClickTopic)
 
+    const [selected, setSelected] = useState<{[key: string] : boolean}>({})
+    const [error, setError] = useState<string | null>(null)
+    
+    const handleFollowChange = (topicId: string) => {
+        setSelected((prev) => ({
+            ...prev,
+            [topicId]: !prev[topicId],
+        }));
+        if (error) setError(null)
+    };
+
   return (
     <>
     {/* <!-- Right Sidebar --> */}
@@ -21,14 +34,13 @@ export default function TopicSidebar (
             <div>
                 <div className="hidden lg:block space-y-4">
                     {/* <!-- Community Card --> */}
-                    <div className="p-6 rounded-lg bg-[--second-DarkMidnight]">
-                        <div key={topic._id}>
+                    <div className=" p-6 rounded-lg bg-[--second-DarkMidnight]">
+                        <div key={topic._id} className="flex flex-col items-center text-center">
                             <h2 className="text-xl font-bold mb-3">{topic.name}</h2>
                             <p className="text-sm mb-4">{topic.description}</p>
-                            {/* <button className= "w-full text-center bg-[--primary-color] hover:bg-green-400 py-1 rounded text-sm text-[--second-DarkMidnight] font-semibold">
-                                Follow
-                            </button> */}
+                            <FollowButton topicId={topic._id} onFollowChange={handleFollowChange} />
                         </div>
+
                     </div>
 
                     {/* <!-- Other Topics Card --> */}
@@ -37,7 +49,7 @@ export default function TopicSidebar (
                             <div className="space-y-4">
                                 <div>
                                     <div className="flex justify-between items-center mb-4">
-                                        <span className="font-bold text-primary">Other Topics</span>
+                                        <span className="font-bold text-[--primary-color]">Other Topics</span>
                                         <span className="text-text"><i className="fa-solid fa-bars-staggered"></i></span>
                                     </div>
 
