@@ -152,16 +152,16 @@ const showFollow = async (req, res) => {
         const user = await User.findById(userId).populate("followTopic");
 
         // ตรวจสอบว่าผู้ใช้ติดตามหัวข้อใด ๆ ป่าว
-        if (!user.followTopic.length) {
-            return res
-                .status(404)
-                .json({ message: "No followed topics found" });
-        }
+        // if (!user.followTopic.length) {
+        //     return res
+        //         .status(404)
+        //         .json({ message: "No followed topics found" });
+        // }
 
         // ส่ง topic ติดตามกลับไป
         res.status(200).json({
             message: "Followed topics retrieved successfully",
-            topics: user.followTopic,
+            topics: user.followTopic || [],
         });
     } catch (error) {
         console.error(error);

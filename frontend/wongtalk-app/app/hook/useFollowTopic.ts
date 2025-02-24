@@ -9,7 +9,6 @@ export const userFollowTopic = () => {
     const [topics, setTopics] = useState<Topic[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const [reload, setReload] = useState<boolean>(false);
 
     const fetchData = async () => {
         try {
@@ -39,9 +38,6 @@ export const userFollowTopic = () => {
         fetchData();
     }, []);
 
-    // ทำเพื่อให้เปลี่ยน refetch เมื่อลบ unfollow
-    const refetch = () => setReload((prev) => !prev);
 
     return { profile, topics, loading, error, fetchData };
 };
-

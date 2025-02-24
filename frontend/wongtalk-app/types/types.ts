@@ -76,7 +76,39 @@ export interface PostDetail{
     allComments: Comment[]
 }
 
+
+// กำหนด type ของ props ที่ต้องใช้
+// followButton.tsx
 export interface FollowButtonProps {
     topicId: string;
     onFollowChange: (topicId: string) => void;
 }
+
+// profileHeadeer.tsx
+export interface ProfileHeaderProps {
+    profile?: User | null;
+    onLogout: () => void;
+    isShow: boolean;
+    setIsShow: (show: boolean) => void;
+}
+
+// profileTab.tsx
+export interface ProfileTabsProps {
+    mypost: boolean;
+    setMyPost: (value: boolean) => void;
+}
+
+// profileList.tsx
+export interface PostListProps {
+    profile: User | null;
+}
+
+// topicList.tsx
+export interface TopicListProps {
+    topics: Topic[];
+    selectedTopic: string | null;
+    handleSelect: (e: React.MouseEvent, topicId: string) => void;
+    handleUnfollow: (topicId: string, e: React.MouseEvent) => Promise<void>;
+    dropdownRef: React.RefObject<HTMLDivElement | null>;
+}
+
