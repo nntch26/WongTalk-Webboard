@@ -1,41 +1,45 @@
 import Link from "next/link";
 import styles from "./styles/Sidebar.module.css";
 
-import { userFollowTopic } from "../hook/useFollowTopic";
 import { useState, useEffect } from "react";
-import { getToken } from "../api/profileServices";
 
 import TopicList from "./home/TopicList";
+import { Topic } from "@/types/types";
+import { getFollowTopic } from "../api/userServices";
 
 export default function Sidebar() {
-    const { profile, topics, loading, error } = userFollowTopic();
-    const [token, setToken] = useState<string | null>(null);
+    const [topics, setTopics] = useState<Topic[]>([]);
+    const [userId, setUserId] = useState<string | null>(null);
 
-    const fetchProfile = async () => {
-            try {
-                const token = await getToken(); // ดึง token
-                if (token) {
-                    setToken(token);
-                    return;
+    useEffect(() => {
+        const user_id = localStorage.getItem("userId");
+            setUserId(user_id);
+    }, []);
+
+    
+    useEffect(() => {
+        const fetchTopic = async () => {
+            if (userId) {
+                try {
+                    const topicData = await getFollowTopic(userId);
+                    setTopics(topicData.topics);
+                } catch (error) {
+                    console.error("Failed to fetch Topics:", error);
                 }
-            } catch (error) {
-                console.error("Failed to fetch Token:", error);
             }
         };
-    
-        // ดึง user
-        useEffect(() => {
-            fetchProfile();
-        }, []);
 
+        fetchTopic();
+    }, [userId]);
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p className="text-red-500">{error}</p>;
 
     return (
         <>
             {/* <!-- Sidenav --> */}
-            <div id="sidenav"className={`${styles.sidebarcus} sidebar-cus fixed top-16 left-0 h-full w-64  z-40 transform md:translate-x-0 -translate-x-full transition-transform duration-300 ease-in-out`}>
+            <div
+                id="sidenav"
+                className={`${styles.sidebarcus} sidebar-cus fixed top-16 left-0 h-full w-64  z-40 transform md:translate-x-0 -translate-x-full transition-transform duration-300 ease-in-out`}
+            >
                 <div className="overflow-y-auto h-full">
                     {/* <!-- หน้าแรก --> */}
                     <div className="px-3 py-4">
@@ -69,11 +73,17 @@ export default function Sidebar() {
                         <h3 className="px-3 text-sm font-medium text-gray-400">
                             Following
                         </h3>
-                        {token ? (
+                        {userId ? (
                             topics.length > 0 ? (
                                 topics.map((topic) => (
-                                    <div className="space-y-2 mt-4" key={topic._id}>
-                                        <TopicList key={topic._id} topic={topic} />
+                                    <div
+                                        className="space-y-2 mt-4"
+                                        key={topic._id}
+                                    >
+                                        <TopicList
+                                            key={topic._id}
+                                            topic={topic}
+                                        />
                                     </div>
                                 ))
                             ) : (

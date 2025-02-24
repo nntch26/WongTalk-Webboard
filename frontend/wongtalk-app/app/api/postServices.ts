@@ -5,6 +5,8 @@ import { Post, PostData } from "@/types/types";
 
 import axios from "axios";
 
+import { redirect } from "next/navigation";
+
 
 // โพสทั้งหมด
 export const fetchPost = async () => {
@@ -99,3 +101,27 @@ export const AddPost = async (newdata:PostData) => {
     }
     
 }
+
+
+// router.delete("/posts/:id", auth, deletePost);
+export const DeletePost = async (postId: string) => {
+    try {
+        const res = await axios.delete(`http://localhost:8000/api/posts/${postId}`, { withCredentials: true });
+        // return res.data;
+    } catch (error) {
+        console.error("Error deleting post:", error);
+        throw error; 
+    }
+    redirect("/profile")
+};
+
+// router.put("/posts/:id",auth, updatePost);
+export const UpdatePost = async (postId: string) => {
+    try {
+        const res = await axios.put(`http://localhost:8000/api/posts/${postId}`, { withCredentials: true });
+        return res.data;
+    } catch (error) {
+        console.error("Error deleting post:", error);
+        throw error; 
+    }
+};
