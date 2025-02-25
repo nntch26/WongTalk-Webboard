@@ -1,13 +1,15 @@
 "use client"
 
+import { Topic } from "@/types/types";
 import React, { useState, useRef, useEffect } from "react";
 
 export const ThreeDot: React.FC<{
     postId: string;
-    onEdit: (id: string) => void;
-    onDelete: (id: string) => void;
+    topicId: Topic;
+    onEdit: (id: string, topicId: string) => void;
+    onDelete: (id: string, topic: string) => void;
 
-}> = ({ postId, onEdit, onDelete }) => {
+}> = ({ postId, topicId, onEdit, onDelete }) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -18,12 +20,12 @@ export const ThreeDot: React.FC<{
     };
 
     const handleEdit = () => {
-        onEdit(postId); // set id เพื่อเอาไปใช้ต่อ จะได้รู้ว่ากดมาจาก postid อะไร
+        onEdit(postId, topicId._id); // set id เพื่อเอาไปใช้ต่อ จะได้รู้ว่ากดมาจาก postid อะไร
         setIsOpen(false); // ถ้าเลือกแล้วจะปิด
     };
 
     const handleDelete = async () => {
-        onDelete(postId); // set id เพื่อเอาไปใช้ต่อ จะได้รู้ว่ากดมาจาก postid อะไร
+        onDelete(postId, topicId._id); // set id เพื่อเอาไปใช้ต่อ จะได้รู้ว่ากดมาจาก postid อะไร
         setIsOpen(false); // ถ้าเลือกแล้วจะปิด
     };
 

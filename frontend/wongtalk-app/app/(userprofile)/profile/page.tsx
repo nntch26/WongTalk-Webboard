@@ -48,8 +48,6 @@ export default function Profile() {
         fetchData();
     }, []);
 
-
-
     const handleSelect = (e: React.MouseEvent, topicId: string) => {
         e.preventDefault();
         e.stopPropagation();
@@ -78,8 +76,10 @@ export default function Profile() {
             await followTopic(userId, topicId);
             setSelectedTopic(null);
 
-            // รีหน้า หลังจากที่ลบ unfollow
-            await fetchData();
+            // รีหน้า หลังจากที่ลบ unfollow โดยหา Id ที่ไม่ตรงกับ topicId ที่ลบแล้ว setTopics
+            setTopics((prevPosts) =>
+                prevPosts.filter((topic) => topic._id !== topicId)
+            );
         } catch (error) {
             console.error("Error unfollowing topic:", error);
         }
@@ -111,9 +111,7 @@ export default function Profile() {
                     <ActionButtons />
                     <ProfileTabs mypost={mypost} setMyPost={setMyPost} />
                     {mypost ? (
-                        <PostList
-                            profile={profile}
-                        />
+                        <PostList profile={profile} />
                     ) : (
                         <FollowTopicList
                             topics={topics}

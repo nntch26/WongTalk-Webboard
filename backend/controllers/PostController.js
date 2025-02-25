@@ -333,7 +333,7 @@ const getPostDetail = async (req, res) => {
 // สร้างโพสใหม่
 const createPost = async (req, res) => {
     try {
-        const { title, content,topicId } = req.body;
+        const { title, content, topicId } = req.body;
         const userId = req.user.id;
         console.log("createPost userId ->>", userId )
         console.log("createPost userId ->>", title, content,topicId )
@@ -384,7 +384,7 @@ const createPost = async (req, res) => {
 const updatePost = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, content } = req.body;
+        const { title, content, topicId } = req.body;
 
         // ตรวจสอบว่า id มีค่าหรือไม่
         if (!id) {
@@ -393,12 +393,19 @@ const updatePost = async (req, res) => {
                 .json({ success: false, message: "Post ID is required" });
         }
 
+        // สร้าง ข้อมูลที่จะ update
+        const updateData = {title, content}
+
+        if (topicId) {
+            updateData.topic = topicId
+        }
+
         // ค้นหาและอัปเดตโพสต์
         const updatedPost = await Post.findByIdAndUpdate(
             id,
-            { title, content }, // ข้อมูลที่ต้องการแก้ไข
+            updateData, // ข้อมูลที่ต้องการแก้ไข
             { new: true } // คืนค่าโพสต์ที่อัปเดตแล้ว
-        );
+        )
 
         if (!updatedPost) {
             return res

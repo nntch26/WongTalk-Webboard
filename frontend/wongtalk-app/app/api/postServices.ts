@@ -112,13 +112,12 @@ export const DeletePost = async (postId: string) => {
         console.error("Error deleting post:", error);
         throw error; 
     }
-    redirect("/profile")
 };
 
 // router.put("/posts/:id",auth, updatePost);
-export const UpdatePost = async (postId: string) => {
+export const UpdatePost = async(postId: string, newdata: PostData) => {
     try {
-        const res = await axios.put(`http://localhost:8000/api/posts/${postId}`, { withCredentials: true });
+        const res = await axios.put(`http://localhost:8000/api/posts/${postId}`,newdata, { withCredentials: true });
         return res.data;
     } catch (error) {
         console.error("Error deleting post:", error);
