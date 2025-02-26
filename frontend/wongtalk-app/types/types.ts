@@ -75,6 +75,12 @@ export interface PostDetail{
     allComments: Comment[]
 }
 
+export interface UpdatePost {
+    title: string;
+    content: string;
+}
+
+
 
 // กำหนด type ของ props ที่ต้องใช้
 // followButton.tsx
@@ -95,11 +101,6 @@ export interface ProfileHeaderProps {
 export interface ProfileTabsProps {
     mypost: boolean;
     setMyPost: (value: boolean) => void;
-}
-
-// profileList.tsx
-export interface PostListProps {
-    profile: User | null;
 }
 
 // topicList.tsx

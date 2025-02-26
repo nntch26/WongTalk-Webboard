@@ -3,7 +3,6 @@ import Popup from "../popupModel";
 
 export const ProfileHeader = ({
     profile,
-    onLogout,
     isShow,
     setIsShow,
 }: ProfileHeaderProps) => {

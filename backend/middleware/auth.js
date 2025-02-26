@@ -8,7 +8,6 @@ exports.auth = async (req, res, next) => {
     try {
         const decode = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decode;
-        console.log("user", decode);
         next();
     } catch (error) {
         res.status(400).json({ message: "Invalid or expired token." });
