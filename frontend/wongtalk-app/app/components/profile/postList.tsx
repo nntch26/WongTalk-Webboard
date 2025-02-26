@@ -4,15 +4,7 @@ import { User } from "@/types/types";
 import { useRouter } from "next/navigation";
 
 export const PostList = ({ profile }: { profile: User | null }) => {
-    const [posts, setPosts] = useState<
-        Array<{
-            _id: string;
-            content: string;
-            commentCount: number;
-            title?: string;
-            topicId?: string;
-        }>
-    >([]);
+    const [posts, setPosts] = useState(profile?.posts || []);
 
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
     const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -58,6 +50,7 @@ export const PostList = ({ profile }: { profile: User | null }) => {
                 prevPosts.filter((post) => post._id !== postId)
             );
             console.log("Post deleted successfully");
+            
         } catch (error) {
             console.error("Failed to delete post:", error);
         } finally {

@@ -115,12 +115,24 @@ export const DeletePost = async (postId: string) => {
 };
 
 // router.put("/posts/:id",auth, updatePost);
-export const UpdatePost = async(postId: string, newdata: PostData) => {
+export const UpdatePost = async (postId: string, editData: PostData) => {
     try {
-        const res = await axios.put(`http://localhost:8000/api/posts/${postId}`,newdata, { withCredentials: true });
+        const res = await axios.put(`http://localhost:8000/api/posts/${postId}`, editData, { withCredentials: true });
+        console.log(res)
         return res.data;
     } catch (error) {
         console.error("Error deleting post:", error);
         throw error; 
     }
 };
+
+// router.get("/search", Search);
+export const SearchPost = async (query: string) => {
+    try {
+        const res = await axios.get(`http://localhost:8000/api/search`, {params: query, withCredentials: true })
+        return res.data
+    } catch (error) {
+        console.error("Error Search", error)
+        throw error;
+    }
+}

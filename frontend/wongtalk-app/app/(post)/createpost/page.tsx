@@ -51,14 +51,14 @@ export default function page() {
     // แก้ไข post
     const editPost = async () => {
         try {
-            const postData: PostData = {
+            const editData: PostData = {
                 title: title,
                 content: content,
                 topicId: topic,
             };
 
             // update ข้อมูล post
-            const savedataedit = await UpdatePost(postId, postData);
+            const savedataedit = await UpdatePost(postId, editData);
 
             if (savedataedit) {
                 console.log("Post Edit successfully:");
@@ -221,7 +221,9 @@ export default function page() {
                                 <select
                                     className={`${stylesp.inputfocustopic} w-full px-4 py-3 bg-[#191C24] border border-[rgba(255,255,255,0.1)] rounded-lg `}
                                     value={topic}
-                                    onChange={(e) => setTopic(e.target.value)}
+                                    onChange={(e) => {
+                                        setTopic(e.target.value)
+                                    }}
                                 >
                                     <option
                                         value=""

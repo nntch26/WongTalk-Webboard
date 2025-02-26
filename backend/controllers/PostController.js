@@ -397,7 +397,7 @@ const updatePost = async (req, res) => {
         const updateData = {title, content}
 
         if (topicId) {
-            updateData.topic = topicId
+            updateData.topicId = topicId
         }
 
         // ค้นหาและอัปเดตโพสต์
