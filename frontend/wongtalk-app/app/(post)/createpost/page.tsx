@@ -106,6 +106,7 @@ export default function page() {
         localStorage.setItem('savedata', JSON.stringify(savedata))
     }
 
+    // ดึง draft จากที่ save ใน local มาโชว์ ถ้ามี
     const SavaData = async() =>{
 
         const getDatalocal = localStorage.getItem('savedata')

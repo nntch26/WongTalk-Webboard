@@ -22,13 +22,13 @@ export interface Post{
 
 
 export interface User {
-    _id?: string;
+    _id: string;
     fullname: string;
     username: string;
-    email: string;
-    posts: Post[];
+    email?: string;
+    posts?: Post[];
     image: string;
-    createdAt: string;
+    createdAt?: string;
 }
 
 export interface RegisterForm {
@@ -40,7 +40,7 @@ export interface RegisterForm {
 }
 
 
-// โพส ส่ง api
+// โพส ส่ง api , draft post
 export interface PostData {
     title: string;
     content: string;

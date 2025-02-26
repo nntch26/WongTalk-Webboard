@@ -3,12 +3,12 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useParams, useRouter  } from 'next/navigation'
 
-import { PostDetail, Topic, CommentData } from '@/types/types'
+import { PostDetail, Topic, CommentData, User } from '@/types/types'
 
 import { fetchPostDetail } from '@/app/api/postServices'
 import { fetchTopic } from '@/app/api/topicServices'
-import { AddComment } from '@/app/api/commentServices'
-import { getToken } from '@/app/api/profileServices'
+import { AddComment, DeleteComment, EditComment } from '@/app/api/commentServices'
+// import { getToken } from '@/app/api/profileServices'
 
 import TopicTag from '@/app/components/topic/TopicTag'
 import TopicSidebar from '@/app/components/topic/TopicSidebar '
@@ -16,6 +16,7 @@ import PopupModalComment from '@/app/components/popup/PopupModalComment'
 
 import styles from '@/app/components/styles/Maincontent.module.css'
 
+import { useAuth } from '@/app/hook/useAuth'
 
 
 
@@ -23,13 +24,15 @@ export default function page() {
     const [post, setPost] = useState<PostDetail | null>(null)
     const [topic, setTopic] = useState<Topic| null>(null)
     const [topicList, setTopicList] = useState<Topic[]>([]);
-    const [topicId, setTopicId] = useState<string>("");
+
     const [content, setContent] = useState<string>("");
+    const [editingCommentId, setEditingCommentId] = useState<string | null>(null); // เก็บไอดีคอมเม้นจะแก้ไข
+    const [editContent, setEditContent] = useState(""); // เนื้อหาคอมเม้นที่แก้ไข
 
     const [error, setError] = useState<string>("");
     const [isFocused, setIsFocused] = useState<boolean>(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // จำลองสถานะล็อกอิน
-    const [showModal, setShowModal] = useState(false);
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [isEdit, setIsEdit] = useState<boolean>(false)
     const router = useRouter()
 
 
@@ -37,17 +40,28 @@ export default function page() {
     const { id } = useParams() as {id:string}; // ID เปน string
     console.log("page param:",id)
 
+    // hook เช็คว่า user login ยัง
+    const {currentUser, islogin} = useAuth()
+    console.log("Current User:", currentUser);
+
+   
     // ดึง post detail
-    const getPostDetail = async (postid:string) => {
+    const getPostDetail = async () => {
         try{
-            const getpost = await fetchPostDetail(postid)
+            const getpost = await fetchPostDetail(id)
             console.log("get post detail All: ", getpost)
             console.log("get post detail: ", getpost.Post[0])
-            console.log("get id topic : ", getpost.Post[0].topicId._id)
 
-            setPost(getpost)
-            setTopicId(getpost.Post[0].topicId._id)
-            
+            if(getpost){
+                setPost(getpost)
+
+                // Fetch topic 
+                const topicId = getpost.Post[0].topicId._id
+                if (topicId) {
+                    getTopicOne(topicId)
+                }
+            }
+
         }catch(error){
         console.log(error)
         }
@@ -81,27 +95,6 @@ export default function page() {
         }
     }
 
-    // สร้างคอมเม้น
-    const addComment = async()=>{
-        try {
-            const commentData:CommentData = {
-                postId: post?.Post[0]._id || "",
-                content: content,
-            };
-
-            console.log("commentData -> ",commentData)
-            const savedata  = await AddComment(commentData)
-
-            // ถ้าสร้างคอมมเม้นได้
-            if(savedata){
-                console.log('Comment successfully created:');
-                setContent("");
-            }
-        } catch (error) {
-            console.error('Error creating Comment:', error);
-        }
-
-    }
 
      // กดเลือก topic ในหน้านี้
     const handleClickTopic = (e:React.MouseEvent, id:string) =>{
@@ -111,64 +104,119 @@ export default function page() {
         router.push('/topic/')
     }
 
-    // กดคอมเม้นโพส
-    const handleSubmitComment = (e: React.FormEvent) =>{
-        e.preventDefault(); // ทำให้ไม่รีเฟรชหน้า
+
+
+    // กดเพิ่มคอมเม้นโพส
+    const handleAddComment = async (e: React.FormEvent) => {
+        e.preventDefault()
+        
         if (!content) {
-            setError("Please fill in all fields.");
-            return;
-        } 
-        
-        addComment() // โยนไปฟฟังก์ชัน เพิ่มคอมเม้น
-
-    }
-
-    // เช็คว่า user login หรือไม่
-    const checkUserLogged = async () => {
-        const loggedIn = await getToken(); 
-        
-        if (!loggedIn) {
-            // ไม่สามารถgเม้นได้ถ้า user ยังไม่ login
-            console.log("User is not logged in.");
-            return; 
-        }else{
-            console.log("User is logged in.");
-            setIsLoggedIn(true)
-            return; 
-        }
-
-    }
-
-    // เช็คว่า loggin ยัง
-    const handleFocus = () => {
-        if (!isLoggedIn) {
-            setShowModal(true); // ตั้งให้โชว์ popup
-        }else{
-            // ถ้าล็อคอิน ก้เม้นได้ ให้โชว์ปุ่ม
-            setIsFocused(true)
+            setError("Please enter a comment.")
+            return
         }
         
+        if (!islogin) {
+            setShowModal(true)
+            return
+        }
+        
+        try {
+            setError("")
+            const commentData: CommentData = {
+                postId: post?.Post[0]._id || "",
+                content: content,
+            }
+            
+            const result = await AddComment(commentData) // สร้างคอมมใหม่
+            
+             // ถ้าสร้างคอมมเม้นได้
+            if (result) {
+                console.log('Comment successfully created:');
+                setContent('')
+                setIsFocused(false)
+                getPostDetail()  // ถ้าโพส หรือ คอมเม้นเปลี่ยนแปลง ให้รันใหม่
+            }
+        } catch (error) {
+            console.error('Error creating comment:', error)
+            setError("Failed to add comment. Please try again.")
+        }
+    }
+    
+
+    // กดปุ่มลบคอมเม้น
+    const handleDeleteComment = async (commentId: string) => {
+
+        try {
+            console.log("commentData -> ",commentId)
+            const result = await DeleteComment(commentId, id)
+            
+            if (result) {
+                getPostDetail() // เรียกข้อมูลโพสใหม่
+            }
+        } catch (error) {
+            console.error('Error deleting comment:', error)
+            setError("Failed to delete comment. Please try again.")
+        }
+    }
+
+    // กดปุ่มแก้ไข comment
+    const handleEditClick = (commentId:string) => {
+        setIsEdit(true)
+        setEditingCommentId(commentId);
     };
 
-    useEffect(() => {
-      getPostDetail(id)
-      getTopicList()
-      checkUserLogged() // เช้คก่อนว่า login ยัง
-      
+    
+    // กดปุ่มบันทึกการแก้ไขคอมเม้น 
+    const handleEditComment = async (commentId:string) =>{
+        
+        if (!editContent) {
+            setError("Please enter a comment.")
+            return
+        }
+        
+        try {
+            setError("")
+            setIsEdit(false)
 
-    }, [post]); // ถ้าโพส หรือ คอมเม้นเปลี่ยนแปลง ให้รันใหม่
-  
-    useEffect(() => {
-      console.log("topicid:", topicId)
+            const commentData: CommentData = {
+                postId: post?.Post[0]._id || "",
+                content: editContent,
+            }
+            const result = await EditComment(commentId, commentData) // สร้างคอมมใหม่
+             // ถ้าแก้ไขคอมมเม้นได้
+            if (result) {
+                console.log('Comment successfully edit:');
+                getPostDetail() // เรียกข้อมูลโพสใหม่
+            }
+        } catch (error) {
+            console.error('Error editing comment:', error)
+            setError("Failed to edit comment. Please try again.")
+        }
 
-      if (topicId) { // เช็ค topicId มีค่ายัง แล้วค่อยเรียก
-          getTopicOne(topicId);
-      }
-      
-    }, [topicId]);  // เรียกตอน setTopicId ใน getPostDetail แล้ว
+    }
+
+
+    // ถ้ากดที่คอมเม้น เช็คว่า login ยัง
+    const handleCommentFocus = () => {
+        if (!islogin) {
+            setShowModal(true) // ถ้ายังจะให้ดชว์ popup
+        } else {
+            setIsFocused(true)
+        }
+    }
+
+
+
+    useEffect(() => {
+        getPostDetail()
+        getTopicList()
+    }, []);
+
+    
   
   console.log("topic->>:", topic)
   console.log("allcommment ->>:", post?.allComments)
+
 
   return (
 
@@ -192,7 +240,7 @@ export default function page() {
           {post &&(
             <div className="flex-1">
               {/* Post Detail */}
-              <div className="bg-[--hover-DarkCharcoal] rounded-xl p-4 lg:p-8 mb-4">
+              <div className="bg-[--second-DarkMidnight] rounded-xl p-4 lg:p-8 mb-4">
                   {/* <!-- profile --> */}
                     <div className="flex items-start mb-6">
                         <div className="w-full">
@@ -237,7 +285,7 @@ export default function page() {
               <div id='allcomment' className="flex-1 mt-8">
 
                   {/* <!-- All Comments --> */}
-                  <div className="p-4 lg:p-8 mb-4 bg-[--hover-DarkCharcoal] rounded-xl">
+                  <div className="p-4 lg:p-8 mb-4 bg-[--second-DarkMidnight] rounded-xl">
                       <div className="flex items-center mb-6 ml-4">
                           <i className="fa-regular fa-comment-dots text-lg md:text-3xl"></i>
                           <span>
@@ -248,24 +296,27 @@ export default function page() {
                       {error && (<div className="error text-red-500">{error}</div>) }
 
                       {/* <!-- Comment input --> */}
-                      <form onSubmit={handleSubmitComment}>
+                      <form onSubmit={handleAddComment}>
 
                             <div className='flex  gap-4 mb-4'>
-                                <img src="#" alt="Avatar" className="w-10 h-10 rounded-full bg-slate-500" />
+                                <img src={`/uploads/${currentUser?.image}`} alt="Avatar" className="w-10 h-10 rounded-full bg-slate-600" />
                                 <textarea className={`${styles.comment} w-full p-4 mb-2`} 
                                     name="text" rows={3} 
                                     placeholder="Type comment here... "
                                     value={content || ''}
                                     onChange={(e) => setContent(e.target.value)}
-                                    onFocus={handleFocus} // ถ้าคลิกให้โชว์ปุ่ม
+                                    onFocus={handleCommentFocus} // ถ้าคลิกให้โชว์ปุ่ม
                                     onBlur={(e) => !e.target.value && setIsFocused(false)} // ซ่อนปุ่มถ้าไม่มีข้อความไร
-                                    readOnly={!isLoggedIn} // พิมไม่ได้ ถ้ายังไม่ล็อคอิน
+                                    readOnly={!islogin} // พิมไม่ได้ ถ้ายังไม่ล็อคอิน
                                 ></textarea>
                             </div>
 
                             {isFocused &&(
                                 <div className="text-right">
-                                    <button type='submit' className="px-4 py-2 bg-green-400 text-gray-900 font-semibold rounded-lg hover:bg-green-600">Post</button>
+                                    <button type='submit' 
+                                    className="px-4 py-2 bg-green-400 text-gray-900 font-semibold rounded-lg hover:bg-green-600">
+                                        Post
+                                    </button>
                                 </div>
                             )}
                       </form>
@@ -283,34 +334,54 @@ export default function page() {
                                 >
                                 <div className="flex items-start">
                                     <div className="flex-1">
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
-                                        <img
-                                            src={`/uploads/${commentother.userId.image}`}
-                                            alt="Avatar"
-                                            className="w-10 h-10 rounded-full"
-                                        />
-                                        <div>
-                                            <div className="text-sm md:text-base text-[--primary-color]">
-                                            {commentother.userId.fullname}</div>
-                                            <div className="text-gray-500 text-sm md:text-md">
-                                            {commentother.createdAt}
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-3">
+                                                <img
+                                                    src={`/uploads/${commentother.userId.image}`}
+                                                    alt="Avatar"
+                                                    className="w-10 h-10 rounded-full"
+                                                />
+                                                <div>
+                                                    <div className="text-sm md:text-base text-[--primary-color]">
+                                                    {commentother.userId.fullname}</div>
+                                                    <div className="text-gray-500 text-sm md:text-md">
+                                                    {commentother.createdAt}
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+
+                                            {/* แก้ไขและลบคอมเมนต์  ถ้าผุ้ใช้ปัจจุบัน เปนคนเดียวกับ คนคอมเม้น จะให้ลบแก้ไขได้*/}
+                                            {currentUser?._id === commentother.userId._id &&(
+                                            <div>
+                                                {editingCommentId === commentother._id &&isEdit? (
+                                                    <>
+                                                    <button onClick={() => handleEditComment(commentother._id)}>Save</button>
+                                                    <button onClick={() => setIsEdit(false)}>Cancel</button>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                    <button onClick={() => handleEditClick(commentother._id)}>Edit</button>
+                                                    <button className="text-red-600 font-semibold hover:underline"
+                                                        onClick={() => handleDeleteComment(commentother._id)}>
+                                                        Delete
+                                                    </button>
+                                                    </>
+                                                )}
+                                                
+                                            </div>
+                                            )}
                                         </div>
 
-                                        {/* แก้ไขและลบคอมเมนต์ */}
-                                        <div>
-                                            <button className="text-blue-600 font-semibold hover:underline">
-                                            Edit
-                                        </button>
-                                        <button className="text-red-600 font-semibold hover:underline">
-                                            Delete
-                                        </button>
-                                        </div>
-                                    </div>
+                                        {/* แสดงช่องแก้ไข ถ้ากดปุ่ม edit */}
+                                        {editingCommentId === commentother._id &&isEdit  ?(
+                                            <textarea value={editContent || ''}
+                                            onChange={(e) => setEditContent(e.target.value)} 
+                                            className={`${styles.comment} w-full p-4 mb-2`}/>
+                                        ):(
+                                            <p className="mt-2 text-white break-words text-sm md:text-md">{commentother.content}</p>
+                                        )}
 
-                                    <p className="mt-2 text-white break-words text-sm md:text-md">{commentother.content}</p>
+                                        
                                     </div>
                                 </div>
                             </div>

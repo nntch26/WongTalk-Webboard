@@ -72,7 +72,7 @@ export default function Sidebar() {
                         {token ? (
                             topics.length > 0 ? (
                                 topics.map((topic) => (
-                                    <div className="space-y-2 mt-4" key={topic._id}>
+                                    <div className="space-y-2 mt-2" key={topic._id}>
                                         <TopicList key={topic._id} topic={topic} />
                                     </div>
                                 ))
