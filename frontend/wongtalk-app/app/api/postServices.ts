@@ -129,7 +129,7 @@ export const UpdatePost = async (postId: string, editData: PostData) => {
 // router.get("/search", Search);
 export const SearchPost = async (query: string) => {
     try {
-        const res = await axios.get(`http://localhost:8000/api/search`, {params: query, withCredentials: true })
+        const res = await axios.get(`http://localhost:8000/api/search`, {params: {query}, withCredentials: true })
         return res.data
     } catch (error) {
         console.error("Error Search", error)

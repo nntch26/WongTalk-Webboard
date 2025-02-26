@@ -110,6 +110,7 @@ const getPostsTop = async (req, res) => {
     }
 };
 
+
 // ค้นหาโพส
 const Search = async (req, res) => {
     try {
@@ -153,7 +154,9 @@ const Search = async (req, res) => {
 
         // ไม่มีคำที่ค้นหา หาไม่เจอ
         if (modifiedPosts.length === 0) {
-            return res.status(404).json({
+            return res.status(200).json({
+                success: true,
+                data: [],
                 message: "No posts found matching your search.",
             });
         }

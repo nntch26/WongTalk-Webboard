@@ -2,18 +2,18 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
-// import { useRouter } from "next/navigation";
-
 import { getProfile, getToken } from "../api/profileServices";
 import styles from "./styles/Navbar.module.css";
-
+import { useRouter } from "next/navigation";
+import { SearchPost } from "../api/postServices";
 
 // type
 import { User } from "@/types/types";
 
 export default function Navbar() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [sidenavOpen, setSidenavOpen] = useState<boolean>(false);
+    const [search, setSearch] = useState<string>("");
+    const router = useRouter();
 
     const [profile, setProfile] = useState<User | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -30,6 +30,26 @@ export default function Navbar() {
             }
         } catch (error) {
             console.error("Failed to fetch profile:", error);
+        }
+    };
+
+    const handleSearch = async () => {
+        try {
+            const getSearch = await SearchPost(search);
+            localStorage.setItem(
+                "searchResult",
+                JSON.stringify(getSearch.data)
+            );
+            router.push(`/search?query=${encodeURIComponent(search)}`); // ส่งคำที่ค้นหาไปที่ params ตรง URL
+        } catch (error: any) {
+            // Type assertion to 'any'
+            if (error.response) {
+                console.log("No matching posts found");
+                localStorage.setItem("searchResult", JSON.stringify([]));
+                router.push("/search");
+            } else {
+                console.error("errorsss", error);
+            }
         }
     };
 
@@ -71,7 +91,6 @@ export default function Navbar() {
         };
     }, [sidenavOpen]);
 
-
     return (
         <>
             {/* Navbar */}
@@ -108,8 +127,13 @@ export default function Navbar() {
                                 type="text"
                                 placeholder="Search..."
                                 className={styles.searchbar}
+                                onChange={(e) => setSearch(e.target.value)}
+                                onKeyDown={(e) => e.key === "Enter" && handleSearch()} // กด Enter ค้นหาได้ โครตเจ๋ง 555555555
                             />
-                            <button className="px-6 py-2 bg-gray-900 border border-l-0 border-gray-600 rounded-r-full hover:bg-gray-800">
+                            <button
+                                className="px-6 py-2 bg-gray-900 border border-l-0 border-gray-600 rounded-r-full hover:bg-gray-800"
+                                onClick={handleSearch}
+                            >
                                 <i className="fas fa-search text-gray-300"></i>
                             </button>
                         </div>
@@ -159,5 +183,4 @@ export default function Navbar() {
             </nav>
         </>
     );
-
 }
