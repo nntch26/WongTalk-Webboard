@@ -33,6 +33,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({
 
         if (userId) {
             try {
+                console.log("followed topics")
                 await followTopic(userId, topicId); // อัปเดต followTopic
                 setFollowTopics((prev) =>
                     prev.some((topic) => topic._id === topicId) // ถ้า id ตรงกันแสดงว่า ติดตามแล้ว

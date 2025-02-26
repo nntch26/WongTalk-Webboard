@@ -44,7 +44,8 @@ const addComment = async (req, res) => {
 const editComment = async (req, res) => {
     try {
         const { commentId } = req.params;
-        const { userId, content } = req.body;
+        const { content } = req.body;
+        const userId = req.user.id;
 
         //หาคอมเม้นจาก id
         const comment = await Comment.findById(commentId);
@@ -84,8 +85,11 @@ const editComment = async (req, res) => {
 // ลบคอมเม้น
 const deleteComment = async (req, res) => {
     try {
-        const { commentId } = req.params;
-        const { userId, postId } = req.body;
+        const { commentId , postId} = req.params;
+        const userId = req.user.id;
+
+        console.log("backend delete comment:",userId, commentId )
+
 
         // ค้นหาคอมเม้นนั้น
         const comment = await Comment.findById(commentId);
@@ -116,6 +120,7 @@ const deleteComment = async (req, res) => {
             message: "Comment deleted successfully",
         });
     } catch (error) {
+        console.log(error.message)
         res.status(500).json({
             success: false,
             message: "Error deleting comment",

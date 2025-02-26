@@ -5,6 +5,7 @@ import { login } from "../../api/authServices";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import { User } from "@/types/types";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -27,8 +28,16 @@ export default function Login() {
             const userData = await login(email, password);
             const path = sessionStorage.getItem("userId") ? "/recommend" : callbackUrl;
 
-            localStorage.setItem("userId", userData.user._id); 
+            const userdata:User ={
+                _id: userData.user._id,
+                fullname: userData.user.name,
+                image: userData.user.image,
+                username: userData.user.username
+            } // สร้างข้อมูลไว้เรียกใช้ ใน local 
+
+            localStorage.setItem("userdata", JSON.stringify(userdata)); // เก้บใน local
             router.push(path);
+            
         } catch (err: any) {
             // alert("Invalid email or password");
             setError(err.response.data.message);

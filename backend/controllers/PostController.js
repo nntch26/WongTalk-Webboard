@@ -451,10 +451,13 @@ const deletePost = async (req, res) => {
                 .json({ success: false, message: "Post not found" });
         }
 
-        // หาก User มีโพสต์ที่เกี่ยวข้อง ให้ลบออกจาก array `posts`
+        // หาก User มีโพสต์ที่เกี่ยวข้อง ให้ลบออกจาก array `posts` ลบ คอมเม้น
         await User.updateOne({ posts: id }, { $pull: { posts: id } });
-
+        await Comment.deleteMany({ postId: id });
         // ใช้ operator $pull เพื่อลบค่า id
+
+        
+
 
         res.status(200).json({
             success: true,
