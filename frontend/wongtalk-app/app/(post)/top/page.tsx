@@ -10,13 +10,11 @@ import { Post, Topic } from "@/types/types";
 import Sidebar from "@/app/components/Sidebar";
 import TopicList from "@/app/components/home/TopicList";
 import PostCard from "@/app/components/home/PostCard";
-import Navbar from "@/app/components/Navbar";
-
 import ViewMoreButton from "@/app/components/home/ViewMoreButton";
 
 
 export default function page() {
-    const [poststop, setPostsTop] = useState<Post[]>([]);
+    const [postsTop, setPostsTop] = useState<Post[]>([]);
     const [topics, setTopicList] = useState<Topic[]>([]) 
 
     const [morePosts, setMorePosts] = useState<Post[]>([]);
@@ -25,9 +23,9 @@ export default function page() {
     const getposts = async () => {
         try {
             const getdata = await fetchPostTop();
-            console.log("poststop ", getdata);
+            console.log("poststop ------> ", getdata);
             setPostsTop(getdata);
-            setMorePosts(getdata.splice(0, num))
+            setMorePosts(getdata.slice(0, num))
         } catch (error) {
             console.log("Error fetching ", error);
         }
@@ -52,7 +50,7 @@ export default function page() {
         console.log(num)
         setNum(prevNum => {
             const newNum = prevNum + 5;// เพิ่มค่า num 
-            setMorePosts(poststop.slice(0, newNum)); // ใช้ค่าที่อัปเดตแล้ว ถ้ากดครั้งแรกไปแล้ว ให้โชว์เพิ่มอีก 
+            setMorePosts(postsTop.slice(0, newNum)); // ใช้ค่าที่อัปเดตแล้ว ถ้ากดครั้งแรกไปแล้ว ให้โชว์เพิ่มอีก 
             return newNum;
         })
         
@@ -101,7 +99,7 @@ export default function page() {
                             {/* <!-- Post  --> */}
                             {morePosts && morePosts.length > 0 ? (
                                 morePosts.map((post) => {
-                                    console.log("Post Data:", post);
+                                    // console.log("Post top:", post);
                                     return (
                                         <PostCard key={post._id} post={post} />
                                     );
@@ -111,7 +109,7 @@ export default function page() {
                             )}
 
                             {/* <!-- ปุ่มดูเพิ่มเติม --> */}
-                            {morePosts.length < poststop.length &&(
+                            {morePosts.length < postsTop.length &&(
                             <div className="text-center mt-6">
                                 {/* <!-- กดปุ่ม แล้วเปลี่ยนค่า t f ให้แสดงโพสเพิ่ม --> */}
                                 <ViewMoreButton onClick={handleeShowMorePost} />
