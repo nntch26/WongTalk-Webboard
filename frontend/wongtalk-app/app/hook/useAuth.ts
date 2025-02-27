@@ -14,11 +14,15 @@ export const useAuth = ()=>{
     useEffect(() => {
         const fetchDataUser = async () => {
         // const userdata = localStorage.getItem('userdata')
-        const userdata = await getToken()
+        const userdata = await getToken() // เช็คว่ามี token มั้ย
         if(userdata){
-            const getuser = JSON.parse(userdata) //แปลง json
-            setcurrentUser(getuser)
-            setIslogin(true)
+            const userdatalocal = localStorage.getItem('userdata') // ดึงข้อมูล user จาก local
+
+            if (userdatalocal) {
+                const getuser = JSON.parse(userdatalocal) //แปลง json
+                setcurrentUser(getuser)
+                setIslogin(true)
+            }
         }
     }
     fetchDataUser()

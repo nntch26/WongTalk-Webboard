@@ -13,6 +13,7 @@ import { AddComment, DeleteComment, EditComment } from '@/app/api/commentService
 import TopicTag from '@/app/components/topic/TopicTag'
 import TopicSidebar from '@/app/components/topic/TopicSidebar '
 import PopupModalComment from '@/app/components/popup/PopupModalComment'
+import PopupModel from '@/app/components/popup/PopupModel'
 
 import styles from '@/app/components/styles/Maincontent.module.css'
 
@@ -28,10 +29,12 @@ export default function page() {
     const [content, setContent] = useState<string>("");
     const [editingCommentId, setEditingCommentId] = useState<string | null>(null); // เก็บไอดีคอมเม้นจะแก้ไข
     const [editContent, setEditContent] = useState(""); // เนื้อหาคอมเม้นที่แก้ไข
+    const [deleteCommentId, setDeleteCommentId] = useState<string | null>(null);// เก็บไอดีคอมเม้นจะลบ
 
     const [error, setError] = useState<string>("");
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
+    const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const router = useRouter()
 
@@ -145,6 +148,7 @@ export default function page() {
 
     // กดปุ่มลบคอมเม้น
     const handleDeleteComment = async (commentId: string) => {
+        setShowModalDelete(false)
 
         try {
             console.log("commentData -> ",commentId)
@@ -164,6 +168,12 @@ export default function page() {
         setIsEdit(true)
         setEditingCommentId(commentId);
         setEditContent(commentedit); // เก็บข้อความจะแก้ไข
+    };
+
+      // กดปุ่มลบ comment
+      const handleDeleteClick = (commentId:string) => {
+       setShowModalDelete(true)
+       setDeleteCommentId(commentId)
     };
 
     
@@ -331,6 +341,8 @@ export default function page() {
                     {/* โชว์ตอน user จะคอมเม้น แต่ยังไม่ login */}
                       {showModal && <PopupModalComment onClose={() => setShowModal(false)} />}
 
+                        
+
                       <hr className="border-0 h-px bg-gray-800 rounded-xl my-5 w-full mx-auto" />
 
                       {/* <!-- all comment --> */}
@@ -362,17 +374,24 @@ export default function page() {
                                             <div>
                                                 {editingCommentId === commentother._id &&isEdit? (
                                                     <>
-                                                    <button onClick={() => handleEditComment(commentother._id)}>Save</button>
-                                                    <button onClick={() => setIsEdit(false)}>Cancel</button>
+                                                    <button onClick={() => handleEditComment(commentother._id)}>
+                                                        <i className="fa-solid fa-check mr-3 text-green-400 hover:text-green-300"></i>
+                                                    </button>
+                                                    <button onClick={() => setIsEdit(false)}>
+                                                        <i className="fa-solid fa-xmark text-gray-500 hover:text-red-400"></i>
+                                                    </button>
                                                     </>
                                                 ) : (
                                                     <>
-                                                    <button onClick={() => handleEditClick(commentother._id, commentother.content)}>Edit</button>
-                                                    <button className="text-red-600 font-semibold hover:underline"
-                                                        onClick={() => handleDeleteComment(commentother._id)}>
-                                                        Delete
+                                                    <button onClick={() => handleEditClick(commentother._id, commentother.content)}>
+                                                        <i className="fa-solid fa-pen-to-square text-gray-500 mr-3 hover:text-gray-400"></i>
+                                                    </button>
+                                                    <button className="font-semibold"
+                                                        onClick={() => handleDeleteClick(commentother._id)}>
+                                                        <i className="fa-solid fa-trash text-gray-500 hover:text-gray-400"></i>
                                                     </button>
                                                     </>
+
                                                 )}
                                                 
                                             </div>
@@ -389,13 +408,25 @@ export default function page() {
                                         )}
 
                                         
+                                        {/* โชว์ตอน user จะ ลบ คอมเม้น  */}
+                                        {showModalDelete && deleteCommentId && <PopupModel                        
+                                        onClick = {()=> {handleDeleteComment(deleteCommentId)}} 
+                                        titletext = "Delete comment?"
+                                        subtext = "Are you sure you want to delete your comment?"
+                                        textbutton ="Delete"
+                                        onClose={() => setShowModalDelete(false)}/>}            
                                     </div>
                                 </div>
                             </div>
+                            
+
+                            
+                            
                         ))
                         ) : (
                         <p>No comments available</p>
                         )}
+                        
                   </div>
               </div>
 

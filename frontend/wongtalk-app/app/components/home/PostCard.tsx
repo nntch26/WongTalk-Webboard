@@ -11,18 +11,8 @@ import TopicTag from '../topic/TopicTag';
 
 export default function PostCard({ post }: { post: Post }) {
 
-    const router = useRouter();
     console.log("PostCard",post)
 
-    const handleNavigate = (e: React.MouseEvent, id:string) =>{
-        e.preventDefault(); // ทำให้ไม่รีเฟรชหน้า
-       
-        sessionStorage.setItem("itopic_id", id)
-        router.push('/topic/')
-    }
-
-    
-    
     return (
         <>
         <div className={`${styles.postcard} rounded-xl p-4 mb-4 `}>
@@ -57,14 +47,19 @@ export default function PostCard({ post }: { post: Post }) {
 
                         {/* <!-- Actions (Likes & Comments) --> */}
                         <div className="flex items-center gap-4 text-gray-400 mt-4">
+                            
                             <button className="flex items-center gap-2 hover:text-green-400 px-2 py-1 rounded">
                                 <i className="fa-solid fa-hands-clapping"></i>
                                 <span>{post.likes} Likes</span>
                             </button>
-                            <button className="flex items-center gap-2 hover:text-green-400 px-2 py-1 rounded">
-                                <i className="fa-regular fa-comment-dots"></i>
-                                <span>{post.commentCount} Comments</span>
-                            </button>
+
+                            <Link href={`/detail/${post._id}#allcomment`}>
+                                <button className="flex items-center gap-2 hover:text-green-400 px-2 py-1 rounded">
+                                    <i className="fa-regular fa-comment-dots"></i>
+                                    <span>{post.commentCount} Comments</span>
+                                </button>
+                            </Link>
+                            
                         </div>
                     </div>
                 </div>
