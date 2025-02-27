@@ -160,9 +160,10 @@ export default function page() {
     }
 
     // กดปุ่มแก้ไข comment
-    const handleEditClick = (commentId:string) => {
+    const handleEditClick = (commentId:string, commentedit:string) => {
         setIsEdit(true)
         setEditingCommentId(commentId);
+        setEditContent(commentedit); // เก็บข้อความจะแก้ไข
     };
 
     
@@ -299,7 +300,13 @@ export default function page() {
                       <form onSubmit={handleAddComment}>
 
                             <div className='flex  gap-4 mb-4'>
-                                <img src={`/uploads/${currentUser?.image}`} alt="Avatar" className="w-10 h-10 rounded-full bg-slate-600" />
+                                {islogin ?(
+                                    <img src={`/uploads/${currentUser?.image}`} alt="Avatar" className="w-10 h-10 rounded-full bg-slate-600" />
+
+                                ):(
+                                    <img src="/uploads/default.png" alt="Avatar" className="w-10 h-10 rounded-full" />
+
+                                )}
                                 <textarea className={`${styles.comment} w-full p-4 mb-2`} 
                                     name="text" rows={3} 
                                     placeholder="Type comment here... "
@@ -360,7 +367,7 @@ export default function page() {
                                                     </>
                                                 ) : (
                                                     <>
-                                                    <button onClick={() => handleEditClick(commentother._id)}>Edit</button>
+                                                    <button onClick={() => handleEditClick(commentother._id, commentother.content)}>Edit</button>
                                                     <button className="text-red-600 font-semibold hover:underline"
                                                         onClick={() => handleDeleteComment(commentother._id)}>
                                                         Delete
@@ -376,7 +383,7 @@ export default function page() {
                                         {editingCommentId === commentother._id &&isEdit  ?(
                                             <textarea value={editContent || ''}
                                             onChange={(e) => setEditContent(e.target.value)} 
-                                            className={`${styles.comment} w-full p-4 mb-2`}/>
+                                            className={`${styles.comment} w-full p-4 mb-2 mt-2`}/>
                                         ):(
                                             <p className="mt-2 text-white break-words text-sm md:text-md">{commentother.content}</p>
                                         )}

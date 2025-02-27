@@ -6,14 +6,14 @@ import Link from "next/link";
 
 import { fetchTopics } from "@/app/api/topicServices";
 import { fetchPost } from "@/app/api/postServices";
-import { Post } from "@/types/types";
-import { Topic } from "@/types/types";
+import { Post, Topic } from "@/types/types";
 
 import Sidebar from "./components/Sidebar";
 import TopicList from "./components/home/TopicList";
 import PostCard from "./components/home/PostCard";
 import PostNew from "./components/home/PostNew";
 import Navbar from "./components/Navbar";
+import ViewMoreButton from "./components/home/ViewMoreButton";
 
 export default function Home() {
     const [allPosts, setAllPosts] = useState<Post[]>([]);
@@ -57,9 +57,11 @@ export default function Home() {
     //show more โชว์โพสอื่นๆ เพิ่ม
     const handleeShowMorePost = () => {
         console.log(num)
-        setNum(num + 5) // เพิ่มค่า num แต่ numจะไม่เปลี่ยนทันที เลย + ไปตรงๆ
-        setMorePosts(allPosts.slice(0, num+5)); // ถ้ากดครั้งแรกไปแล้ว ให้โชว์เพิ่มอีก 
-        console.log(num)
+        setNum(prevNum => {
+            const newNum = prevNum + 5;// เพิ่มค่า num 
+            setMorePosts(allPosts.slice(0, newNum)); // ใช้ค่าที่อัปเดตแล้ว ถ้ากดครั้งแรกไปแล้ว ให้โชว์เพิ่มอีก 
+            return newNum;
+        })
         
     }
 
@@ -129,11 +131,9 @@ export default function Home() {
                             {/* <!-- ปุ่มดูเพิ่มเติม --> */}
                             {morePosts.length < allPosts.length &&(
                                 <div className="text-center mt-6">
-                                <button className="px-6 py-2 bg-gray-800 text-gray-300 rounded-full hover:bg-gray-700"
-                                        onClick={()=>(handleeShowMorePost())}> {/* <!-- กดปุ่ม แล้วเปลี่ยนค่า t f ให้แสดงโพสเพิ่ม --> */}
-                                        View All
-                                        <i className="fas fa-chevron-down ml-2"></i>
-                                </button>
+                                {/* <!-- กดปุ่ม แล้วเปลี่ยนค่า t f ให้แสดงโพสเพิ่ม --> */}
+                                <ViewMoreButton onClick={handleeShowMorePost} />
+                               
                             </div>
                             )}
                             

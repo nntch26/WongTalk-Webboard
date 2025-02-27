@@ -80,7 +80,7 @@ export default function Sidebar() {
                             topics.length > 0 ? (
                                 topics.map((topic) => (
                                     <div
-                                        className="space-y-2 mt-4"
+                                        className="space-y-2 mt-2"
                                         key={topic._id}
                                     >
                                         <TopicList

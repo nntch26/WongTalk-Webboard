@@ -5,25 +5,29 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import { fetchPostTop } from "@/app/api/postServices";
-import { Post } from "@/types/types";
+import { Post, Topic } from "@/types/types";
 
 import Sidebar from "@/app/components/Sidebar";
 import TopicList from "@/app/components/home/TopicList";
 import PostCard from "@/app/components/home/PostCard";
 import Navbar from "@/app/components/Navbar";
-import { Topic } from "@/types/types";
 
+import ViewMoreButton from "@/app/components/home/ViewMoreButton";
 
 
 export default function page() {
-    const [postsnew, setPostsnew] = useState<Post[]>([]);
+    const [poststop, setPostsTop] = useState<Post[]>([]);
     const [topics, setTopicList] = useState<Topic[]>([]) 
+
+    const [morePosts, setMorePosts] = useState<Post[]>([]);
+    const [num, setNum] = useState<number>(5)
 
     const getposts = async () => {
         try {
             const getdata = await fetchPostTop();
-            console.log("data ", getdata);
-            setPostsnew(getdata);
+            console.log("poststop ", getdata);
+            setPostsTop(getdata);
+            setMorePosts(getdata.splice(0, num))
         } catch (error) {
             console.log("Error fetching ", error);
         }
@@ -41,6 +45,17 @@ export default function page() {
         }catch(error){
             console.error('Error fetching topics', error)
         }
+    }
+
+    //show more โชว์โพสอื่นๆ เพิ่ม
+    const handleeShowMorePost = () => {
+        console.log(num)
+        setNum(prevNum => {
+            const newNum = prevNum + 5;// เพิ่มค่า num 
+            setMorePosts(poststop.slice(0, newNum)); // ใช้ค่าที่อัปเดตแล้ว ถ้ากดครั้งแรกไปแล้ว ให้โชว์เพิ่มอีก 
+            return newNum;
+        })
+        
     }
     
     useEffect(() => {
@@ -84,8 +99,8 @@ export default function page() {
                         {/* ฝั่งซ้าย โพส */}
                         <div className="flex-1">
                             {/* <!-- Post  --> */}
-                            {postsnew && postsnew.length > 0 ? (
-                                postsnew.map((post) => {
+                            {morePosts && morePosts.length > 0 ? (
+                                morePosts.map((post) => {
                                     console.log("Post Data:", post);
                                     return (
                                         <PostCard key={post._id} post={post} />
@@ -96,12 +111,13 @@ export default function page() {
                             )}
 
                             {/* <!-- ปุ่มดูเพิ่มเติม --> */}
+                            {morePosts.length < poststop.length &&(
                             <div className="text-center mt-6">
-                                <button className="px-6 py-2 bg-gray-800 text-gray-300 rounded-full hover:bg-gray-700">
-                                    more
-                                    <i className="fas fa-chevron-down ml-2"></i>
-                                </button>
+                                {/* <!-- กดปุ่ม แล้วเปลี่ยนค่า t f ให้แสดงโพสเพิ่ม --> */}
+                                <ViewMoreButton onClick={handleeShowMorePost} />
+                                
                             </div>
+                            )}
                         </div>
                     </div>
                 </div>
