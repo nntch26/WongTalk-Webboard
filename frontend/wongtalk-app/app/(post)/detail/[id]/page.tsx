@@ -337,8 +337,7 @@ export default function page() {
                         {/* card คอมเม้นคนอื่น */}
                     {post.allComments.length > 0 ? (
                         post.allComments.map((commentother) => (
-                            <div className="p-4 mb-6 border border-solid rounded-lg border-gray-500"
-                                >
+                            <div className="p-4 mb-6 border border-solid rounded-lg border-gray-500">
                                 <div className="flex items-start">
                                     <div className="flex-1">
                                         <div className="flex items-center justify-between">
@@ -397,11 +396,7 @@ export default function page() {
 
                                     </div>
                                 </div>
-                            </div>
-                            
-
-                            
-                            
+                            </div>                
                         ))
                         ) : (
                         <p>No comments available</p>

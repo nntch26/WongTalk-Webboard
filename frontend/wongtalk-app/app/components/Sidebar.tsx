@@ -7,7 +7,7 @@ import TopicList from "./home/TopicList";
 import { Topic } from "@/types/types";
 import { getFollowTopic } from "../api/userServices";
 
-export default function Sidebar() {
+export default function Sidebar({ onClickOpen }: { onClickOpen: boolean }) {
     const [topics, setTopics] = useState<Topic[]>([]);
     const [userId, setUserId] = useState<string | null>(null);
 
@@ -41,7 +41,9 @@ export default function Sidebar() {
             {/* <!-- Sidenav --> */}
             <div
                 id="sidenav"
-                className={`${styles.sidebarcus} sidebar-cus fixed top-16 left-0 h-full w-64  z-40 transform md:translate-x-0 -translate-x-full transition-transform duration-300 ease-in-out`}
+                className={`${styles.sidebarcus} ${
+                    onClickOpen ? "translate-x-0" : "-translate-x-full"
+                } fixed top-16 left-0 h-full w-64 z-40 transform transition-transform duration-300 ease-in-out md:translate-x-0`}                
             >
                 <div className="overflow-y-auto h-full">
                     {/* <!-- หน้าแรก --> */}

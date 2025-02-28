@@ -66,7 +66,7 @@ export default function page() {
     return (
         <div>
             {/* <Navbar /> */}
-            <Sidebar />
+            <Sidebar onClickOpen={false} />
 
             {/* <!-- Main Content --> */}
             <div

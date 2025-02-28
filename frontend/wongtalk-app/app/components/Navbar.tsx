@@ -6,9 +6,11 @@ import { getProfile, getToken } from "../api/profileServices";
 import styles from "./styles/Navbar.module.css";
 import { useRouter } from "next/navigation";
 import { SearchPost } from "../api/postServices";
+import Sidebar from "./Sidebar";
 
 // type
 import { User } from "@/types/types";
+
 
 export default function Navbar() {
     const [sidenavOpen, setSidenavOpen] = useState<boolean>(false);
@@ -60,7 +62,7 @@ export default function Navbar() {
 
     const toggleSidenav = (): void => {
         console.log(sidenavOpen);
-        setSidenavOpen(!sidenavOpen);
+        setSidenavOpen(!sidenavOpen); // ถ้ากดที่ เบอร์เกอร์เมนู ให้เปิดปิด
     };
 
     // ฟังก์ชันเปิดปิด sidenav ถ้าคลิกด้านนอก
@@ -173,14 +175,18 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                {/* Overlay */}
-                {sidenavOpen && (
+            </nav>
+
+            {/* Overlay */}
+            {sidenavOpen && (
+                <>
                     <div
                         id="overlay"
                         className="fixed inset-0 bg-white bg-opacity-50 z-40 transition-transform duration-300 ease-in-out md:hidden"
                     ></div>
-                )}
-            </nav>
+                    <Sidebar onClickOpen={sidenavOpen}/>
+                </>
+            )}
         </>
     );
 }
