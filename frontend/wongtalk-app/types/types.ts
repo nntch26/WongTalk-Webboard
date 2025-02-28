@@ -89,13 +89,6 @@ export interface FollowButtonProps {
     onFollowChange: (topicId: string) => void;
 }
 
-// profileHeadeer.tsx
-export interface ProfileHeaderProps {
-    profile?: User | null;
-    onLogout: () => void;
-    isShow: boolean;
-    setIsShow: (show: boolean) => void;
-}
 
 // profileTab.tsx
 export interface ProfileTabsProps {

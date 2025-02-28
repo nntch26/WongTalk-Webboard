@@ -22,7 +22,6 @@ export default function Profile() {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const [isShow, setIsShow] = useState<boolean>(false);
     const [mypost, setMyPost] = useState<boolean>(true);
     const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -104,9 +103,6 @@ export default function Profile() {
                     <ProfileBanner bannerUrl="https://i.pinimg.com/originals/53/44/9f/53449fa87702af80374c45b87080c639.jpg" />
                     <ProfileHeader
                         profile={profile}
-                        onLogout={() => {}}
-                        isShow={isShow}
-                        setIsShow={setIsShow}
                     />
                     <ActionButtons />
                     <ProfileTabs mypost={mypost} setMyPost={setMyPost} />

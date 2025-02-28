@@ -1,11 +1,26 @@
-import { ProfileHeaderProps } from "@/types/types";
-import Popup from "../popupModel";
+import { useState } from "react";
+import PopupModel from "../popup/PopupModel";
+import { logout } from "@/app/api/authServices";
+import { useRouter } from "next/navigation";
+
+import { User } from "@/types/types";
 
 export const ProfileHeader = ({
     profile,
-    isShow,
-    setIsShow,
-}: ProfileHeaderProps) => {
+}: {profile?: User | null}) => {
+    const [showModalLogout, setShowModalLogout] = useState<boolean>(false);
+    const router = useRouter();
+
+    // logout
+    const handleLogout = async () => {
+        setShowModalLogout(false);
+        const res = await logout();
+        if (res.success) {
+            localStorage.removeItem("userdata");
+            router.push("/"); // กลับไป post หน้าแรก
+        }
+    };
+
     if (!profile) return null;
 
     return (
@@ -22,10 +37,18 @@ export const ProfileHeader = ({
                     <button>
                         <i
                             className="fa-solid fa-arrow-right-from-bracket fa-xl sm:mt-5 text-[#E8E9EA]/60"
-                            onClick={() => setIsShow(true)}
+                            onClick={() => setShowModalLogout(true)}
                         ></i>
                     </button>
-                    <Popup isOpen={isShow} onClose={() => setIsShow(false)} />
+                    {showModalLogout && (
+                        <PopupModel
+                            onClick={() => handleLogout()}
+                            onClose={() => setShowModalLogout(false)}
+                            titletext="Logout Account ?"
+                            textbutton="Logout"
+                            subtext="Are you sure you want to logout"
+                        />
+                    )}
                 </div>
             </div>
             <div className="mt-8">
@@ -43,7 +66,7 @@ export const ProfileHeader = ({
                 <div className="mt-3">
                     <span className="text-[#E8E9EA]/60 text-sm sm:text-base">
                         <span className="font-bold text-[#E8E9EA]">
-                            # {profile.posts.length}
+                            # {profile.posts?.length}
                         </span>{" "}
                         Posts
                     </span>

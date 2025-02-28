@@ -3,12 +3,13 @@ import { useState, useRef, useEffect } from "react";
 import { User } from "@/types/types";
 import { useRouter } from "next/navigation";
 
+import PopupModel from "../popup/PopupModel";
+
 export const PostList = ({ profile }: { profile: User | null }) => {
     const [posts, setPosts] = useState(profile?.posts || []);
-
-    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-    const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
     const router = useRouter();
+    const [ShowModalDelete, setShowModalDelete] = useState<boolean>(false)
+    const [postId, setPostId] = useState<string | null>(null)
 
     // อัปเดต posts ทุกครั้งที่ profile เปลี่ยน
     useEffect(() => {
@@ -41,6 +42,8 @@ export const PostList = ({ profile }: { profile: User | null }) => {
 
     // กด delete
     const handleDelete = async (postId: string) => {
+        setShowModalDelete(false);
+
         try {
             console.log("Deleting post with ID:", postId);
             await DeletePost(postId);
@@ -50,55 +53,26 @@ export const PostList = ({ profile }: { profile: User | null }) => {
                 prevPosts.filter((post) => post._id !== postId)
             );
             console.log("Post deleted successfully");
-            
         } catch (error) {
             console.error("Failed to delete post:", error);
-        } finally {
-            // ปิด dropdown เมื่อลบเสร็จ
-            setOpenDropdown(null);
         }
     };
 
-    const toggleDropdown = (postId: string, e: React.MouseEvent) => {
-        e.stopPropagation();
-        setOpenDropdown((prev) => (prev === postId ? null : postId));
-    };
 
-    const handleClickOutside = (event: MouseEvent) => {
-        // เช็คว่า กดข้างนอก dropdown หรือไม่
-        let clickedInside = false;
+    const handlePostId = (postId: string) => {
+        setShowModalDelete(true);
+        setPostId(postId);
+    }
 
-        // ถ้ากดข้างใน dropdown ให้เป็น true
-        Object.values(dropdownRefs.current).forEach((ref) => {
-            if (ref && ref.contains(event.target as Node)) {
-                clickedInside = true;
-            }
-        });
 
-        if (!clickedInside) {
-            setOpenDropdown(null); // ปิด
-        }
-    };
-
-    useEffect(() => {
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
-
-    // set ref ให้ dropdown แต่ละตัว เป็นค่าตาม postid
-    const setDropdownRef = (postId: string) => (el: HTMLDivElement | null) => {
-        dropdownRefs.current[postId] = el;
-    };
 
     return (
         <div className="py-4 divide-y divide-[rgba(255,255,255,0.1)] noscroll overflow-y-auto max-h-[26rem] px-4">
             {posts.length === 0 ? (
                 <p className="text-center text-gray-500">No posts available</p>
             ) : (
-                posts.map((post, index) => (
-                    <div key={post._id || index} className="">
+                posts.map((post) => (
+                    <div key={post._id} className="">
                         <div className="relative flex gap-3 py-3 mb-5">
                             <img
                                 src={`/uploads/${profile?.image}`}
@@ -125,33 +99,29 @@ export const PostList = ({ profile }: { profile: User | null }) => {
                                 </div>
                             </div>
 
-                            <div
-                                className="relative"
-                                ref={setDropdownRef(post._id)}
-                            >
-                                <i
-                                    className="fa-solid fa-ellipsis-vertical cursor-pointer text-gray-500 text-xl hover:text-[#E8E9EA] transition"
-                                    onClick={(e) => toggleDropdown(post._id, e)}
-                                />
-                                {openDropdown === post._id && (
-                                    <div className="absolute z-10 bg-[#1E293B] border border-[#374151] rounded-md shadow-md mt-1 right-5">
-                                        <button
-                                            onClick={() => handleEdit(post._id)}
-                                            className="text-green-500 text-sm block px-4 py-1 hover:font-bold rounded-md transition"
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            onClick={() =>
-                                                handleDelete(post._id)
-                                            }
-                                            className="text-red-500 text-sm block px-4 py-1 hover:font-bold rounded-md transition"
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                )}
+                            <div className="relative">
+                                <div className="absolute flex mt-2 right-5">
+                                    <button
+                                        onClick={() => handleEdit(post._id)}
+                                        className="fa-solid fa-pen-to-square text-gray-500 mr-3 hover:text-gray-400"
+                                    ></button>
+                                    <button
+                                        onClick={() => handlePostId(post._id)}
+                                        className="fa-solid fa-trash text-gray-500 hover:text-gray-400"
+                                    ></button>
+                                </div>
                             </div>
+                            {ShowModalDelete && postId &&(
+                                <PopupModel
+                                    onClick={() => {
+                                        handleDelete(postId);
+                                    }}
+                                    onClose={() => setShowModalDelete(false)}
+                                    titletext="Delete Post?"
+                                    subtext="Are you sure you want to delete your post?"
+                                    textbutton="Delete"
+                                />
+                            )}
                         </div>
                     </div>
                 ))
