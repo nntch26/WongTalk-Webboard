@@ -86,7 +86,7 @@ export const PostList = ({ profile }: { profile: User | null }) => {
                                     </span>
                                 </div>
                                 <p className="text-sm text-gray-600">
-                                    {profile?.createdAt}
+                                    {post.time}
                                 </p>
                                 <p className="mt-1 text-sm sm:text-base break-words">
                                     {post.content}

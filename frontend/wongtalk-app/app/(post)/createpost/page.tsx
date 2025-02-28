@@ -11,16 +11,20 @@ import { Topic } from "@/types/types";
 import { PostData } from "@/types/types";
 import { fetchTopics } from "@/app/api/topicServices";
 import ErrorText from "@/app/components/ErrorText";
+import PopupModelSuccess from "@/app/components/popup/PopupModelSuccess";
 
 export default function page() {
     const [title, setTitle] = useState<string>("");
     const [content, setContent] = useState<string>("");
     const [topic, setTopic] = useState<string>("");
-    const [error, setError] = useState<string>("");
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [postId, setPostId] = useState<string>("");
 
     const [topicList, setTopicList] = useState<Topic[]>([]);
+    const [showModal, setShowModal] = useState<boolean>(false)    
+    const [error, setError] = useState<string>("");
+    const [massageDraft, setMassageDraft] = useState<string>("");
+
     const router = useRouter();
 
     // สร้างโพส
@@ -41,7 +45,12 @@ export default function page() {
                 setTitle("");
                 setContent("");
                 setTopic("");
-                router.push("/"); // เด้งไปหน้าแรก
+                setError('')
+                setShowModal(true)
+                setTimeout(() => {
+                     router.push("/"); // เด้งไปหน้าแรก
+                }, 3000); // หน่วงเวลา ก่อนเปลี่ยน 
+               
             }
         } catch (error) {
             console.error("Error creating post:", error);
@@ -133,6 +142,7 @@ export default function page() {
     const handleSave = async (e: React.MouseEvent) => {
         e.preventDefault();
 
+        setMassageDraft("Your draft has been saved successfully.")
         const savedata: PostData = {
             title: title,
             content: content,
@@ -199,6 +209,12 @@ export default function page() {
                 <ErrorText error={error} />
                 )}
 
+                {massageDraft &&(
+                    <div className="text-green-400 mb-2">
+                       <i className="fa-solid fa-cloud-arrow-up mr-2"></i>
+                        {massageDraft}
+                    </div>
+                )}
                 <div className="lg:grid-cols-3 gap-6 mb-5 p-4">
                     {/* <!-- ส่วนเขียนโพส --> */}
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -282,6 +298,16 @@ export default function page() {
                     </form>
                 </div>
             </div>
+
+             {/* Popup Model */}
+                 
+            {/* โชว์ตอน สร้างโพสสำเร็จ  */}
+            {showModal  && <PopupModelSuccess                        
+            onClick = {()=> router.push("/")} 
+            titletext = "Post Successful!"
+            subtext = "Your post has been published successfully."
+            textbutton ="Done"
+            onClose={() => setShowModal(false)}/>}  
         </>
     );
 }
