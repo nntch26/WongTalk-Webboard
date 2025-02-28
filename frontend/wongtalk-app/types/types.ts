@@ -15,7 +15,7 @@ export interface Post{
     userId: User;
     topicId: Topic;
     commentCount: number;
-    likes: number;
+    likes: User[];
     createdAt: string;
     time: string,
 }

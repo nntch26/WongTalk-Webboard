@@ -30,7 +30,7 @@ router.post("/topic/top", getPostsTopInTopic);
 router.get("/posts/:id", getPostDetail);
 
 // กดไลค์
-router.put("/posts/reactions", likePost);
+router.put("/posts/reactions",auth, likePost);
 
 // เพิ่ม ลบ แก้ไข
 router.post("/posts",auth, createPost);

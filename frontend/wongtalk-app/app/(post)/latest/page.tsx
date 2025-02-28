@@ -12,7 +12,7 @@ import TopicList from "@/app/components/home/TopicList";
 import PostCard from "@/app/components/home/PostCard";
 import Navbar from "@/app/components/Navbar";
 import { Topic } from "@/types/types";
-import ViewMoreButton from "@/app/components/home/ViewMoreButton";
+import ButtonViewMore from "@/app/components/home/ButtonViewMore";
 
 
 export default function page() {
@@ -111,7 +111,7 @@ export default function page() {
                             {/* <!-- ปุ่มดูเพิ่มเติม --> */}
                             {morePosts.length < postslatest.length &&(
                                 <div className="text-center mt-6">
-                                    <ViewMoreButton onClick={handleeShowMorePost} />
+                                    <ButtonViewMore onClick={handleeShowMorePost} />
                                 </div>
                             )}
                         </div>

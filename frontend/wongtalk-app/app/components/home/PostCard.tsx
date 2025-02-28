@@ -7,7 +7,7 @@ import { Post } from "@/types/types";
 
 import styles from "../styles/Maincontent.module.css";
 import TopicTag from '../topic/TopicTag';
-
+import ReactionButton from './ReactionButton';
 
 export default function PostCard({ post }: { post: Post }) {
 
@@ -46,21 +46,7 @@ export default function PostCard({ post }: { post: Post }) {
                         </div>
 
                         {/* <!-- Actions (Likes & Comments) --> */}
-                        <div className="flex items-center gap-4 text-gray-400 mt-4">
-                            
-                            <button className="flex items-center gap-2 hover:text-green-400 px-2 py-1 rounded">
-                                <i className="fa-solid fa-hands-clapping"></i>
-                                <span>{post.likes} Likes</span>
-                            </button>
-
-                            <Link href={`/detail/${post._id}#allcomment`}>
-                                <button className="flex items-center gap-2 hover:text-green-400 px-2 py-1 rounded">
-                                    <i className="fa-regular fa-comment-dots"></i>
-                                    <span>{post.commentCount} Comments</span>
-                                </button>
-                            </Link>
-                            
-                        </div>
+                        <ReactionButton key={post._id} post={post}/>
                     </div>
                 </div>
             </div>

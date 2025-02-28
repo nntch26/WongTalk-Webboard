@@ -2,9 +2,9 @@ import Link from 'next/link';
 import React from 'react'
 
 
-export default function PopupModalComment({ onClose }: {onClose: () => void;}) {
+export default function PopupModalLogin({ onClose }: {onClose: () => void;}) {
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
             <div className="relative bg-[--hover-DarkCharcoal] p-6 rounded-md shadow-lg w-96 text-center">
 
                 <button className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"

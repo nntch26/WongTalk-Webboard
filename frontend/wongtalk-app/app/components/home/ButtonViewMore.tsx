@@ -1,7 +1,7 @@
 
 import React from 'react'
 
-export default function ViewMoreButton({onClick} : {onClick: () => void} ) {
+export default function ButtonViewMore({onClick} : {onClick: () => void} ) {
   return (
     <>
     {/* <!-- กดปุ่ม แล้วเปลี่ยนค่า t f ให้แสดงโพสเพิ่ม --> */}

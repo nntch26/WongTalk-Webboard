@@ -8,10 +8,10 @@ interface PopupType {
 
 }
 
-export default function PopupModel({ onClose,onClick, titletext, subtext, textbutton }: PopupType) {
+export default function PopupModelCheck({ onClose,onClick, titletext, subtext, textbutton }: PopupType) {
   return (
     <> 
-    <div className="fixed inset-0 flex items-center justify-center ">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
             <div className="relative bg-[--hover-DarkCharcoal] p-6 rounded-md shadow-lg  text-center">
 
                 <button className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
@@ -29,7 +29,7 @@ export default function PopupModel({ onClose,onClick, titletext, subtext, textbu
                         <div className="items-center gap-2 mt-3 flex flex-row">
                             
                             <button
-                                className="w-full mt-2 mr-3 p-2.5 flex-1 text-[#E8E9EA] hover:bg-opacity-90 rounded-md outline-none border ring-offset-2 ring-[#374151]-600 focus:ring-2"
+                                className="w-full mt-2 mr-3 p-2.5 flex-1 text-[#E8E9EA] hover:bg-opacity-90 rounded-md outline-none border  ring-offset-2 ring-gray-500 focus:ring-2"
                                 onClick={onClose}
                             >
                                 Cancel

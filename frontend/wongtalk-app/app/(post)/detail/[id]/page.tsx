@@ -12,12 +12,12 @@ import { AddComment, DeleteComment, EditComment } from '@/app/api/commentService
 
 import TopicTag from '@/app/components/topic/TopicTag'
 import TopicSidebar from '@/app/components/topic/TopicSidebar '
-import PopupModalComment from '@/app/components/popup/PopupModalComment'
-import PopupModel from '@/app/components/popup/PopupModel'
+import PopupModalLogin from '@/app/components/popup/PopupModalLogin'
+import PopupModelCheck from '@/app/components/popup/PopupModelCheck'
 
 import styles from '@/app/components/styles/Maincontent.module.css'
-
 import { useAuth } from '@/app/hook/useAuth'
+import ReactionButton from '@/app/components/home/ReactionButton'
 
 
 
@@ -26,6 +26,7 @@ export default function page() {
     const [topic, setTopic] = useState<Topic| null>(null)
     const [topicList, setTopicList] = useState<Topic[]>([]);
 
+  
     const [content, setContent] = useState<string>("");
     const [editingCommentId, setEditingCommentId] = useState<string | null>(null); // เก็บไอดีคอมเม้นจะแก้ไข
     const [editContent, setEditContent] = useState(""); // เนื้อหาคอมเม้นที่แก้ไข
@@ -270,23 +271,14 @@ export default function page() {
                         <h1 className="text-xl md:text-4xl font-bold mb-3">{post.Post[0].title}</h1>
                         {/* <!-- Topic tag--> */}
                         <TopicTag key={post.Post[0].topicId._id} post={post.Post[0]} />
+
                         <p className="text-xs md:text-base">{post.Post[0].content} </p>
                     
                     </div>
 
-                  {/* <!-- Post Actions --> */}
-
-                  <div className="flex items-center gap-4 text-gray-400 mt-10">
-                      <button className="flex items-center gap-2 hover:text-green-400 px-2 py-1 rounded">
-                          <i className="fa-solid fa-hands-clapping"></i>
-                          <span>{post.Post[0].likes}  Likes</span>
-                      </button>
-                      <a href='#allcomment' className="flex items-center gap-2 hover:text-green-400 px-2 py-1 rounded">
-                          <i className="fa-regular fa-comment-dots"></i>
-                          <span>{post.Post[0].commentCount}   Comments</span>
-                      </a>
-                  </div>
-
+                   {/* <!-- Actions (Likes & Comments) --> */}
+                    <ReactionButton key={post.Post[0]._id} post={post.Post[0]}/>
+                   
                   <hr className="border-0 h-px bg-gray-800 rounded-xl my-2 w-full mx-auto" />
 
               </div>
@@ -338,11 +330,7 @@ export default function page() {
                             )}
                       </form>
 
-                    {/* โชว์ตอน user จะคอมเม้น แต่ยังไม่ login */}
-                      {showModal && <PopupModalComment onClose={() => setShowModal(false)} />}
-
-                        
-
+                
                       <hr className="border-0 h-px bg-gray-800 rounded-xl my-5 w-full mx-auto" />
 
                       {/* <!-- all comment --> */}
@@ -407,14 +395,6 @@ export default function page() {
                                             <p className="mt-2 text-white break-words text-sm md:text-md">{commentother.content}</p>
                                         )}
 
-                                        
-                                        {/* โชว์ตอน user จะ ลบ คอมเม้น  */}
-                                        {showModalDelete && deleteCommentId && <PopupModel                        
-                                        onClick = {()=> {handleDeleteComment(deleteCommentId)}} 
-                                        titletext = "Delete comment?"
-                                        subtext = "Are you sure you want to delete your comment?"
-                                        textbutton ="Delete"
-                                        onClose={() => setShowModalDelete(false)}/>}            
                                     </div>
                                 </div>
                             </div>
@@ -441,6 +421,19 @@ export default function page() {
             onClickTopic={handleClickTopic} 
             />
           )}
+
+
+        {/* Popup Model */}
+        {/* โชว์ตอน user จะคอมเม้น แต่ยังไม่ login */}
+        {showModal && <PopupModalLogin onClose={() => setShowModal(false)} />}
+
+        {/* โชว์ตอน user จะ ลบ คอมเม้น  */}
+        {showModalDelete && deleteCommentId && <PopupModelCheck                        
+        onClick = {()=> {handleDeleteComment(deleteCommentId)}} 
+        titletext = "Delete comment?"
+        subtext = "Are you sure you want to delete your comment?"
+        textbutton ="Delete"
+        onClose={() => setShowModalDelete(false)}/>}     
 
       </div> 
   </div>

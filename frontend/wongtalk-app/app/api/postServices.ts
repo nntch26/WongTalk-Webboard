@@ -2,9 +2,7 @@
 // api postServices.ts
 
 import { Post, PostData } from "@/types/types";
-
 import axios from "axios";
-
 import { redirect } from "next/navigation";
 
 
@@ -133,6 +131,22 @@ export const SearchPost = async (query: string) => {
         return res.data
     } catch (error) {
         console.error("Error Search", error)
+        throw error;
+    }
+}
+
+
+// กดไลค์
+export const LikePost = async(postId:string)=>{
+    try{
+        console.log(postId)
+        const res = await axios.put("http://localhost:8000/api/posts/reactions", { postId }, { withCredentials: true })
+        console.log("Like Post successfully:", res);
+        return res
+
+    
+    }catch(error){
+        console.error("Error reactions Like", error)
         throw error;
     }
 }

@@ -10,7 +10,7 @@ import { Post, Topic } from "@/types/types";
 import Sidebar from "@/app/components/Sidebar";
 import TopicList from "@/app/components/home/TopicList";
 import PostCard from "@/app/components/home/PostCard";
-import ViewMoreButton from "@/app/components/home/ViewMoreButton";
+import ButtonViewMore from "@/app/components/home/ButtonViewMore";
 
 
 export default function page() {
@@ -112,7 +112,7 @@ export default function page() {
                             {morePosts.length < postsTop.length &&(
                             <div className="text-center mt-6">
                                 {/* <!-- กดปุ่ม แล้วเปลี่ยนค่า t f ให้แสดงโพสเพิ่ม --> */}
-                                <ViewMoreButton onClick={handleeShowMorePost} />
+                                <ButtonViewMore onClick={handleeShowMorePost} />
                                 
                             </div>
                             )}

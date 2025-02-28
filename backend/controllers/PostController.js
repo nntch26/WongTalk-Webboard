@@ -21,7 +21,7 @@ const getAllPost = async (req, res) => {
         // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
         const modifiedPosts = randomPosts.map((post) => ({
             ...post,
-            likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
+            // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
             // createdPost: moment(post.createdAt)
             //     .tz("Asia/Bangkok")
@@ -55,7 +55,7 @@ const getLatestPost = async (req, res) => {
         // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
         const modifiedPosts = allPosts.map((post) => ({
             ...post,
-            likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
+            // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
             // createdPost: moment(post.createdAt)
             //     .tz("Asia/Bangkok")
@@ -92,7 +92,7 @@ const getPostsTop = async (req, res) => {
         // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
         const modifiedPosts = allPosts.map((post) => ({
             ...post,
-            likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
+            // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
             // createdPost: moment(post.createdAt)
             //     .tz("Asia/Bangkok")
@@ -143,7 +143,7 @@ const Search = async (req, res) => {
         // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
         const modifiedPosts = randomPosts.map((post) => ({
             ...post,
-            likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
+            // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
             // createdPost: moment(post.createdAt)
             //     .tz("Asia/Bangkok")
@@ -192,7 +192,7 @@ const getPostTopic = async (req, res) => {
         // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
         const modifiedPosts = posts.map((post) => ({
             ...post,
-            likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
+            // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
             // createdPost: moment(post.createdAt)
             //     .tz("Asia/Bangkok")
@@ -241,7 +241,7 @@ const getPostsTopInTopic = async (req, res) => {
         // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
         const modifiedPosts = posts.map((post) => ({
             ...post,
-            likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
+            // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
             // createdPost: moment(post.createdAt)
             //     .tz("Asia/Bangkok")
@@ -289,7 +289,7 @@ const getPostDetail = async (req, res) => {
         
         const modifiedPosts = Array.of(posts).map((post) => ({
             ...post,
-            likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
+            // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
             // createdPost: moment(post.createdAt)
             //     .tz("Asia/Bangkok")
@@ -475,13 +475,15 @@ const deletePost = async (req, res) => {
 // กดไลค์
 const likePost = async (req, res) => {
     try {
-        const { userId, postId } = req.body;
+        const { postId } = req.body;
+        const userId  = req.user.id
 
-        console.log(userId);
-        console.log(postId);
+        console.log("likePost:", userId, postId);
+        
 
         // ค้นหาโพสต์
         const post = await Post.findById(postId);
+        // consolog.log("get post", post)
 
         if (!post) {
             return res.status(404).json({
@@ -492,7 +494,7 @@ const likePost = async (req, res) => {
 
         // userId อยู่ใน array likes แล้วหรือยัง
         if (post.likes.includes(userId)) {
-            // ถ้าเคยไลค์ -> ลบ userId ออกจาก likes
+            // ถ้าเคยไลค์ -> ลบ userId ออกจาก likes / unlike
             post.likes = post.likes.filter(
                 (like) => like.toString() !== userId
             );
@@ -514,7 +516,6 @@ const likePost = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Post liked successfully",
-
             likesCount: post.likes.length,
         });
     } catch (error) {
@@ -525,6 +526,10 @@ const likePost = async (req, res) => {
         });
     }
 };
+
+
+
+
 
 module.exports = {
     Search,

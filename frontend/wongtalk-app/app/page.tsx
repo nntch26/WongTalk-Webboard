@@ -13,7 +13,7 @@ import TopicList from "./components/home/TopicList";
 import PostCard from "./components/home/PostCard";
 import PostNew from "./components/home/PostNew";
 import Navbar from "./components/Navbar";
-import ViewMoreButton from "./components/home/ViewMoreButton";
+import ButtonViewMore from "./components/home/ButtonViewMore";
 
 export default function Home() {
     const [allPosts, setAllPosts] = useState<Post[]>([]);
@@ -132,7 +132,7 @@ export default function Home() {
                             {morePosts.length < allPosts.length &&(
                                 <div className="text-center mt-6">
                                 {/* <!-- กดปุ่ม แล้วเปลี่ยนค่า t f ให้แสดงโพสเพิ่ม --> */}
-                                <ViewMoreButton onClick={handleeShowMorePost} />
+                                <ButtonViewMore onClick={handleeShowMorePost} />
                                
                             </div>
                             )}
