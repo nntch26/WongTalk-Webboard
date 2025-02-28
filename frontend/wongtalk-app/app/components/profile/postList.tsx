@@ -52,6 +52,7 @@ export const PostList = ({ profile }: { profile: User | null }) => {
             setPosts((prevPosts) =>
                 prevPosts.filter((post) => post._id !== postId)
             );
+            console.log("Post data:", profile);
             console.log("Post deleted successfully");
         } catch (error) {
             console.error("Failed to delete post:", error);
@@ -86,10 +87,10 @@ export const PostList = ({ profile }: { profile: User | null }) => {
                                     </span>
                                 </div>
                                 <p className="text-sm text-gray-600">
-                                    {profile?.createdAt}
+                                    {post.time}
                                 </p>
                                 <p className="mt-1 text-sm sm:text-base break-words">
-                                    {post.content}
+                                    {post.title}
                                 </p>
                                 <div className="flex justify-between mt-3 text-[#E8E9EA]/60 max-w-md">
                                     <button className="flex items-center gap-1 text-sm hover:text-[#30E48E] transition-colors">

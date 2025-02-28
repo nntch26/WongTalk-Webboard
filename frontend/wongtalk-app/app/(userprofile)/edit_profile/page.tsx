@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getProfile, editProfile } from "../../api/profileServices";
 import Navbar from "@/app/components/Navbar";
+import ErrorText from "@/app/components/ErrorText";
 
 // type
 import { User } from "@/types/types";
@@ -60,11 +61,40 @@ export default function EditProfile() {
         if (error) setError(null);
     };
 
+    const validateForm = () => {
+        if (!user.fullname) {
+            setError("Fullname fields are required");
+            return false;
+        }
+
+        if (!user.username) {
+            setError("Username fields are required");
+            return false;
+        }
+
+        if (!user.email) {
+            setError("Email fields are required");
+            return false;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(user.email)) {
+            setError("Invalid email format");
+            return false;
+        }
+
+
+        return true;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         // console.log(user);
         // console.log(fileOld);
 
         e.preventDefault();
+
+        if (!validateForm()) return;
+
         const formData = new FormData();
         formData.append("fullname", user.fullname);
         formData.append("username", user.username);
@@ -114,20 +144,6 @@ export default function EditProfile() {
                                     className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-[#080E13]"
                                 />
 
-                                {/*  */}
-                                {/* <label className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                <span className="text-white text-sm">
-                                    Change Photo
-                                </span>
-                                <input
-                                    type="file"
-                                    className="hidden"
-                                    accept="image/*"
-                                    onChange={handleImageChange}
-                                />
-                            </label> */}
-                                {/*  */}
-
                                 <div className="mt-6 text-center">
                                     <h1 className="text-lg sm:text-xl font-bold">
                                         {user.fullname}
@@ -147,6 +163,8 @@ export default function EditProfile() {
                                 </h2>
                                 <hr className="border-t-2 border-[rgba(255,255,255,0.1)] mb-8" />
 
+                                {/* error */}
+                                {error && <ErrorText error={error} />}
                                 <form
                                     className="space-y-4"
                                     onSubmit={handleSubmit}
@@ -226,11 +244,6 @@ export default function EditProfile() {
 
                                     {/* Buttons */}
                                     <div className="flex flex-row justify-between gap-6 py-6">
-                                        {/* <Link href={"/profile"}>
-                                        <button className="w-full sm:w-auto px-6 py-2 bg-[#4B5563] text-[#E8E9EA] rounded-full font-bold text-sm sm:text-base hover:bg-opacity-90 transition-colors">
-                                            Cancel
-                                        </button>
-                                    </Link> */}
                                         <button
                                             type="submit"
                                             className="sm:w-auto px-6 py-2 bg-[#30E48E] text-[#080E13] rounded-full font-bold text-sm sm:text-base hover:bg-opacity-90 transition-colors"

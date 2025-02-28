@@ -12,15 +12,23 @@ const getProfile = async (req, res) => {
         }
 
         // เพิ่ม createdAt ใหอยู่ใน format ของ Bangkok
+        const formattedPosts = user.posts.map((post) => ({
+            ...post.toObject(),
+            createdAt: moment(post.createdAt)
+                .tz("Asia/Bangkok")
+                .format("YYYY-MM-DD"),
+            time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
+        }));
+
         const userProfile = {
-            ...user.toObject(), // เปลี่ยนเป็นอ็อบเจ็กต์ธรรมดา
+            ...user.toObject(),
             createdAt: moment(user.createdAt)
                 .tz("Asia/Bangkok")
                 .format("YYYY-MM-DD"),
+            posts: formattedPosts,
         };
 
-        res.json(userProfile); // ส่งข้อมูลกลับไป
-
+        res.json(userProfile);
         // console.log(authToken);
     } catch (error) {
         res.status(500).json({ message: "Server error" });
