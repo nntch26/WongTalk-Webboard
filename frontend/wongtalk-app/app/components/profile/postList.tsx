@@ -1,22 +1,27 @@
 import { DeletePost } from "@/app/api/postServices";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { User } from "@/types/types";
 import { useRouter } from "next/navigation";
 
 import PopupModelCheck from "../popup/PopupModelCheck";
 
-export const PostList = ({ profile }: { profile: User | null }) => {
+export const PostList = ({
+    profile,
+    setProfile,
+}: {
+    profile: User | null;
+    setProfile: (profile: User) => void;
+}) => {
     const [posts, setPosts] = useState(profile?.posts || []);
     const router = useRouter();
-    const [ShowModalDelete, setShowModalDelete] = useState<boolean>(false)
-    const [postId, setPostId] = useState<string | null>(null)
+    const [ShowModalDelete, setShowModalDelete] = useState<boolean>(false);
+    const [postId, setPostId] = useState<string | null>(null);
 
-    // อัปเดต posts ทุกครั้งที่ profile เปลี่ยน
     useEffect(() => {
-        if (profile?.posts) {
-            setPosts(profile.posts);
+        if (profile) {
+            setProfile({ ...profile, posts });
         }
-    }, [profile]);
+    }, [posts]); // ถ้า posts เปลี่ยน ให้ update ไปที่ profile.post ด้วยทำให้หน้า profile หน้า profile.tsx เปลี่ยนด้วย
 
     // กด edit
     const handleEdit = (postId: string) => {
@@ -59,13 +64,10 @@ export const PostList = ({ profile }: { profile: User | null }) => {
         }
     };
 
-
     const handlePostId = (postId: string) => {
         setShowModalDelete(true);
         setPostId(postId);
-    }
-
-
+    };
 
     return (
         <div className="py-4 divide-y divide-[rgba(255,255,255,0.1)] noscroll overflow-y-auto max-h-[26rem] px-4">
@@ -112,7 +114,7 @@ export const PostList = ({ profile }: { profile: User | null }) => {
                                     ></button>
                                 </div>
                             </div>
-                            {ShowModalDelete && postId &&(
+                            {ShowModalDelete && postId && (
                                 <PopupModelCheck
                                     onClick={() => {
                                         handleDelete(postId);

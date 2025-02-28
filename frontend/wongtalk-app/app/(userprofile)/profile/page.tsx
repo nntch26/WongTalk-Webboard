@@ -107,7 +107,9 @@ export default function Profile() {
                     <ActionButtons />
                     <ProfileTabs mypost={mypost} setMyPost={setMyPost} />
                     {mypost ? (
-                        <PostList profile={profile} />
+                        <PostList profile={profile}
+                        setProfile={setProfile}
+                        />
                     ) : (
                         <FollowTopicList
                             topics={topics}
