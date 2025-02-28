@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { User } from "@/types/types";
 import { useRouter } from "next/navigation";
 
-import PopupModel from "../popup/PopupModel";
+import PopupModelCheck from "../popup/PopupModelCheck";
 
 export const PostList = ({ profile }: { profile: User | null }) => {
     const [posts, setPosts] = useState(profile?.posts || []);
@@ -112,7 +112,7 @@ export const PostList = ({ profile }: { profile: User | null }) => {
                                 </div>
                             </div>
                             {ShowModalDelete && postId &&(
-                                <PopupModel
+                                <PopupModelCheck
                                     onClick={() => {
                                         handleDelete(postId);
                                     }}
