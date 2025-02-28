@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { Topic } from "@/types/types";
 import { PostData } from "@/types/types";
 import { fetchTopics } from "@/app/api/topicServices";
+import ErrorText from "@/app/components/ErrorText";
 
 export default function page() {
     const [title, setTitle] = useState<string>("");
@@ -194,7 +195,9 @@ export default function page() {
                     </div>
                 </header>
 
-                {error && <div className="error text-red-500">{error}</div>}
+                {error && (
+                <ErrorText error={error} />
+                )}
 
                 <div className="lg:grid-cols-3 gap-6 mb-5 p-4">
                     {/* <!-- ส่วนเขียนโพส --> */}

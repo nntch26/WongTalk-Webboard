@@ -64,10 +64,10 @@ export default function Sidebar({ onClickOpen }: { onClickOpen: boolean }) {
                                 <i className="fa-solid fa-arrow-up-right-dots mr-3"></i>
                                 <span>Top Posts</span>
                             </Link>
-                            <Link href="#" className={styles.sidenavitem}>
+                            {/* <Link href="#" className={styles.sidenavitem}>
                                 <i className="fas fa-star mr-3"></i>
                                 <span>Following</span>
-                            </Link>
+                            </Link> */}
                         </div>
                     </div>
 

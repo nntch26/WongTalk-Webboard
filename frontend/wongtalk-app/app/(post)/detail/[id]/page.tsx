@@ -8,16 +8,15 @@ import { PostDetail, Topic, CommentData, User } from '@/types/types'
 import { fetchPostDetail } from '@/app/api/postServices'
 import { fetchTopic } from '@/app/api/topicServices'
 import { AddComment, DeleteComment, EditComment } from '@/app/api/commentServices'
-// import { getToken } from '@/app/api/profileServices'
 
-import TopicTag from '@/app/components/topic/TopicTag'
 import TopicSidebar from '@/app/components/topic/TopicSidebar '
 import PopupModalLogin from '@/app/components/popup/PopupModalLogin'
 import PopupModelCheck from '@/app/components/popup/PopupModelCheck'
 
 import styles from '@/app/components/styles/Maincontent.module.css'
 import { useAuth } from '@/app/hook/useAuth'
-import ReactionButton from '@/app/components/home/ReactionButton'
+import PostDetailCard from '@/app/components/detail/PostDetailCard'
+import ErrorText from '@/app/components/ErrorText'
 
 
 
@@ -123,6 +122,7 @@ export default function page() {
             setShowModal(true)
             return
         }
+       
         
         try {
             setError("")
@@ -217,8 +217,6 @@ export default function page() {
         }
     }
 
-
-
     useEffect(() => {
         getPostDetail()
         getTopicList()
@@ -251,38 +249,10 @@ export default function page() {
           {/* <!-- Left Post --> */}
           {post &&(
             <div className="flex-1">
-              {/* Post Detail */}
-              <div className="bg-[--second-DarkMidnight] rounded-xl p-4 lg:p-8 mb-4">
-                  {/* <!-- profile --> */}
-                    <div className="flex items-start mb-6">
-                        <div className="w-full">
-                            <div className="flex items-center gap-3">
-                                <img src={`/uploads/${post.Post[0].userId.image}`} alt="Avatar" className="w-10 h-10 rounded-full" />
-                                <div>
-                                    <div className="text-sm md:text-base text-[--primary-color]">{post.Post[0].userId.fullname}</div>
-                                    <div className="text-gray-500 text-sm md:text-md">{post.Post[0].time}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* <!-- content post --> */}
-                    <div className="mb-3 text-while">
-                        <h1 className="text-xl md:text-4xl font-bold mb-3">{post.Post[0].title}</h1>
-                        {/* <!-- Topic tag--> */}
-                        <TopicTag key={post.Post[0].topicId._id} post={post.Post[0]} />
-
-                        <p className="text-xs md:text-base">{post.Post[0].content} </p>
-                    
-                    </div>
-
-                   {/* <!-- Actions (Likes & Comments) --> */}
-                    <ReactionButton key={post.Post[0]._id} post={post.Post[0]}/>
-                   
-                  <hr className="border-0 h-px bg-gray-800 rounded-xl my-2 w-full mx-auto" />
-
-              </div>
-            
+              
+              {/* ส่วนของเนื้อหา Post Detail */}
+              <PostDetailCard key={post.Post[0]._id}  post={post.Post[0]}/>
+                
             
               {/* <!-- ส่วน Comment --> */}
               <div id='allcomment' className="flex-1 mt-8">
@@ -296,10 +266,13 @@ export default function page() {
                           </span>
                       </div>
 
-                      {error && (<div className="error text-red-500">{error}</div>) }
-
-                      {/* <!-- Comment input --> */}
-                      <form onSubmit={handleAddComment}>
+                        {/* Error */}
+                        {error && (
+                        <ErrorText error={error} />
+                        )}
+                      
+                        {/* <!-- Comment input --> */}
+                        <form onSubmit={handleAddComment}>
 
                             <div className='flex  gap-4 mb-4'>
                                 {islogin ?(
@@ -315,22 +288,30 @@ export default function page() {
                                     value={content || ''}
                                     onChange={(e) => setContent(e.target.value)}
                                     onFocus={handleCommentFocus} // ถ้าคลิกให้โชว์ปุ่ม
-                                    onBlur={(e) => !e.target.value && setIsFocused(false)} // ซ่อนปุ่มถ้าไม่มีข้อความไร
                                     readOnly={!islogin} // พิมไม่ได้ ถ้ายังไม่ล็อคอิน
                                 ></textarea>
                             </div>
 
                             {isFocused &&(
                                 <div className="text-right">
+                                    <button
+                                    onClick={(e) => {
+                                        setIsFocused(false);
+                                        setError("");
+                                    }}
+                                    className="px-4 py-2 mr-3 bg-gray-700 text-gray-300 font-medium rounded-lg hover:bg-gray-500">
+                                        cancel
+                                    </button>
+
                                     <button type='submit' 
-                                    className="px-4 py-2 bg-green-400 text-gray-900 font-semibold rounded-lg hover:bg-green-600">
+                                    className="px-4 py-2 bg-green-400 text-gray-900 font-semibold rounded-lg hover:bg-green-500">
                                         Post
                                     </button>
+                                    
                                 </div>
                             )}
-                      </form>
+                        </form>
 
-                
                       <hr className="border-0 h-px bg-gray-800 rounded-xl my-5 w-full mx-auto" />
 
                       {/* <!-- all comment --> */}
