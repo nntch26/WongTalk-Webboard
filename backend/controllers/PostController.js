@@ -18,7 +18,7 @@ const getAllPost = async (req, res) => {
         // สุ่มโพสต์
         const randomPosts = allPosts.sort(() => 0.5 - Math.random()); //.slice(0, 10);
 
-        // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+        // แปลงข้อมูล แปลงเวลา
         const modifiedPosts = randomPosts.map((post) => ({
             ...post,
             // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
@@ -52,7 +52,7 @@ const getLatestPost = async (req, res) => {
             .sort({ createdAt: -1 }) // เรียงจากใหม่ไปเก่า
             .lean();
 
-        // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+        // แปลงข้อมูล แปลงเวลา
         const modifiedPosts = allPosts.map((post) => ({
             ...post,
             // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
@@ -89,7 +89,7 @@ const getPostsTop = async (req, res) => {
             .sort({ likes: -1 }) // เรียงจากมากไปน้อย
             .lean(); // แปลงเป็น JSON object
 
-        // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+        // แปลงข้อมูล แปลงเวลา
         const modifiedPosts = allPosts.map((post) => ({
             ...post,
             // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
@@ -140,7 +140,7 @@ const Search = async (req, res) => {
             .sort(() => 0.5 - Math.random())
             .slice(0, 10);
 
-        // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+        // แปลงข้อมูล แปลงเวลา
         const modifiedPosts = randomPosts.map((post) => ({
             ...post,
             // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
@@ -189,7 +189,7 @@ const getPostTopic = async (req, res) => {
             .sort({ createdAt: -1 }) // เรียงจากใหม่ไปเก่า
             .lean(); // แปลงเป็น JSON object
 
-        // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+        // แปลงข้อมูล แปลงเวลา
         const modifiedPosts = posts.map((post) => ({
             ...post,
             // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
@@ -238,7 +238,7 @@ const getPostsTopInTopic = async (req, res) => {
             .limit(5) // จำกัดผลลัพธ์ 5 โพสต์
             .lean(); // แปลงเป็น JSON object
 
-        // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+        // แปลงข้อมูล แปลงเวลา
         const modifiedPosts = posts.map((post) => ({
             ...post,
             // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
@@ -285,7 +285,7 @@ const getPostDetail = async (req, res) => {
             .populate({ path: "userId", select: "fullname image" })
             .lean(); // แปลงเป็น JSON object
 
-        // แปลงข้อมูลให้ `likes` และ `commentCount` เป็นตัวเลขที่ถูกต้อง
+        // แปลงข้อมูล แปลงเวลา
         
         const modifiedPosts = Array.of(posts).map((post) => ({
             ...post,
@@ -312,6 +312,9 @@ const getPostDetail = async (req, res) => {
             createdAt: moment(comment.createdAt).tz("Asia/Bangkok").format("MMM D"), // แปลงวันที่
         }));
 
+         // สุ่มคอมเม้น
+        const randomComment = modifiedComment.sort(() => 0.5 - Math.random()); //.slice(0, 10);
+
 
         
         console.log(comments);
@@ -320,7 +323,7 @@ const getPostDetail = async (req, res) => {
             success: true,
             data:{
                 Post: modifiedPosts,
-                allComments: modifiedComment,
+                allComments: randomComment,
             }
 
         });
