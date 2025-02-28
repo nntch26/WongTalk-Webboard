@@ -312,6 +312,9 @@ const getPostDetail = async (req, res) => {
             createdAt: moment(comment.createdAt).tz("Asia/Bangkok").format("MMM D"), // แปลงวันที่
         }));
 
+         // สุ่มคอมเม้น
+        const randomComment = modifiedComment.sort(() => 0.5 - Math.random()); //.slice(0, 10);
+
 
         
         console.log(comments);
@@ -320,7 +323,7 @@ const getPostDetail = async (req, res) => {
             success: true,
             data:{
                 Post: modifiedPosts,
-                allComments: modifiedComment,
+                allComments: randomComment,
             }
 
         });
