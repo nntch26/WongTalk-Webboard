@@ -70,7 +70,7 @@ export default function Home() {
     return (
         <>
             <Navbar />
-            <Sidebar />
+            <Sidebar onClickOpen={false} />
             {/* <!-- Main Content --> */}
             <div
                 id="main-content"

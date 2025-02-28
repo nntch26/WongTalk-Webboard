@@ -101,18 +101,31 @@ export default function page() {
         e.preventDefault();
 
         // เช็คก่อนว่า มีค่าป่าว
-        if (title && content && topic) {
-            // เช็คว่าเป็น edit post หรือป่าว
-            if (isEditing) {
-                await editPost();
-            } else {
-                await createPost();
-                localStorage.removeItem("savedata");
-            }
-        } else {
+        if (!title || !content || !topic) {
             setError("Please fill in all fields.");
             return;
         }
+
+        // เช็คว่าเป็น edit post หรือป่าว
+        if (isEditing) {
+
+            // เช็คว่า หัวเรื่อง กับ เนื้อหา น้อยเกินไป่าว
+            if (title.length < 5 || content.length < 10) {
+                setError("Title must be at least 5 characters and content must be at least 10 characters.");
+                return;
+            }
+            await editPost();
+
+        } else {
+
+            if (title.length < 5 || content.length < 10) {
+                setError("Title must be at least 5 characters and content must be at least 10 characters.");
+                return;
+            }
+            await createPost(); 
+            localStorage.removeItem("savedata");
+        }
+      
     };
 
     // กด Save Draft
@@ -199,15 +212,14 @@ export default function page() {
                                         } // เก็บค่าจาก input value ของ title
                                         className={`${stylesp.placeholder} ${stylesp.inputfocus} 
                                         w-full px-4 py-6 bg-[--second-DarkMidnight] border-b-2 border-[rgba(255,255,255,0.1)] rounded-lg text-lg`}
-                                        maxLength={300}
+                                        maxLength={100}
                                     />
 
                                     <textarea
                                         placeholder="Write your post content here..."
                                         value={content}
                                         onChange={(e) =>
-                                            setContent(e.target.value)
-                                        }
+                                            setContent(e.target.value)}
                                         className={`${stylesp.inputfocustext} w-full px-4 py-3 bg-[--second-DarkMidnight] border border-[rgba(255,255,255,0.1)] rounded-lg min-h-[300px]`}
                                     ></textarea>
                                 </div>
