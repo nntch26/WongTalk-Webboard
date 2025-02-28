@@ -1,5 +1,5 @@
 import { useState } from "react";
-import PopupModel from "../popup/PopupModel";
+import PopupModelCheck from "../popup/PopupModelCheck";
 import { logout } from "@/app/api/authServices";
 import { useRouter } from "next/navigation";
 
@@ -41,7 +41,7 @@ export const ProfileHeader = ({
                         ></i>
                     </button>
                     {showModalLogout && (
-                        <PopupModel
+                        <PopupModelCheck
                             onClick={() => handleLogout()}
                             onClose={() => setShowModalLogout(false)}
                             titletext="Logout Account ?"

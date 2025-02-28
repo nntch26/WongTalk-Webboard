@@ -13,6 +13,7 @@ import { User } from "@/types/types";
 
 export default function EditProfile() {
     const [user, setUser] = useState<User>({
+        _id: "",
         fullname: "",
         username: "",
         email: "",
@@ -67,7 +68,9 @@ export default function EditProfile() {
         const formData = new FormData();
         formData.append("fullname", user.fullname);
         formData.append("username", user.username);
-        formData.append("email", user.email);
+        if (user.email) {
+            formData.append("email", user.email);
+        }
 
         if (fileOld) {
             formData.append("fileOld", fileOld);
