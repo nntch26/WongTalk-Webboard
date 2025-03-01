@@ -159,7 +159,7 @@ http://localhost:3000
 
 
 ## หน้าหลักของเว็บไซต์
-![image](https://github.com/user-attachments/assets/cd183362-7ad8-4c20-abf2-7690b33e3ba6)
+![image](https://github.com/user-attachments/assets/a84d773b-72fc-498e-a20b-350df6056190)
 
 ## หน้าเนื้อหาในโพสต์กระทู้และส่วนแสดงความคิดเห็น 
 ![image](https://github.com/user-attachments/assets/2a9d4ba4-16b5-4f17-87e1-cd17e02803c9)
