@@ -125,7 +125,7 @@ export default function page() {
         setIsLoading(true);
         setTimeout(() => {
             setTopicId(id);
-        }, 300); // หน่วงเวลา 0.3 ก่อนเปลี่ยน topicId
+        }, 500); // หน่วงเวลา 0.3 ก่อนเปลี่ยน topicId
         
     }
 

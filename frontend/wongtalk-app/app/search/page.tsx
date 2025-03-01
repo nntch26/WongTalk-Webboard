@@ -87,12 +87,10 @@ export default function Home() {
                             {/*  ฝั่งซ้าย โพส */}
                             <div className="flex-1">
                                 {/* <!-- Post  --> */}
-                                {morePosts && morePosts.length > 0 ? (
+                                {morePosts && morePosts.length > 0 &&(
                                     morePosts.map((post) => (
                                         <PostCard key={post._id} post={post} />
                                     ))
-                                ) : (
-                                    <div>Loading...</div>
                                 )}
 
                                 {/* <!-- ปุ่มดูเพิ่มเติม --> */}
@@ -114,6 +112,7 @@ export default function Home() {
                             </div>
                         </div>
                     ) : (
+                        // ไม่มีโพสที่ค้นหา
                         <h2 className="text-gray-400 text-xl text-center">
                             No matching posts found.
                         </h2>
