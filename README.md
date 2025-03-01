@@ -28,15 +28,9 @@
 - nodemon: ใช้ในการรีสตาร์ทเซิร์ฟเวอร์โดยอัตโนมัติเมื่อมีการเปลี่ยนแปลงโค้ด
 - moment-timezone: ใช้สำหรับจัดการเวลาภายในเขตเวลาต่างๆ
 
-## Environment Variables
-```bash
-PORT=8000 // กำหนดพอร์ตสำหรับเซิร์ฟเวอร์
-MONGO_URI=mongodb://localhost:27017/mydb // เชื่อมต่อกับ MongoDB ที่ localhost ใช้ฐานข้อมูลชื่อ mydb 
-JWT_SECRET =    // รหัสสำหรับเข้ารหัสและถอดรหัส JWT
-```
 
 ## Installation and Setup
-### 1.Setup Backend
+### 1. Setup Backend
 1. เปิดเทอร์มินัล (หรือ Command Prompt) และไปที่โฟลเดอร์ที่ backend
 ```bash
 cd backend
@@ -52,14 +46,20 @@ npm init -y
 npm install bcryptjs body-parser cookie-parser cors dotenv express jsonwebtoken mongoose morgan nodemon moment-timezone
 ```
 
-2.สร้างไฟล์ package.json (ถ้ายังไม่มี)
-```bash
-npm init -y
+4.สร้างไฟล์ ```.env```  ตั้งค่าตัวแปรในไฟล์ .env ที่ใช้ในการตั้งค่าคอนฟิกต่างๆ สำหรับแอปพลิเคชัน ดังนี้
+## Environment Variables
+```
+PORT=8000 // กำหนดพอร์ตสำหรับเซิร์ฟเวอร์
+MONGO_URI=mongodb://localhost:27017/mydb // เชื่อมต่อกับ MongoDB ที่ localhost ใช้ฐานข้อมูลชื่อ mydb 
+JWT_SECRET =    // รหัสสำหรับเข้ารหัสและถอดรหัส JWT
 ```
 
+5.เริ่มต้นเซิร์ฟเวอร์ สำหรับ backend ใช้ nodemon เพื่อรันเซิร์ฟเวอร์
 ```bash
-npm init
+nodemon index.js
 ```
+
+
 
 ## NextJS
 
