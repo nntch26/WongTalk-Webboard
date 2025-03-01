@@ -106,5 +106,54 @@ npm run dev
 http://localhost:3000
 ```
 
+## API Endpoints
+
+### **Authentication**
+
+| **Method** | **Endpoint**                  | **Description**             |
+|------------|-------------------------------|-----------------------------|
+| POST       | /register                     | สมัครสมาชิกใหม่            |
+| POST       | /login                        | เข้าสู่ระบบ                 |
+
+
+### **User Profile**
+
+| **Method** | **Endpoint**                  | **Description**             |
+|------------|-------------------------------|-----------------------------|
+| GET        | /users                        | ดูข้อมูลผู้ใช้ทั้งหมด     |
+| POST       | /profile                      | แก้ไขโปรไฟล์               |
+| POST       | /showfollow                   | แสดง Topic ที่ติดตาม       |
+
+### **Topic Management**
+
+| **Method** | **Endpoint**                  | **Description**             |
+|------------|-------------------------------|-----------------------------|
+| POST       | /follow                       | ติดตาม Topic                |
+| GET        | /getAllTopic                  | ดึง Topic ทั้งหมด           |
+
+
+### **Post Management**
+
+| **Method** | **Endpoint**                  | **Description**             |
+|------------|-------------------------------|-----------------------------|
+| GET        | /posts                        | ดึงรายการโพสต์ทั้งหมด     |
+| POST       | /posts                        | สร้างโพสต์ใหม่             |
+| PUT        | /posts/:id                    | แก้ไขโพสต์                 |
+| DELETE     | /posts/:id                    | ลบโพสต์                    |
+| PUT        | /posts/reactions              | กดไลค์โพสต์                |
+
+### **Comment Management**
+
+| **Method** | **Endpoint**                  | **Description**             |
+|------------|-------------------------------|-----------------------------|
+| POST       | /comments/                    | สร้างความคิดเห็น           |
+| PUT        | /comments/:commentId/         | แก้ไขความคิดเห็น           |
+| DELETE     | /comments/:commentId/:postId  | ลบความคิดเห็น              |
+
+### **Search**
+
+| **Method** | **Endpoint**                  | **Description**             |
+|------------|-------------------------------|-----------------------------|
+| GET        | /search                       | ค้นหาโพสต์                |
 
 
