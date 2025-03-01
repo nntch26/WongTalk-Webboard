@@ -29,24 +29,25 @@
 - moment-timezone: ใช้สำหรับจัดการเวลาภายในเขตเวลาต่างๆ
 
 
-## Installation and Setup
-### 1. Setup Backend
+# Installation and Setup
+## 1. Setup Backend
 1. เปิดเทอร์มินัล (หรือ Command Prompt) และไปที่โฟลเดอร์ที่ ```backend```
 ```bash
 cd backend
 ```
 
-2.สร้างไฟล์ ```package.json``` (ถ้ายังไม่มี)
+2. สร้างไฟล์ ```package.json``` (ถ้ายังไม่มี)
 ```bash
 npm init -y
 ```
 
-3.ติดตั้ง Backend Dependencies
+3. ติดตั้ง Backend Dependencies
 ```bash
-npm install bcryptjs body-parser cookie-parser cors dotenv express jsonwebtoken mongoose morgan nodemon moment-timezone
+npm install bcryptjs body-parser cookie-parser cors dotenv express jsonwebtoken mongoose morgan moment-timezone
+npm install --save-dev nodemon
 ```
 
-4.สร้างไฟล์ ```.env```  ตั้งค่าตัวแปรในไฟล์ที่ใช้ในการตั้งค่าคอนฟิกต่างๆ สำหรับแอปพลิเคชัน ดังนี้
+4. สร้างไฟล์ ```.env```  ตั้งค่าตัวแปรในไฟล์ที่ใช้ในการตั้งค่าคอนฟิกต่างๆ สำหรับแอปพลิเคชัน ดังนี้
 ### Environment Variables
 ```
 PORT=8000
@@ -58,7 +59,7 @@ JWT_SECRET =
 - MONGO_URI=  เชื่อมต่อกับ MongoDB ที่ localhost ใช้ฐานข้อมูลชื่อ mydb 
 - JWT_SECRET =   รหัสสำหรับเข้ารหัสและถอดรหัส JWT
 
-5.เริ่มต้นเซิร์ฟเวอร์ สำหรับ backend ใช้ ```nodemon``` เพื่อรันเซิร์ฟเวอร์
+5. เริ่มต้นเซิร์ฟเวอร์ สำหรับ backend ใช้ ```nodemon``` เพื่อรันเซิร์ฟเวอร์
 ```bash
 nodemon index.js
 ```
