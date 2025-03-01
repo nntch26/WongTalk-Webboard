@@ -23,7 +23,7 @@ export default function PopupModalLogin({ onClose }: {onClose: () => void;}) {
                 </p>
 
                 {/* ปุ่ม Log in กับ Create Account */}
-                <div className="mt-4 flex flex-col space-y-2">
+                <div className="mt-4 flex flex-col space-y-4">
                     <Link href={"/login"} className="w-full px-4 py-2 bg-[--primary-color] text-[--second-DarkMidnight] rounded-md hover:bg-green-400">
                         Log in
                     </Link>
