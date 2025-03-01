@@ -158,3 +158,14 @@ http://localhost:3000
 | GET        | /search                       | ค้นหาโพสต์                |
 
 
+## หน้าหลักของเว็บไซต์
+![image](https://github.com/user-attachments/assets/cd183362-7ad8-4c20-abf2-7690b33e3ba6)
+
+## หน้าเนื้อหาในโพสต์กระทู้และส่วนแสดงความคิดเห็น 
+![image](https://github.com/user-attachments/assets/2a9d4ba4-16b5-4f17-87e1-cd17e02803c9)
+
+## หน้าหมวดหมู่หัวข้อเนื้อหา (Topic)
+![image](https://github.com/user-attachments/assets/8dd4db1e-cbd4-4eb9-8cc0-ecec4fc3c9b3)
+
+## หน้าโปรไฟล์ของผู้ใช้ 
+![image](https://github.com/user-attachments/assets/1ad95906-65eb-4254-92c8-ab3687cf31de)
