@@ -2,7 +2,7 @@
 
 โปรเจกต์รายวิชาการพัฒนาเว็บฝั่งไคลเอนต์ 06016429 CLIENT-SIDE WEB DEVELOPMENT (2/2024) <br>
 <p align="center">
-  <img src="frontend/wongtalk-app/public/logo2.png" alt="Logo" width="300" />
+  <img src="frontend/wongtalk-app/public/logo2.png" alt="Logo" width="200" />
 </p>
 
 
