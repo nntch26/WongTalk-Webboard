@@ -80,15 +80,31 @@ npm install --save-dev @types/js-cookie
 npm install --save @fortawesome/fontawesome-free
 ```
 
-## เริ่มต้นเซิร์ฟเวอร์
-- เริ่มต้นเซิร์ฟเวอร์ สำหรับ backend ใช้ ```nodemon``` เพื่อรันเซิร์ฟเวอร์
+## รันแอปพลิเคชัน
+- สำหรับ backend ใช้ ```nodemon``` เพื่อรันเซิร์ฟเวอร์ (ต้องอยู่ในโฟลเดอร์ backend )
 ```bash
+cd backend
 nodemon index.js
 ```
 
-- สำหรับ frontend ใช้คำสั่ง ```npm run dev``` เพื่อเริ่มต้นเซิร์ฟเวอร์ของ Next.js
+หากรันสำเร็จจะแสดงความข้อความบนเทอร์มินัล ว่า
+```
+-------------------------
+Server is running on port: 8000
+MongoDB Connected: localhost
+```
+
+- สำหรับ frontend ใช้คำสั่ง ```npm run dev``` เพื่อเริ่มต้นเซิร์ฟเวอร์ของ Next.js (ต้องอยู่ในโฟลเดอร์ frontend/wongtalk-app )
 ```bash
+cd frontend
+cd wongtalk-app
 npm run dev
 ```
+
+หากรันสำเร็จ เข้าถึงได้ที่ 
+```
+http://localhost:3000
+```
+
 
 
