@@ -59,10 +59,7 @@ JWT_SECRET =
 - MONGO_URI=  เชื่อมต่อกับ MongoDB ที่ localhost ใช้ฐานข้อมูลชื่อ mydb 
 - JWT_SECRET =   รหัสสำหรับเข้ารหัสและถอดรหัส JWT
 
-5. เริ่มต้นเซิร์ฟเวอร์ สำหรับ backend ใช้ ```nodemon``` เพื่อรันเซิร์ฟเวอร์
-```bash
-nodemon index.js
-```
+
 
 ## 2. Setup Frontend (Next.js)
 1. เปิดเทอร์มินัล (หรือ Command Prompt) และไปที่โฟลเดอร์ที่ ```wongtalk-app```
@@ -83,7 +80,13 @@ npm install --save-dev @types/js-cookie
 npm install --save @fortawesome/fontawesome-free
 ```
 
-4. เริ่มต้นเซิร์ฟเวอร์ สำหรับ frontend ใช้คำสั่ง ```npm run dev``` เพื่อเริ่มต้นเซิร์ฟเวอร์ของ Next.js
+## เริ่มต้นเซิร์ฟเวอร์
+- เริ่มต้นเซิร์ฟเวอร์ สำหรับ backend ใช้ ```nodemon``` เพื่อรันเซิร์ฟเวอร์
+```bash
+nodemon index.js
+```
+
+- สำหรับ frontend ใช้คำสั่ง ```npm run dev``` เพื่อเริ่มต้นเซิร์ฟเวอร์ของ Next.js
 ```bash
 npm run dev
 ```
