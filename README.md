@@ -47,7 +47,7 @@ npm install bcryptjs body-parser cookie-parser cors dotenv express jsonwebtoken 
 npm install --save-dev nodemon
 ```
 
-4. สร้างไฟล์ ```.env```  ตั้งค่าตัวแปรในไฟล์ที่ใช้ในการตั้งค่าคอนฟิกต่างๆ สำหรับแอปพลิเคชัน ดังนี้
+4. สร้างไฟล์ ```.env```  จากนั้นตั้งค่าตัวแปรในไฟล์ ที่ใช้ในการตั้งค่าคอนฟิกต่างๆ สำหรับแอปพลิเคชัน ดังนี้
 ### Environment Variables
 ```
 PORT=8000
