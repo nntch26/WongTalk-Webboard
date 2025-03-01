@@ -50,6 +50,7 @@ export default function PostCard({ post }: { post: Post }) {
                     </div>
                 </div>
             </div>
+            
         </>
     );
 }

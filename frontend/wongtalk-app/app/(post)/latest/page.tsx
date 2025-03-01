@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -14,6 +14,8 @@ import Navbar from "@/app/components/Navbar";
 import { Topic } from "@/types/types";
 import ButtonViewMore from "@/app/components/home/ButtonViewMore";
 
+// Skeleton loading
+import { SkeletonPostsLoading } from "@/app/components/ui/Skeletons";
 
 export default function page() {
     const [postslatest, setPostsLatest] = useState<Post[]>([]);
@@ -26,8 +28,11 @@ export default function page() {
         try {
             const getdata = await fetchPostNew();
             console.log("data ", getdata);
-            setPostsLatest(getdata);
-            setMorePosts(getdata.slice(0,num))
+            setTimeout(() => {
+                setPostsLatest(getdata);
+                setMorePosts(getdata.slice(0,num))
+            }, 600)
+            
         } catch (error) {
             console.log("Error fetching ", error);
         }
@@ -97,16 +102,14 @@ export default function page() {
                         {/* ฝั่งซ้าย โพส */}
                         <div className="flex-1">
                             {/* <!-- Post  --> */}
-                            {morePosts && morePosts.length > 0 ? (
-                                morePosts.map((post) => {
-                                    console.log("Post Data:", post);
-                                    return (
-                                        <PostCard key={post._id} post={post} />
-                                    );
-                                })
-                            ) : (
-                                <div>Loading...</div>
-                            )}
+                            <Suspense fallback={<SkeletonPostsLoading />}>
+                                {morePosts && morePosts.length > 0? (
+                                    morePosts.map((post) => (
+                                        <PostCard key={post._id} post={post} />))
+                                ) : (
+                                    <SkeletonPostsLoading />
+                                )}
+                            </Suspense>
 
                             {/* <!-- ปุ่มดูเพิ่มเติม --> */}
                             {morePosts.length < postslatest.length &&(
