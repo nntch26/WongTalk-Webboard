@@ -15,7 +15,7 @@
 ### Frontend
 
 -   [Next.js](https://nextjs.org/) - React Framework สำหรับการสร้างเว็บแอปพลิเคชัน
-
+-   [TypeScript](https://www.typescriptlang.org/) - Superset ของ JavaScript ที่เพิ่ม Type Safety
 -   [TailwindCSS](https://tailwindcss.com/) - สำหรับการจัดการ Style
 
 ### Backend
