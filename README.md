@@ -159,13 +159,13 @@ http://localhost:3000
 
 
 ## หน้าหลักของเว็บไซต์
-![image](https://github.com/user-attachments/assets/a84d773b-72fc-498e-a20b-350df6056190)
+![image](https://github.com/user-attachments/assets/afe79de7-b770-4c18-ab0c-849a11ffb2e8)
 
 ## หน้าเนื้อหาในโพสต์กระทู้และส่วนแสดงความคิดเห็น 
-![image](https://github.com/user-attachments/assets/2a9d4ba4-16b5-4f17-87e1-cd17e02803c9)
+![image](https://github.com/user-attachments/assets/c608daed-cc92-45f4-bb95-298ca480b0f2)
 
 ## หน้าหมวดหมู่หัวข้อเนื้อหา (Topic)
-![image](https://github.com/user-attachments/assets/8dd4db1e-cbd4-4eb9-8cc0-ecec4fc3c9b3)
+![image](https://github.com/user-attachments/assets/c154b653-3392-438c-9a0f-509cd3734996)
 
 ## หน้าโปรไฟล์ของผู้ใช้ 
-![image](https://github.com/user-attachments/assets/1ad95906-65eb-4254-92c8-ab3687cf31de)
+![image](https://github.com/user-attachments/assets/33e11583-1df0-4cde-9a42-ad98ce4705d2)
