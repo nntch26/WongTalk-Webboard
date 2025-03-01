@@ -64,26 +64,28 @@ JWT_SECRET =
 nodemon index.js
 ```
 
+## 2. Setup Frontend (Next.js)
+1. เปิดเทอร์มินัล (หรือ Command Prompt) และไปที่โฟลเดอร์ที่ ```wongtalk-app```
+```bash
+cd frontend
+cd wongtalk-app
+```
 
+2. สร้างไฟล์ ```package.json``` (ถ้ายังไม่มี)
+```bash
+npm init -y
+```
 
-## NextJS
-
+3. ติดตั้ง Frontend Dependencies
 ```bash
 npm install axios
-```
-
-```bash
 npm install --save-dev @types/js-cookie
-```
-
-## Install Express
-
-```bash
-npm install bcryptjs body-parser cookie-parser cors dotenv express jsonwebtoken mongoose morgan nodemon moment-timezone
-```
-
-## ใช้ไอคอน Font Awesome
-
-```bash
 npm install --save @fortawesome/fontawesome-free
 ```
+
+4. เริ่มต้นเซิร์ฟเวอร์ สำหรับ frontend ใช้คำสั่ง ```npm run dev``` เพื่อเริ่มต้นเซิร์ฟเวอร์ของ Next.js
+```bash
+npm run dev
+```
+
+
