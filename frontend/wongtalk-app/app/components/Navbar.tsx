@@ -20,6 +20,8 @@ export default function Navbar() {
     const [profile, setProfile] = useState<User | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [token, setToken] = useState<string | null>(null);
+    const [suggestions, setSuggestions] = useState<string[]>([]);
+
 
     const fetchProfile = async () => {
         try {
@@ -36,13 +38,21 @@ export default function Navbar() {
     };
 
     const handleSearch = async () => {
+        if (!search.trim()) {
+            return;
+        }
         try {
+            console.log("search word",search)
+
             const getSearch = await SearchPost(search);
+            console.log("getSearch",getSearch)
             localStorage.setItem(
                 "searchResult",
                 JSON.stringify(getSearch.data)
             );
+            setSuggestions([]);  // ลบคำแนะนำ
             router.push(`/search?query=${encodeURIComponent(search)}`); // ส่งคำที่ค้นหาไปที่ params ตรง URL
+
         } catch (error: any) {
             // Type assertion to 'any'
             if (error.response) {
@@ -54,44 +64,66 @@ export default function Navbar() {
             }
         }
     };
+    
+    const handleSuggestion = async (search: string)=>{
+        // ถ้าเปนช่องว่าง ส่งเปนลิสเปล่า
+        if (!search.trim()) {
+            setSuggestions([]);
+            return;
+        }
+        try {
+            const getSearch = await SearchPost(search);
+            // ดึงแค่ title
+            const titles = getSearch.data.map((suggestion: { title: string }) => suggestion.title);
+        setSuggestions(titles); 
+        } catch (error) {
+            console.error("Error fetching suggestions:", error);
+            setSuggestions([]);
+        }
 
+    }
+
+    // เลือกคำค้นหา จากอันที่แนะนำ
+    const handleSelectSuggestion = async (suggestion: string) => {
+        console.log("SelectSuggestion -->:", suggestion);
+        setSearch(suggestion)
+        setSuggestions([]); // ลบคำแนะนำ
+    
+        try {
+            console.log("search word2", suggestion); 
+    
+            const getSearch = await SearchPost(suggestion);
+            localStorage.setItem(
+                "searchResult",
+                JSON.stringify(getSearch.data)
+            );
+            router.push(`/search?query=${encodeURIComponent(suggestion)}`);
+    
+        } catch (error: any) {
+            if (error.response) {
+                console.log("No matching posts found");
+                localStorage.setItem("searchResult", JSON.stringify([]));
+                router.push("/search");
+            } else {
+                console.error("errorsss", error);
+            }
+        }
+    };
+    
     // ดึง user
     useEffect(() => {
         fetchProfile();
     }, []);
+
 
     const toggleSidenav = (): void => {
         console.log(sidenavOpen);
         setSidenavOpen(!sidenavOpen); // ถ้ากดที่ เบอร์เกอร์เมนู ให้เปิดปิด
     };
 
-    // ฟังก์ชันเปิดปิด sidenav ถ้าคลิกด้านนอก
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent): void => {
-            const sidenav = document.getElementById("sidenav");
-            const toggleButton = document.getElementById("toggle-button");
-            const overlay = document.getElementById("overlay");
+    console.log("search:",search)
+    console.log("search results:",suggestions)
 
-            // ตรวจสอบว่า click outside หรือไม่
-            if (
-                sidenavOpen &&
-                sidenav &&
-                toggleButton &&
-                overlay &&
-                !sidenav.contains(event.target as Node) &&
-                !toggleButton.contains(event.target as Node) &&
-                !overlay.contains(event.target as Node)
-            ) {
-                setSidenavOpen(false);
-            }
-        };
-
-        document.addEventListener("click", handleClickOutside);
-
-        return () => {
-            document.removeEventListener("click", handleClickOutside);
-        };
-    }, [sidenavOpen]);
 
     return (
         <>
@@ -129,7 +161,8 @@ export default function Navbar() {
                                 type="text"
                                 placeholder="Search..."
                                 className={styles.searchbar}
-                                onChange={(e) => setSearch(e.target.value)}
+                                value={search}
+                                onChange={(e) => {setSearch(e.target.value); handleSuggestion(e.target.value)}}
                                 onKeyDown={(e) => e.key === "Enter" && handleSearch()} // กด Enter ค้นหาได้ โครตเจ๋ง 555555555
                             />
                             <button
@@ -138,8 +171,29 @@ export default function Navbar() {
                             >
                                 <i className="fas fa-search text-gray-300"></i>
                             </button>
+
+                            {/* โชว์คำค้นหาใกล้เคียง */}
+
+                            {suggestions.length > 0 && (
+                                <ul className="absolute bg-[--second-DarkMidnight] border border-gray-700 rounded-md p-4 mt-10 w-[57%] z-30">
+                                    {suggestions.map((suggestion, index) => (
+                                        <li
+                                            key={index}
+                                            className="p-2 cursor-pointer hover:bg-gray-800"
+                                            onClick={() => {handleSelectSuggestion(suggestion)}}
+                                        >
+                                            {suggestion}
+                                        </li>
+                                    ))}
+                                    <hr className="border-gray-700 mt-2 mb-2" />
+                                    <li className="text-gray-400"><i className="fas fa-search text-gray-300 mr-2"></i>Search For "{search}"</li>
+                                </ul>
+                            )}
+                            
+
                         </div>
                     </div>
+
 
                     {/* <!-- ส่วนฝั่งขวา navbar --> */}
                     <div className="flex items-center gap-5">
