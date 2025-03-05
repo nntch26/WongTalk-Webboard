@@ -35,7 +35,7 @@ export default function Home() {
                 setAllPosts(getdata); // เก็บโพสต์ทั้งหมด
                 setMorePosts(getdata.slice(0, num)); // แสดงเฉพาะ 2 โพสแรก
 
-            }, 1000); // ดีเลย์ 1 วินาที
+            }, 800); // ดีเลย์ โหลดหน้าเว็บ
 
         } catch (error) {
             console.log("Error fetching ", error);
@@ -70,7 +70,7 @@ export default function Home() {
 
             setTimeout(() => {
                 setPostsnew(getdata); 
-            }, 1000); // ดีเลย์ 1 วินาที
+            }, 800); // ดีเลย์ โหลดหน้าเว็บ
             
         } catch (error) {
             console.log("Error fetching ", error);
