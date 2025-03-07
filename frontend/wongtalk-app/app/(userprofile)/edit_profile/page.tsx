@@ -269,11 +269,11 @@ export default function EditProfile() {
 
               {/* Popup Model */}
                     
-            {/* โชว์ตอน สร้างโพสสำเร็จ  */}
+            {/* โชว์ตอน แก้ไขสำเร็จ  */}
             {showModal  && <PopupModelSuccess                        
             onClick = {()=> router.push("/profile")}  // แก้ไขสำเร็จให้ไปที่หน้าโปรไฟล์
-            titletext = "Post Successful!"
-            subtext = "Your post has been published successfully."
+            titletext = "Profile Update Successful!"
+            subtext = "Your profile has been updated successfully."
             textbutton ="Done"
             onClose={() => setShowModal(false)}/>}  
         </>
