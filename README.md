@@ -81,8 +81,8 @@ npm install --save-dev nodemon
 
 ```
 PORT=8000
-MONGO_URI=mongodb://localhost:27017/mydb
-JWT_SECRET =
+MONGO_URI="mongodb+srv://usertest:3QNFM1NOB8BIln83@cluster0.681kq.mongodb.net/mydb?retryWrites=true&w=majority&appName=Cluster0"
+JWT_SECRET = s3cr3tK3y987!@#
 ```
 
 -   PORT= กำหนดพอร์ตสำหรับเซิร์ฟเวอร์
