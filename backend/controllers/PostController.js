@@ -80,7 +80,7 @@ const getLatestPost = async (req, res) => {
 const getPostsTop = async (req, res) => {
     try {
         const oneWeekAgo = new Date();
-        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7); // ย้อนกลับไป 7 วัน
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 14); // ย้อนกลับไป 
 
         const allPosts = await Post.find({ createdAt: { $gte: oneWeekAgo } })
             .select("title content likes commentCount createdAt")
@@ -99,7 +99,7 @@ const getPostsTop = async (req, res) => {
             //     .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
-        console.log(modifiedPosts);
+        console.log("ดึงโพสมาแรงที่สุด", modifiedPosts);
 
         res.status(200).json({
             success: true,
@@ -235,7 +235,7 @@ const getPostsTopInTopic = async (req, res) => {
             .populate({ path: "topicId", select: "name description icon" })
             .populate({ path: "userId", select: "fullname image" })
             .sort({ likes: -1 }) // เรียงตามจำนวน likes มากที่สุด
-            .limit(5) // จำกัดผลลัพธ์ 5 โพสต์
+            // .limit(5) // จำกัดผลลัพธ์ 5 โพสต์
             .lean(); // แปลงเป็น JSON object
 
         // แปลงข้อมูล แปลงเวลา

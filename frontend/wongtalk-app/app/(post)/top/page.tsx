@@ -27,6 +27,7 @@ export default function page() {
         try {
             const getdata = await fetchPostTop();
             console.log("poststop ------> ", getdata);
+            // ดึงโพสมาแรงที่สุด ใน 2 อาทิตนี้
             setTimeout(() => {
                 setPostsTop(getdata);
                 setMorePosts(getdata.slice(0, num))

@@ -25,7 +25,7 @@ export default function PostNew({newpost}: {newpost: Post[]}) {
                             className="w-10 h-10 rounded-full"
                         />
                         <div>
-                            <Link href="#">
+                            <Link href={`/detail/${newpost._id}`}>
                                 <h3 className="text-white">{newpost.title}</h3>
                             </Link>
                             <p className="text-gray-400 text-sm">

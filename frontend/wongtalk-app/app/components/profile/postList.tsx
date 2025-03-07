@@ -4,6 +4,7 @@ import { User } from "@/types/types";
 import { useRouter } from "next/navigation";
 
 import PopupModelCheck from "../popup/PopupModelCheck";
+import Link from "next/link";
 
 export const PostList = ({
     profile,
@@ -91,14 +92,20 @@ export const PostList = ({
                                 <p className="text-sm text-gray-600">
                                     {post.time}
                                 </p>
-                                <p className="mt-1 text-sm sm:text-base break-words">
-                                    {post.title}
-                                </p>
+                                <Link href={`/detail/${post._id}`}>
+                                    <p className="mt-1 text-sm sm:text-base break-words">
+                                        {post.title}
+                                    </p>
+                                </Link>
+                                
                                 <div className="flex justify-between mt-3 text-[#E8E9EA]/60 max-w-md">
-                                    <button className="flex items-center gap-1 text-sm hover:text-[#30E48E] transition-colors">
+                                <Link href={`/detail/${post._id}`}>
+                                <button className="flex items-center gap-1 text-sm hover:text-[#30E48E] transition-colors">
                                         <i className="fa-regular fa-comment-dots fa-lg"></i>
                                         <span>{post.commentCount}</span>
                                     </button>
+                                </Link>
+                                    
                                 </div>
                             </div>
 
