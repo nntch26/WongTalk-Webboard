@@ -15,7 +15,7 @@ import { ActionButtons } from "@/app/components/profile/button";
 import { ProfileTabs } from "@/app/components/profile/profileTab";
 import { PostList } from "@/app/components/profile/postList";
 import FollowTopicList from "@/app/components/profile/topicList";
-import { ProfileSkeleton } from "@/app/components/ui/Skeletons";
+import { ProfileSkeleton } from "@/app/components/UI/Skeletons";
 
 export default function Profile() {
     const [profile, setProfile] = useState<User | null>(null);

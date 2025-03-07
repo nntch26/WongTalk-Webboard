@@ -16,7 +16,7 @@ import Navbar from "./components/Navbar";
 import ButtonViewMore from "./components/home/ButtonViewMore";
 
 // Skeleton loading
-import { SkeletonPostsLoading,  SkeletonNewPost } from "./components/ui/Skeletons";
+import { SkeletonPostsLoading,  SkeletonNewPost } from "./components/UI/Skeletons";
     
 
 export default function Home() {

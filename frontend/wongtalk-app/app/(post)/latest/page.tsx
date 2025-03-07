@@ -15,7 +15,7 @@ import { Topic } from "@/types/types";
 import ButtonViewMore from "@/app/components/home/ButtonViewMore";
 
 // Skeleton loading
-import { SkeletonPostsLoading } from "@/app/components/ui/Skeletons";
+import { SkeletonPostsLoading } from "@/app/components/UI/Skeletons";
 
 export default function page() {
     const [postslatest, setPostsLatest] = useState<Post[]>([]);
