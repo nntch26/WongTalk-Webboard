@@ -175,7 +175,7 @@ export default function Navbar() {
                             {/* โชว์คำค้นหาใกล้เคียง */}
 
                             {suggestions.length > 0 && (
-                                <ul className="absolute bg-[--second-DarkMidnight] border border-gray-700 rounded-md p-4 mt-10 w-[57%] z-30">
+                                <ul className="absolute bg-[--second-DarkMidnight] border border-gray-700 rounded-md p-4 mt-10 w-5/12 z-30">
                                     {suggestions.map((suggestion, index) => (
                                         <li
                                             key={index}

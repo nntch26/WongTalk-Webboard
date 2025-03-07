@@ -11,6 +11,7 @@ import ErrorText from "@/app/components/ErrorText";
 
 // type
 import { User } from "@/types/types";
+import PopupModelSuccess from "@/app/components/popup/PopupModelSuccess";
 
 export default function EditProfile() {
     const [user, setUser] = useState<User>({
@@ -26,6 +27,9 @@ export default function EditProfile() {
     const router = useRouter();
 
     const [fileOld, setfileOld] = useState();
+
+    const [showModal, setShowModal] = useState<boolean>(false)    
+    
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -112,7 +116,12 @@ export default function EditProfile() {
 
         try {
             const updatedUser = await editProfile(formData); // ส่งข้อมูลที่แก้ไขไปที่ API
-            router.push("/profile"); // แก้ไขสำเร็จให้ไปที่หน้าโปรไฟล์
+
+                setShowModal(true) // โชว์ popup
+                setTimeout(() => {
+                    router.push("/profile"); // แก้ไขสำเร็จให้ไปที่หน้าโปรไฟล์
+                }, 3000); // หน่วงเวลา ก่อนเปลี่ยน 
+
         } catch (err: any) {
             setError(err.message || "Profile update failed.");
         }
@@ -257,6 +266,16 @@ export default function EditProfile() {
                     </div>
                 </div>
             </div>
+
+              {/* Popup Model */}
+                    
+            {/* โชว์ตอน สร้างโพสสำเร็จ  */}
+            {showModal  && <PopupModelSuccess                        
+            onClick = {()=> router.push("/profile")}  // แก้ไขสำเร็จให้ไปที่หน้าโปรไฟล์
+            titletext = "Post Successful!"
+            subtext = "Your post has been published successfully."
+            textbutton ="Done"
+            onClose={() => setShowModal(false)}/>}  
         </>
     );
 }

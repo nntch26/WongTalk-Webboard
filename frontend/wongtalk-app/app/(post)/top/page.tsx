@@ -16,6 +16,7 @@ import ButtonViewMore from "@/app/components/home/ButtonViewMore";
 import { SkeletonPostsLoading } from "@/app/components/ui/Skeletons";
 
 export default function page() {
+    
     const [postsTop, setPostsTop] = useState<Post[]>([]);
     const [topics, setTopicList] = useState<Topic[]>([]) 
 

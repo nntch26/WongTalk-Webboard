@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Navbar from "@/app/components/Navbar";
@@ -15,6 +15,7 @@ import { ActionButtons } from "@/app/components/profile/button";
 import { ProfileTabs } from "@/app/components/profile/profileTab";
 import { PostList } from "@/app/components/profile/postList";
 import FollowTopicList from "@/app/components/profile/topicList";
+import { ProfileSkeleton } from "@/app/components/ui/Skeletons";
 
 export default function Profile() {
     const [profile, setProfile] = useState<User | null>(null);
@@ -39,12 +40,17 @@ export default function Profile() {
         } catch (err) {
             setError("Failed to fetch topics");
             console.error("Error fetching topics:", err);
+            
         } finally {
-            setLoading(false);
+                setLoading(false);
+            
         }
     };
     useEffect(() => {
-        fetchData();
+        setTimeout(() => {
+            fetchData();
+        }, 1000);
+        
     }, []);
 
     const handleSelect = (e: React.MouseEvent, topicId: string) => {
@@ -91,19 +97,34 @@ export default function Profile() {
         };
     }, [handleClickOutside]);
 
-    if (loading) return <p>Loading...</p>;
+    // if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
 
     return (
         <>
             <Navbar />
 
+            {loading &&(
+                <div className="fixed top-0 left-0 w-full z-50">
+                <div className="h-0.5 bg-[--primary-color] animate-[loading_1s_ease-in-out_infinite]"></div>
+                </div>
+            )}
+
             <div className="w-full min-h-screen bg-[#080E13] text-[#E8E9EA]">
                 <div className="max-w-6xl mx-auto">
                     <ProfileBanner bannerUrl="https://i.pinimg.com/originals/53/44/9f/53449fa87702af80374c45b87080c639.jpg" />
-                    <ProfileHeader
-                        profile={profile}
-                    />
+                    
+                     <Suspense fallback={<ProfileSkeleton />}>
+                        {profile? (
+                              <ProfileHeader profile={profile}/>
+
+                        ) : (
+                            <ProfileSkeleton />
+                        )}
+                    </Suspense>
+                   
+                    
+                    
                     <ActionButtons />
                     <ProfileTabs mypost={mypost} setMyPost={setMyPost} />
                     {mypost ? (
