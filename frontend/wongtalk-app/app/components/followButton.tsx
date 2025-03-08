@@ -5,22 +5,31 @@ import { FollowButtonProps } from "@/types/types";
 import { getFollowTopic } from "../api/userServices";
 import { Topic } from "@/types/types";
 import PopupModalLogin from "./popup/PopupModalLogin";
+import { useAuth } from "../hook/useAuth";
 
 const FollowButton: React.FC<FollowButtonProps> = ({
     topicId,
     onFollowChange,
 }) => {
-    const getUserData = localStorage.getItem("userdata")
+    // const getUserData = localStorage.getItem("userdata")
 
-    const userId =  getUserData ? JSON.parse(getUserData)._id : sessionStorage.getItem("userId");
+    // const userId =  getUserData ? JSON.parse(getUserData)._id : sessionStorage.getItem("userId");
     const [followTopics, setFollowTopics] = useState<Topic[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
 
+    // hook เช็คว่า user login ยัง
+    const {currentUser, islogin} = useAuth()
+    console.log("Current User:", currentUser);
+    const userId =  currentUser?._id
+
+
     const fetchFollowTopic = async () => {
         try {
-            if (userId) {
-                const dataTopic = await getFollowTopic(userId);
-                setFollowTopics(dataTopic.topics);
+            if (islogin) {
+                if (userId) {
+                    const dataTopic = await getFollowTopic(userId);
+                    setFollowTopics(dataTopic.topics);
+                }
             }
         } catch (error) {
             console.error("Failed to fetch followed topics:", error);
@@ -58,7 +67,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({
         // ยังไม่ได้ login
         if (!userId) {
             setShowModal(true); 
-            console.log(userId)
+            console.log("ยังไม่ได้ login", userId)
         }
 
         onFollowChange(topicId);
