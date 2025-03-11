@@ -129,7 +129,7 @@ export default function Login() {
                             </div>
 
                             {/* Remember Me & Forgot Password */}
-                            <div className="flex items-center justify-between text-xs sm:text-sm mt-2">
+                            {/* <div className="flex items-center justify-between text-xs sm:text-sm mt-2">
                                 <label className="flex items-center text-[#E8E9EA]">
                                     <input
                                         type="checkbox"
@@ -144,7 +144,7 @@ export default function Login() {
                                 >
                                     Forgot password?
                                 </a>
-                            </div>
+                            </div> */}
 
                             {/* Submit Button */}
                             <button

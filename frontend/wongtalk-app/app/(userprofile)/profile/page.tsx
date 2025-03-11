@@ -95,17 +95,12 @@ export default function Profile() {
         };
     }, [handleClickOutside]);
 
-    // if (loading) return <div className="fixed top-0 left-0 w-full z-50">
-    //                     <div className="h-0.5 bg-[--primary-color] animate-[loading_1s_ease-in-out_infinite]"></div>
-    //                     </div>;
-
+    
     if (error) return <p>{error}</p>;
 
     return (
         <>
             <Navbar />
-
-            
 
             <div className="w-full min-h-screen bg-[#080E13] text-[#E8E9EA]">
                 <div className="max-w-6xl mx-auto">
@@ -137,9 +132,6 @@ export default function Profile() {
                             )}
                         </>
                     )}
-
-      
-
                 </div>
             </div>
         </>

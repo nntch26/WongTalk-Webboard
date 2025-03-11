@@ -131,13 +131,13 @@ export default function page() {
 
 
     // ฟังก์ชัน คลิกปุ่ม Top
-    const handleClickTop = (e: React.MouseEvent, topicId: string) => {
+    const handleClickTop = (e: React.MouseEvent) => {
         e.preventDefault();
         setIsTop(true); // เปลี่ยนเป็น Top
     };
     
     // ฟังก์ชัน คลิกปุ่ม Latest
-    const handleClickLatest = (e: React.MouseEvent, topicId: string) => {
+    const handleClickLatest = (e: React.MouseEvent) => {
         e.preventDefault();
         setIsTop(false); // เปลี่ยนเป็น Latest
         
@@ -175,14 +175,14 @@ export default function page() {
                                             className={`font-bold hover:text-primary text-base md:text-lg ${
                                                 !isTop ? 'text-[--primary-color]' : 'text-gray-500'
                                             }`} 
-                                            onClick={(e) => handleClickLatest(e, topicId)}
+                                            onClick={(e) => handleClickLatest(e)}
                                         >
                                             Latest
                                         </button>
 
                                         <button 
                                             className="flex flex-wrap space-x-2 text-base" 
-                                            onClick={(e) => handleClickTop(e, topicId)}
+                                            onClick={(e) => handleClickTop(e)}
                                         >
                                             <span 
                                                 className={`font-bold hover:text-primary text-base md:text-lg ${
