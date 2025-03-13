@@ -90,8 +90,12 @@ export default function Register() {
                 <div className="w-full min-h-[680px] p-4 sm:p-6 md:p-8 bg-[#0F151A] flex justify-center relative">
                     <div className="w-full max-w-sm mx-auto relative pt-16 ">
                         <div className="absolute top-0 left-1/2 transform -translate-x-1/2">
-                            <Link href={"/"}> 
-                                <img src="/logo2.png" alt="Logo"className="w-12 h-12"/>
+                            <Link href={"/"}>
+                                <img
+                                    src="/logo2.png"
+                                    alt="Logo"
+                                    className="w-12 h-12"
+                                />
                             </Link>
                         </div>
 
@@ -250,20 +254,6 @@ export default function Register() {
                                     required
                                 />
                             </div>
-
-                            {/* Terms and Conditions */}
-                            {/* <div className="flex items-center justify-between text-xs sm:text-sm">
-                                <label className="flex items-center text-[#E8E9EA]">
-                                    <input
-                                        type="checkbox"
-                                        name="agreeToTerms"
-                                        checked={formData.agreeToTerms}
-                                        onChange={handleChange}
-                                        className="rounded border-[rgba(255,255,255,0.1)] text-[#30E48E] focus:ring-[#30E48E] mr-2"
-                                    />
-                                    Agree to Terms and Conditions
-                                </label>
-                            </div> */}
 
                             {/* Submit Button */}
                             <button

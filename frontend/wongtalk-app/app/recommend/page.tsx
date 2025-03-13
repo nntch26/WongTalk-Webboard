@@ -2,10 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { fetchTopics } from "../api/topicServices";
-import { followTopic } from "../api/followServices";
 import { Topic } from "@/types/types";
 import { useRouter } from "next/navigation";
-import styles from "@/app/components/styles/Maincontent.module.css";
 import FollowButton from "../components/followButton";
 import Link from "next/link";
 

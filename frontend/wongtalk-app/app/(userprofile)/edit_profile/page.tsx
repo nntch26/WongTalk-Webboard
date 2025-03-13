@@ -92,8 +92,6 @@ export default function EditProfile() {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        // console.log(user);
-        // console.log(fileOld);
 
         e.preventDefault();
 

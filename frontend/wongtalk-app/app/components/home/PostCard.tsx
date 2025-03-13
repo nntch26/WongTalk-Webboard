@@ -28,9 +28,8 @@ export default function PostCard({ post }: { post: Post }) {
                             </div>
                         </div>
                         
-                      {/* <!-- Topic tag--> */}
-                      <TopicTag key={post.topicId._id} post={post} />
-                      
+                        {/* <!-- Topic tag--> */}
+                        <TopicTag key={post.topicId._id} post={post} />
                     </div>
 
 

@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { Topic } from "@/types/types";
-import styles from "@/app/components/styles/Maincontent.module.css";
 import FollowButton from "../followButton";
 
 export default function TopicHead({ topic }: { topic: Topic }) {

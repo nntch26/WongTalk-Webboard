@@ -26,7 +26,7 @@ export default function TopicSidebar (
         if (error) setError(null)
     };
 
-  return (
+return (
     <>
     {/* <!-- Right Sidebar --> */}
     <div className="max-h-max w-full md:w-1/4 hidden md:block">
@@ -73,5 +73,5 @@ export default function TopicSidebar (
         </div>
     </div>    
     </>
-  )
+    )
 }

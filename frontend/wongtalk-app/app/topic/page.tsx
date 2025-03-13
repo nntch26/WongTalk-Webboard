@@ -4,10 +4,6 @@ import { useState, useEffect } from 'react'
 import { Post, Topic } from '@/types/types'
 import { fetchPostTopic, fetchTopics, fetchPostTopicTop, fetchTopic } from '@/app/api/topicServices'
 import PostCard from '@/app/components/home/PostCard';
-import Link from 'next/link';
-
-import styles from "@/app/components/styles/Maincontent.module.css";
-
 import TopicHead from '@/app/components/topic/TopicHead';
 import TopicSidebar from '@/app/components/topic/TopicSidebar ';
 
@@ -68,7 +64,7 @@ export default function page() {
             console.log(error);
         }
     };
-   
+
     
     // ดึงข้อมูล Top posts ตาม topicId
     const getPostTopicTop = async (topicId: string) => {
@@ -81,7 +77,7 @@ export default function page() {
         }
     };
 
-     
+
     // ดึงข้อมูล topic หลายๆอัน
     const getTopicList = async() =>{
         try{

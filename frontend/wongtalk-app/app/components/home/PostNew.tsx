@@ -36,7 +36,7 @@ export default function PostNew({newpost}: {newpost: Post[]}) {
                 ))}
             </div>
 
-           
+        
         </>
     );
 }

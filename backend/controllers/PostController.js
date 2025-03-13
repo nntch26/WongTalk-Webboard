@@ -57,9 +57,6 @@ const getLatestPost = async (req, res) => {
             ...post,
             // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
-            // createdPost: moment(post.createdAt)
-            //     .tz("Asia/Bangkok")
-            //     .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
         console.log(modifiedPosts);
@@ -94,9 +91,6 @@ const getPostsTop = async (req, res) => {
             ...post,
             // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
-            // createdPost: moment(post.createdAt)
-            //     .tz("Asia/Bangkok")
-            //     .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
         console.log("ดึงโพสมาแรงที่สุด", modifiedPosts);
@@ -145,9 +139,6 @@ const Search = async (req, res) => {
             ...post,
             // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
-            // createdPost: moment(post.createdAt)
-            //     .tz("Asia/Bangkok")
-            //     .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
         console.log(modifiedPosts);
@@ -194,9 +185,6 @@ const getPostTopic = async (req, res) => {
             ...post,
             // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
-            // createdPost: moment(post.createdAt)
-            //     .tz("Asia/Bangkok")
-            //     .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
         console.log("modifiedPosts: ",modifiedPosts);
@@ -204,8 +192,8 @@ const getPostTopic = async (req, res) => {
         // ถ้า topic นั้นไม่มีมี โพส ให้ส่งแค่ข้อมูล topic
         if (posts.length === 0) {
             return res.status(404).json({ message: "Not found", error })
-           
-           
+        
+        
         }
 
         res.status(200).json({
@@ -243,9 +231,6 @@ const getPostsTopInTopic = async (req, res) => {
             ...post,
             // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
-            // createdPost: moment(post.createdAt)
-            //     .tz("Asia/Bangkok")
-            //     .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
         console.log(modifiedPosts);
@@ -291,9 +276,6 @@ const getPostDetail = async (req, res) => {
             ...post,
             // likes: post.likes?.length || 0, // ถ้าไม่มี likes ให้เป็น 0
             time: moment(post.createdAt).tz("Asia/Bangkok").fromNow(),
-            // createdPost: moment(post.createdAt)
-            //     .tz("Asia/Bangkok")
-            //     .format("YYYY-MM-DD HH:mm:ss"),
         }));
 
         if (!modifiedPosts) {

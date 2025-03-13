@@ -18,7 +18,7 @@ export default function Login() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!email || !password) {
             setError("Please enter email and password.");
             return;
@@ -26,18 +26,19 @@ export default function Login() {
 
         try {
             const userData = await login(email, password);
-            const path = sessionStorage.getItem("userId") ? "/recommend" : callbackUrl;
+            const path = sessionStorage.getItem("userId")
+                ? "/recommend"
+                : callbackUrl;
 
-            const userdata:User ={
+            const userdata: User = {
                 _id: userData.user._id,
                 fullname: userData.user.name,
                 image: userData.user.image,
-                username: userData.user.username
-            } // สร้างข้อมูลไว้เรียกใช้ ใน local 
+                username: userData.user.username,
+            }; // สร้างข้อมูลไว้เรียกใช้ ใน local
 
             localStorage.setItem("userdata", JSON.stringify(userdata)); // เก้บใน local
             router.push(path);
-            
         } catch (err: any) {
             // alert("Invalid email or password");
             setError(err.response.data.message);
@@ -52,8 +53,12 @@ export default function Login() {
                 <div className="w-full min-h-[300px] p-4 sm:p-6 md:p-8 bg-[#0F151A] flex justify-center relative">
                     <div className="w-full max-w-sm relative pt-16">
                         <div className="absolute top-0 left-1/2 transform -translate-x-1/2">
-                            <Link href={"/"}> 
-                                <img src="/logo2.png" alt="Logo"className="w-12 h-12"/>
+                            <Link href={"/"}>
+                                <img
+                                    src="/logo2.png"
+                                    alt="Logo"
+                                    className="w-12 h-12"
+                                />
                             </Link>
                         </div>
 
@@ -127,24 +132,6 @@ export default function Login() {
                                     }}
                                 />
                             </div>
-
-                            {/* Remember Me & Forgot Password */}
-                            {/* <div className="flex items-center justify-between text-xs sm:text-sm mt-2">
-                                <label className="flex items-center text-[#E8E9EA]">
-                                    <input
-                                        type="checkbox"
-                                        id="red-checkbox"
-                                        className="rounded border-[#A2A8B6] text-[#30E48E] focus:ring-[#30E48E] mr-2"
-                                    />
-                                    Remember me
-                                </label>
-                                <a
-                                    href="#"
-                                    className="text-[#30E48E] hover:text-opacity-80"
-                                >
-                                    Forgot password?
-                                </a>
-                            </div> */}
 
                             {/* Submit Button */}
                             <button

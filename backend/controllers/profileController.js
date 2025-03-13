@@ -40,29 +40,6 @@ const getToken = async (req, res) => {
     res.json(authToken)
 }
 
-// edit Profile
-// const editProfile = async (req, res) => {
-//     const { fullname, username, email, image } = req.body;
-//     try {
-//         const userId = req.user.id;
-//         const user = await User.findById(userId);
-
-//         if (!user) {
-//             return res.status(404).json({ message: "User not found" });
-//         }
-
-//         user.fullname = fullname || user.fullname;
-//         user.username = username || user.username;
-//         user.email = email || user.email;
-//         user.image = image || user.image;
-//         await user.save();
-
-//         res.status(200).json({ message: "Profile updated successfully", user });
-//     } catch (error) {
-//         res.status(500).json({ message: "Server error" });
-//     }
-// };
-
 const multer = require("multer");
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -104,12 +81,6 @@ const editProfile = async (req, res) => {
 
         res.status(200).json({
             message: "Profile updated successfully",
-            // user: {
-            //     fullname: user.fullname,
-            //     username: user.username,
-            //     email: user.email,
-            //     image: user.image,
-            // },
         });
     } catch (error) {
         console.log("Update profile error:", error);

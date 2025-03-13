@@ -25,7 +25,7 @@ export default function page() {
     const [topic, setTopic] = useState<Topic| null>(null)
     const [topicList, setTopicList] = useState<Topic[]>([]);
 
-  
+
     const [content, setContent] = useState<string>("");
     const [editingCommentId, setEditingCommentId] = useState<string | null>(null); // เก็บไอดีคอมเม้นจะแก้ไข
     const [editContent, setEditContent] = useState(""); // เนื้อหาคอมเม้นที่แก้ไข
@@ -47,7 +47,7 @@ export default function page() {
     const {currentUser, islogin} = useAuth()
     console.log("Current User:", currentUser);
 
-   
+
     // ดึง post detail
     const getPostDetail = async () => {
         try{
@@ -122,7 +122,6 @@ export default function page() {
             setShowModal(true)
             return
         }
-       
         
         try {
             setError("")
@@ -172,9 +171,9 @@ export default function page() {
     };
 
       // กดปุ่มลบ comment
-      const handleDeleteClick = (commentId:string) => {
-       setShowModalDelete(true)
-       setDeleteCommentId(commentId)
+    const handleDeleteClick = (commentId:string) => {
+        setShowModalDelete(true)
+        setDeleteCommentId(commentId)
     };
 
     

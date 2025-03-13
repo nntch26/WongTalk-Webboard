@@ -50,7 +50,7 @@ export default function page() {
                 setTimeout(() => {
                      router.push("/"); // เด้งไปหน้าแรก
                 }, 3000); // หน่วงเวลา ก่อนเปลี่ยน 
-               
+            
             }
         } catch (error) {
             console.error("Error creating post:", error);
@@ -135,7 +135,7 @@ export default function page() {
             await createPost(); 
             localStorage.removeItem("savedata");
         }
-      
+    
     };
 
     // กด Save Draft
@@ -211,7 +211,7 @@ export default function page() {
 
                 {massageDraft &&(
                     <div className="text-green-400 mb-2">
-                       <i className="fa-solid fa-cloud-arrow-up mr-2"></i>
+                        <i className="fa-solid fa-cloud-arrow-up mr-2"></i>
                         {massageDraft}
                     </div>
                 )}
@@ -300,7 +300,7 @@ export default function page() {
             </div>
 
              {/* Popup Model */}
-                 
+            
             {/* โชว์ตอน สร้างโพสสำเร็จ  */}
             {showModal  && <PopupModelSuccess                        
             onClick = {()=> router.push("/")} 

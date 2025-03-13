@@ -52,52 +52,6 @@ const getUser = async (req, res) => {
 };
 
 
-// const updateProduct = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const { name, price, description, category } = req.body;
-
-//     const updatedProduct = await Product.findByIdAndUpdate(
-//       id,
-//       { name, price, description, category },
-//       { new: true }
-//     ); // ค้นหา id และอัพเดทข้อมูล
-
-//     res.status(200).json({
-//       success: true,
-//       product: updatedProduct,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       message: "Internal Server Error...",
-//     });
-//   }
-// };
-
-// // ลบข้อมูล
-// const deleteProduct = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const deletedProduct = await Product.findByIdAndDelete(id); // ค้นหา id แล้วลบข้อมูลนั้น
-
-//     // ถ้าหาไม่เจอ
-//     if (!deletedProduct) {
-//       return res.status(404).json({ message: "Product not found." });
-//     }
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Product deleted successfully.",
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       message: "Internal Server Error...",
-//     });
-//   }
-// };
-
 // ติดตาม topic
 const followTopic = async (req, res) => {
     try {
@@ -150,13 +104,6 @@ const showFollow = async (req, res) => {
 
         // ค้นหาผู้ใช้ และดึงข้อมูล topic ที่ติดตาม
         const user = await User.findById(userId).populate("followTopic");
-
-        // ตรวจสอบว่าผู้ใช้ติดตามหัวข้อใด ๆ ป่าว
-        // if (!user.followTopic.length) {
-        //     return res
-        //         .status(404)
-        //         .json({ message: "No followed topics found" });
-        // }
 
         // ส่ง topic ติดตามกลับไป
         res.status(200).json({

@@ -11,7 +11,6 @@ const FollowButton: React.FC<FollowButtonProps> = ({
     topicId,
     onFollowChange,
 }) => {
-    // const getUserData = localStorage.getItem("userdata")
 
     // const userId =  getUserData ? JSON.parse(getUserData)._id : sessionStorage.getItem("userId");
     const [followTopics, setFollowTopics] = useState<Topic[]>([]);

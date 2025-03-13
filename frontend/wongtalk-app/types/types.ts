@@ -7,7 +7,7 @@ export interface Topic {
 }
 
 
-export interface Post{
+export interface Post {
     data: any;
     _id: string;
     title: string;
@@ -55,22 +55,16 @@ export interface CommentData {
 
 
 // คอมเม้น
-export interface Comment{
-    _id : string,
+export interface Comment {
+    _id: string,
     postId: Topic;
-    userId : User
-    content : string,
+    userId: User
+    content: string,
     createdAt: string;
-   
+
 }
 
-// // เวลาคอมเม้น
-// export interface CommentPack {
-//     comment: Comment;
-//     // timeComents: string;
-// }
-
-export interface PostDetail{
+export interface PostDetail {
     Post: Post[];
     allComments: Comment[]
 }
@@ -79,7 +73,6 @@ export interface UpdatePost {
     title: string;
     content: string;
 }
-
 
 
 // กำหนด type ของ props ที่ต้องใช้

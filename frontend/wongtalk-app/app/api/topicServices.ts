@@ -12,8 +12,6 @@ export const fetchTopics = async () => {
         //{ "data": [ { "id": 1, "title": "Topic 1" }... ] }
         console.log("Topics respone : ",data)
 
-        // const alldata = await res.json()
-        // console.log(data)
         return data.data
 
 

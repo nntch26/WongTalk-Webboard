@@ -1,7 +1,6 @@
 
 "use client";
 import React from 'react'
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { Post } from "@/types/types";
@@ -22,7 +21,7 @@ export default function TopicTag({post}:{post:Post}) {
 
 
 
-  return (
+return (
     <>
     <div className={`${styles.tagstopic} mt-2`}>
         <button onClick={(e) => handleNavigate(e, post.topicId._id)} className="flex flex-col text-xs md:text-md font-medium">
@@ -33,5 +32,5 @@ export default function TopicTag({post}:{post:Post}) {
         </button>
     </div>
     </>
-  )
+)
 }
