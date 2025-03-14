@@ -26,6 +26,8 @@ export const useAuth = ()=>{
         }
     }
     fetchDataUser()
+
+    console.log("currentUser",currentUser, islogin)
     }, [])
 
     return {currentUser, islogin}

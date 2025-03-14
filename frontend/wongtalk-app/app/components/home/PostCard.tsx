@@ -13,6 +13,10 @@ export default function PostCard({ post }: { post: Post }) {
 
     console.log("PostCard",post)
 
+    if (!post) {
+        return <p>Loading...</p>; 
+    }
+
     return (
         <>
         <div className={`${styles.postcard} rounded-xl p-4 mb-4 `}>
@@ -29,7 +33,7 @@ export default function PostCard({ post }: { post: Post }) {
                         </div>
                         
                         {/* <!-- Topic tag--> */}
-                        <TopicTag key={post.topicId._id} post={post} />
+                        <TopicTag key={post.topicId?._id} post={post} />
                     </div>
 
 
